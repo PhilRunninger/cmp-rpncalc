@@ -100,22 +100,18 @@ for op,_ in pairs(operatorFunc) do
         end
     end
 end
--- print(vim.inspect(triggerCharacters))
 
--- Create the regex that will determine if the text leading up to the cursor is
--- a valid RPN expression. The regex, paraphrased, is:
---  number ( space ( number | operator ) ) +
+-- Create the regex that determines if the text a valid RPN expression.
 local operators = {}
 for op,_ in pairs(operatorFunc) do
-    operators[#operators+1] = vim.fn.escape(op, [[~^*/\]] )
+    operators[#operators+1] = vim.fn.escape(op, [[~^*/\+%]] )
 end
 
-local numberRegex = [[\([+-]\?\(0\|0\?\.\d\+\|[1-9]\d*\(\.\d\+\)\?\)\([Ee][+-]\?\d\+\)\?\)]]
-local expressionRegex = table.concat(operators,[[\|]])  -- Join all operators
-expressionRegex = [[\(]] .. numberRegex .. [[\|]] .. expressionRegex .. [[\)]]  -- Add a number pattern to the mix.
-expressionRegex = [[\(\(^\|\s\+\)]] .. expressionRegex .. [[\)\+]]  -- Multiple space-delimited operators or numbers.
-expressionRegex = [[\%#=1]] .. expressionRegex  -- Regex options: engine #1
--- print(expressionRegex)
+local numberRegex = [[%([+-]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?)]]  -- 0, -42, 3.14, 6.02e23, etc.
+local operatorsRegex = table.concat(operators,[[|]])  -- Join all operators
+local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
+local expressionRegex = [[ *\zs%( *<]] .. wordRegex .. [[>)+]]  -- Multiple space-delimited words.
+expressionRegex = [[\v]] .. expressionRegex  -- Very magic
 
 -- source contains the callback functions that are needed to work in nvim-cmp.
 local source = {}
@@ -129,18 +125,14 @@ end
 
 source.complete = function(_, request, callback)
     local input = request.context.cursor_before_line
-    print('original input--->',input,'<-----------------------------------------------------------')
     local s,e = vim.regex(expressionRegex):match_str(input)
-    -- print('s: ',s,'   e: ',e)
     if not s or not e then
-        return callback()
+        return callback({isIncomplete=true})
     end
     input = string.sub(input, s+1)
-    -- print('trimmed input: ',input)
 
     stack = {}
-    for word in string.gmatch(input, "%g+") do
-        -- print('word: ',word)
+    for _,word in ipairs(vim.fn.split(input, ' \\+')) do
         local number = tonumber(word)
         if number then
             push(number)
@@ -148,42 +140,28 @@ source.complete = function(_, request, callback)
             local f = operatorFunc[word]
             local ok,_ = pcall(f)
             if not ok then
-                return callback()
+                return callback({isIncomplete=true})
             end
         end
-        -- print('stack: ',vim.inspect(stack))
     end
     local value = ''
-    -- print('value: ',value)
     for _,n in ipairs(stack) do
         value = string.gsub(value .. ' ' .. n, "^%s*(.-)%s*$", "%1")
-    -- print('value: ',value)
     end
-    -- print('value: ',value)
     input = string.gsub(input, "^%s*(.-)%s*$", "%1")
 
-    local r =
-        {
-            items = {{
-                word = input,
-                label = value,
-                textEdit = {
-                    range = {
-                        start = { line = request.context.cursor.row-1, character = s, },
-                        ['end'] = { line = request.context.cursor.row-1, character = request.context.cursor.col-1, }, },
-                    newText = value },
-            },{
-                word = input .. ' ▶ ' .. value,
-                label = input .. ' ▶ ' .. value,
-                textEdit = {
-                    range = {
-                        start = { line = request.context.cursor.row-1, character = s, },
-                        ['end'] = { line = request.context.cursor.row-1, character = request.context.cursor.col-1, }, },
-                    newText = input .. ' ▶ ' .. value },
-            },},
-        }
-    print('r', vim.inspect(r))
-    callback(r)
+    local r = {
+        items = {{
+            label = input .. ' ▶ ' .. value,
+            textEdit = {
+                range = {
+                    start = { line = request.context.cursor.row-1, character = s, },
+                    ['end'] = { line = request.context.cursor.row-1, character = request.context.cursor.col-1, }, },
+                newText = value },
+        }},
+        isIncomplete = true,
+    }
+callback(r)
 end
 
 return source
