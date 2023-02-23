@@ -31,7 +31,7 @@ operatorFunc[ [[logx]] ]  = function() local x=pop(); push(math.log(pop(),x)) en
 operatorFunc[ [[log10]] ] = function() push(math.log(pop(),10)) end -- Log (base 10) of x
 operatorFunc[ [[log2]] ]  = function() push(math.log(pop(),2) )end -- Log (base 2) of x
 operatorFunc[ [[sqrt]] ]  = function() push(math.sqrt(pop())) end -- Square Root
-operatorFunc[ [[**]] ]    = function() local x=pop(); local y=pop(); push(y ^ x) end  -- Exponentiation
+operatorFunc[ [[**]] ]    = function() local x=pop(); local y=pop(); push((y==0 and x==0) and 'nan' or y ^ x) end  -- Exponentiation
 operatorFunc[ [[\]] ]     = function() push(1 / pop()) end -- Reciprocal
 --[[ Trigonometry ]]
 operatorFunc[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
@@ -40,9 +40,9 @@ operatorFunc[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to
 operatorFunc[ [[sin]] ]   = function() push(math.sin(pop())) end -- Sine
 operatorFunc[ [[cos]] ]   = function() push(math.cos(pop())) end -- Cosine
 operatorFunc[ [[tan]] ]   = function() push(math.tan(pop())) end -- Tangent
-operatorFunc[ [[csc]] ]   = function() push(1 / math.sin(pop())) end -- Sine
-operatorFunc[ [[sec]] ]   = function() push(1 / math.cos(pop())) end -- Cosine
-operatorFunc[ [[cot]] ]   = function() push(1 / math.tan(pop())) end -- Tangent
+operatorFunc[ [[csc]] ]   = function() push(1 / math.sin(pop())) end -- Cosecant
+operatorFunc[ [[sec]] ]   = function() push(1 / math.cos(pop())) end -- Secant
+operatorFunc[ [[cot]] ]   = function() push(1 / math.tan(pop())) end -- Cotangent
 
 operatorFunc[ [[asin]] ]  = function() push(math.asin(pop())) end -- Inverse sine
 operatorFunc[ [[acos]] ]  = function() push(math.acos(pop())) end -- Inverse cosine
@@ -52,7 +52,7 @@ operatorFunc[ [[asec]] ]  = function() push(math.acos(1 / pop())) end -- Inverse
 operatorFunc[ [[acot]] ]  = function() push(math.atan(1 / pop())) end -- Inverse cotangent
 
 operatorFunc[ [[sinh]] ]  = function() local x=pop(); push((math.exp(x) - math.exp(-x)) / 2) end -- Hyperbolic sine
-operatorFunc[ [[cosh]] ]  = function() local x=pop(); push((math.exp(x) - math.exp(-x)) / 2) end -- Hyperbolic cosine
+operatorFunc[ [[cosh]] ]  = function() local x=pop(); push((math.exp(x) + math.exp(-x)) / 2) end -- Hyperbolic cosine
 operatorFunc[ [[tanh]] ]  = function() local x=pop(); push((math.exp(2*x)-1) / (math.exp(2*x)+1)) end -- Hyperbolic tangent
 operatorFunc[ [[asinh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x+1))) end -- Inverse hyperbolic sine
 operatorFunc[ [[acosh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x-1))) end -- Inverse hyperbolic cosine
@@ -78,7 +78,7 @@ operatorFunc[ [[e]] ]     = function() push(math.exp(1)) end -- 2.718281828...
 operatorFunc[ [[phi]] ]   = function() push((1+math.sqrt(5)) / 2) end -- 1.618033989...
 --[[ Other ]]
 operatorFunc[ [[hrs]] ]   = function() push((pop() / 60 + pop()) / 60 + pop()) end -- Convert Z:Y:X to hours
-operatorFunc[ [[hms]] ]   = function() local x=pop(); for _=1,2 do local t=x<0 and math.ceil(x) or math.floor(x); push(x); x=60*(x-t); end; push(x) end -- Convert X hours to Z:Y:X
+operatorFunc[ [[hms]] ]   = function() local x=pop(); for _=1,2 do local t=x<0 and math.ceil(x) or math.floor(x); push(t); x=60*(x-t); end; push(x) end -- Convert X hours to Z:Y:X
 
 
 -- Get all unique characters from the operatorFunc keys. These characters will
