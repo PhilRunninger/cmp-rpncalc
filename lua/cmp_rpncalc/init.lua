@@ -107,10 +107,10 @@ for op,_ in pairs(operatorFunc) do
     operators[#operators+1] = vim.fn.escape(op, [[~^*/\+%]] )
 end
 
-local numberRegex = [[%([+-]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?)]]  -- 0, -42, 3.14, 6.02e23, etc.
-local operatorsRegex = table.concat(operators,[[|]])  -- Join all operators
+local numberRegex = [[%([-+]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?)]]  -- 0, -42, 3.14, 6.02e23, etc.
+local operatorsRegex = table.concat(operators,[[|]])  -- Concatenate all operators:  sin|cos|+|-|pi|...
 local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
-local expressionRegex = [[ *\zs%( *<]] .. wordRegex .. [[>)+]]  -- Multiple space-delimited words.
+local expressionRegex = wordRegex .. [[( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
 expressionRegex = [[\v]] .. expressionRegex  -- Very magic
 
 -- source contains the callback functions that are needed to work in nvim-cmp.
@@ -150,7 +150,7 @@ source.complete = function(_, request, callback)
     end
     input = string.gsub(input, "^%s*(.-)%s*$", "%1")
 
-    local r = {
+    callback({
         items = {{
             label = input .. ' ▶ ' .. value,
             textEdit = {
@@ -160,8 +160,7 @@ source.complete = function(_, request, callback)
                 newText = value },
         }},
         isIncomplete = true,
-    }
-callback(r)
+    })
 end
 
 return source
