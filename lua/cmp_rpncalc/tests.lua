@@ -70,78 +70,88 @@ M.run = function(verbose)
     count(assertEqual('8 chs',     -8))
 
     print('Rounding=======================================')
-    count(assertEqual('12.3 floor', 12))  -- Floor - round down to nearest integer
+    count(assertEqual('12.3 floor',  12))  -- Floor - round down to nearest integer
     count(assertEqual('-12.3 floor', -13))
-    count(assertEqual('12.3 ceil', 13))  -- Ceiling - round up to nearest integer
-    count(assertEqual('-12.3 ceil', -12))
-    count(assertEqual('12.3 round', 12))  -- Round to nearest integer
+    count(assertEqual('12.3 ceil',   13))  -- Ceiling - round up to nearest integer
+    count(assertEqual('-12.3 ceil',  -12))
+    count(assertEqual('12.3 round',  12))  -- Round to nearest integer
     count(assertEqual('-12.3 round', -12))
-    count(assertEqual('12.7 round', 13))
+    count(assertEqual('12.7 round',  13))
     count(assertEqual('-12.7 round', -13))
-    count(assertEqual('12.7 trunc', 12))  -- Round toward zero
+    count(assertEqual('12.7 trunc',  12))  -- Round toward zero
     count(assertEqual('-12.7 trunc', -12))
 
     print('Powers & Logs=======================================')
-    count(assertEqual('2 exp', 7.3890560989, 1e-6))  -- Raise e to the x power
-    count(assertEqual('0 exp', 1))
-    count(assertEqual('0.1 exp', 1.1051709180, 1e-6))
-    count(assertEqual('120 log', 4.7874917427, 1e-6))  -- Natural log of x
-    count(assertEqual('0 log', '-inf'))
-    count(assertEqual('625 5 logx', 4))  -- Log y of x
+    count(assertEqual('2 exp',       7.3890560989, 1e-6))  -- Raise e to the x power
+    count(assertEqual('0 exp',       1))
+    count(assertEqual('0.1 exp',     1.1051709180, 1e-6))
+    count(assertEqual('120 log',     4.7874917427, 1e-6))  -- Natural log of x
+    count(assertEqual('0 log',       '-inf'))
+    count(assertEqual('625 5 logx',  4))  -- Log y of x
     count(assertEqual('625 -5 logx', 'nan'))
     count(assertEqual('-625 5 logx', 'nan'))
-    count(assertEqual('1000 log10', 3))  -- Log (base 10) of x
+    count(assertEqual('1000 log10',  3))  -- Log (base 10) of x
     count(assertEqual('12345 log10', 4.0914910942, 1e-6))
-    count(assertEqual('1024 log2', 10))  -- Log (base 2) of x
-    count(assertEqual('13 log2', 3.7004397181, 1e-6))
-    count(assertEqual('36 sqrt', 6))  -- Square Root
-    count(assertEqual('-4 sqrt', 'nan'))
-    count(assertEqual('23.1 sqrt', 4.8062459362, 1e-6))
-    count(assertEqual('2 3 **', 8))  -- Exponentiation
-    count(assertEqual('-12 4 **', 20736))
-    count(assertEqual('-7 3.3 **', 'nan'))
-    count(assertEqual('0 0 **', 'nan'))
+    count(assertEqual('1024 log2',   10))  -- Log (base 2) of x
+    count(assertEqual('13 log2',     3.7004397181, 1e-6))
+    count(assertEqual('36 sqrt',     6))  -- Square Root
+    count(assertEqual('-4 sqrt',     'nan'))
+    count(assertEqual('23.1 sqrt',   4.8062459362, 1e-6))
+    count(assertEqual('2 3 **',      8))  -- Exponentiation
+    count(assertEqual('-12 4 **',    20736))
+    count(assertEqual('-7 3.3 **',   'nan'))
+    count(assertEqual('0 0 **',      'nan'))
     count(assertEqual('12 -0.25 **', 0.5372849659, 1e-6))
-    count(assertEqual('10 \\', 0.1))  -- Reciprocal
-    count(assertEqual('0 \\', 'inf'))
+    count(assertEqual('10 \\',       0.1))  -- Reciprocal
+    count(assertEqual('0 \\',        'inf'))
 
     print('Trigonometry=======================================')
-    count(assertEqual('1.5707963267 deg', 90, 1e-6))  -- convert x to degrees
-    count(assertEqual('90 rad', 1.5707963267, 1e-6))  -- convert x to radians
+    count(assertEqual('1.5707963267 deg', 90,           1e-6))  -- convert x to degrees
+    count(assertEqual('90 rad',           1.5707963267, 1e-6))  -- convert x to radians
 
     count(assertEqual('30 rad sin', 0.5))  -- Sine
     count(assertEqual('60 rad cos', 0.5))  -- Cosine
     count(assertEqual('45 rad tan', 1.0))  -- Tangent
-    -- count(assertEqual('csc'))  -- Cosecant
-    -- count(assertEqual('sec'))  -- Secant
-    -- count(assertEqual('cot'))  -- Cotangent
+    -- count(assertEqual('90 rad tan', 'inf'))  -- The actual is VERY large, but not inf.
+    count(assertEqual('30 rad csc', 2.0))  -- Cosecant
+    count(assertEqual('60 rad sec', 2.0))  -- Secant
+    count(assertEqual('45 rad cot', 1.0))  -- Cotangent
+    count(assertEqual('0 cot',      'inf'))  -- Cotangent
 
     count(assertEqual('0.5 asin deg', 30.0))  -- Inverse sine
-    count(assertEqual('10 asin', 'nan'))
+    count(assertEqual('10 asin',      'nan'))
     count(assertEqual('0.5 acos deg', 60.0))  -- Inverse cosine
-    count(assertEqual('-10 acos', 'nan'))
-    count(assertEqual('1 atan deg', 45.0))    -- Inverse Tangent
-    -- count(assertEqual('acsc'))  -- Inverse cosecant
-    -- count(assertEqual('asec'))  -- Inverse secant
-    -- count(assertEqual('acot'))  -- Inverse cotangent
+    count(assertEqual('-10 acos',     'nan'))
+    count(assertEqual('1 atan deg',   45.0))    -- Inverse Tangent
+    count(assertEqual('2.0 acsc deg', 30.0))  -- Inverse cosecant
+    count(assertEqual('0 acsc',       'nan'))  -- Inverse cosecant
+    count(assertEqual('2.0 asec deg', 60.0))  -- Inverse secant
+    count(assertEqual('0 asec',       'nan'))  -- Inverse secant
+    count(assertEqual('1 acot deg',   45.0))  -- Inverse cotangent
 
-    count(assertEqual('2 sinh', 3.6268604079, 1e-6)) -- Hyperbolic sine
-    count(assertEqual('4 cosh', 27.308232836, 1e-6)) -- Hyperbolic cosine
-    count(assertEqual('-0.5 tanh', -0.462117157, 1e-6)) -- Hyperbolic tangent
-    count(assertEqual('3.6268604079 asinh', 2.0, 1e-6)) -- Inverse hyperbolic sine
-    count(assertEqual('27.30823284 acosh', 4.0, 1e-6)) -- Inverse hyperbolic cosine
-    count(assertEqual('0 acosh', 'nan'))
-    count(assertEqual('-0.462117157 atanh', -0.5, 1e-6)) -- Inverse hyperbolic tangent
-    count(assertEqual('1 atanh', 'inf'))
-    count(assertEqual('-1 atanh', '-inf'))
-    count(assertEqual('10 atanh', 'nan'))
+    count(assertEqual('2 sinh',             3.6268604079, 1e-6)) -- Hyperbolic sine
+    count(assertEqual('4 cosh',             27.308232836, 1e-6)) -- Hyperbolic cosine
+    count(assertEqual('-0.5 tanh',          -0.462117157, 1e-6)) -- Hyperbolic tangent
+    count(assertEqual('3.6268604079 asinh', 2.0,          1e-6)) -- Inverse hyperbolic sine
+    count(assertEqual('27.30823284 acosh',  4.0,          1e-6)) -- Inverse hyperbolic cosine
+    count(assertEqual('0 acosh',            'nan'))
+    count(assertEqual('-0.462117157 atanh', -0.5,         1e-6)) -- Inverse hyperbolic tangent
+    count(assertEqual('1 atanh',            'inf'))
+    count(assertEqual('-1 atanh',           '-inf'))
+    count(assertEqual('10 atanh',           'nan'))
 
-    -- count(assertEqual('csch'))  -- Hyperbolic cosecant
-    -- count(assertEqual('sech'))  -- Hyperbolic secant
-    -- count(assertEqual('coth'))  -- Hyperbolic cotangent
-    -- count(assertEqual('acsch'))  -- Inverse hyperbolic sosecant
-    -- count(assertEqual('asech'))  -- Inverse hyperbolic secant
-    -- count(assertEqual('acoth'))  -- Inverse hyperbolic cotangent
+    count(assertEqual('2 csch',              0.27572056,    1e-6))  -- Hyperbolic cosecant
+    count(assertEqual('0 csch',              'inf'))
+    count(assertEqual('-5 sech',             0.013475282,   1e-6))  -- Hyperbolic secant
+    count(assertEqual('0 sech',              1.0))
+    count(assertEqual('0.5 coth',            2.16395341373, 1e-6))  -- Hyperbolic cotangent
+    count(assertEqual('0 coth',              'inf'))
+    count(assertEqual('0.27572056 acsch',    2.0,           1e-6))  -- Inverse hyperbolic cosecant
+    count(assertEqual('0 acsch',             'inf'))
+    count(assertEqual('0.013475282 asech',   5.0,           1e-6))  -- Inverse hyperbolic secant
+    count(assertEqual('-1 asech',            'nan'))
+    count(assertEqual('2.16395341373 acoth', 0.5,           1e-6))  -- Inverse hyperbolic cotangent
+    count(assertEqual('0 acoth',             'nan'))
 
     print('Bitwise=======================================')
     count(assertEqual('60 13 &', 12))   -- AND

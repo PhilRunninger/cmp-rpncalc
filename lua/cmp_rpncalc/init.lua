@@ -61,7 +61,7 @@ operatorFunc[ [[atanh]] ] = function() local x=pop(); push(math.log((1+x) / (1-x
 operatorFunc[ [[csch]] ]  = function() local x=pop(); push(2 / (math.exp(x) - math.exp(-x))) end -- Hyperbolic cosecant
 operatorFunc[ [[sech]] ]  = function() local x=pop(); push(2 / (math.exp(x) + math.exp(-x))) end -- Hyperbolic secant
 operatorFunc[ [[coth]] ]  = function() local x=pop(); push((math.exp(2*x)+1) / (math.exp(2*x)-1)) end -- Hyperbolic cotangent
-operatorFunc[ [[acsch]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1+x*x)) / x)) end -- Inverse hyperbolic sosecant
+operatorFunc[ [[acsch]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1+x*x)) / x)) end -- Inverse hyperbolic cosecant
 operatorFunc[ [[asech]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1-x*x)) / x)) end -- Inverse hyperbolic secant
 operatorFunc[ [[acoth]] ] = function() local x=pop(); push(math.log((x+1) / (x-1)) / 2) end -- Inverse hyperbolic cotangent
 
