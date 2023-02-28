@@ -1,0 +1,99 @@
+*cmp-rpncalc.txt*        An nvim-cmp completion source for RPN math calculations
+
+┌─┐┌┬┐┌─┐     ┬─┐┌─┐┌┐┌┌─┐┌─┐┬  ┌─┐                            *cmp-rpncalc* *rpn*
+│  │││├─┘ ─── ├┬┘├─┘││││  ├─┤│  │
+└─┘┴ ┴┴       ┴└─┴  ┘└┘└─┘┴ ┴┴─┘└─┘
+
+Reverse Polish Notation, RPN for short, is a mathematical notation in which
+operators follow their operands, in contrast to Polish notation (PN), in which
+operators precede their operands. The description "Polish" refers to the
+nationality of logician Jan Łukasiewicz, who invented Polish notation in 1924.
+                       - https://en.wikipedia.org/wiki/Reverse_Polish_notation
+
+==============================================================================
+                                                                  *rpn-operands*
+
+Numbers, formally called operands, are pushed onto a stack in the order they
+are read by the processor. Supported formats are: integers, decimals, and
+scientific notation. The top number on the stack is called X, with Y, Z, W,
+and other unnamed positions positioned below. When an operator is encountered,
+X and if necessary, other numbers are taken off the stack, and the result of
+the operation is placed back on the stack.
+
+==============================================================================
+                                                                 *rpn-operators*
+|Basic_Arithmetic|  `+  -  *  /  div  %  abs  chs`
+|Powers_&_Logs|     `exp  log  log10  log2  sqrt  **  \`
+|Trigonometry|      `sin    cos    tan    csc    sec    cot`
+                  `asin   acos   atan   acsc   asec   acot`
+                  `sinh   cosh   tanh   csch   sech   coth`
+                  `asinh  acosh  atanh  acsch  asech  acoth`
+|Bitwise|           `&  |  ^  <<  >>  ~`
+|Rounding|          `floor  ceil  round  trunc`
+|Constants|         `pi  e  phi`
+|Other|             `hrs  hms`
+
+                                        *rpn-basic-operators*   *Basic_Arithmetic*
+
+  `+`    Addition               `8 2 +`    becomes `10`
+  `-`    Subtraction            `8 2 -`    becomes `6`
+  `*`    Multiplication         `8 2 *`    becomes `16`
+  `/`    Division               `8 2 *`    becomes `4`
+  `div`  Integer Division       `25 7 div` becomes `3`
+  `%`    Remainder              `25 7 %`   becomes `4`
+  `abs`  Absolute Value         `-9`       becomes `9`
+  `chs`  Change Sign (Negation) `10 chs`   becomes `-10`
+
+                          *rpn-power-operators* *rpn-log-operators*  *Powers_&_Logs*
+
+  `exp`    Exponential function  `1 exp`      becomes `2.718281828...`
+  `log`    Natural log function  `2.718 log`  becomes `0.99989631572895`
+  `log10`  Common log function   `1000 log10` becomes `3`
+  `log2`   Log, base 2 function  `512 log2`   becomes `9`
+  `sqrt`   Square root           `121 sqrt`   becomes `11`
+  `**`     Exponentiation (y^x)  `3 4 **`     becomes `81`
+  `\`      Reciprocal            `4 \`        becomes `0.25`
+
+                                      *rpn-trigonometry-operators*  *Trigonometry*
+  Ordinary
+    `sin`    Sine of x radians         `asin`   Inverse
+    `cos`    Cosine of x radians       `acos`   Inverse
+    `tan`    Tangent of x radians      `atan`   Inverse
+    `csc`    Cosecant of x radians     `acsc`   Inverse
+    `sec`    Secant of x radians       `asec`   Inverse
+    `cot`    Cotangent of x radians    `acot`   Inverse
+
+  Hyperbolic
+    `sinh`   Hyperbolic Sine of x radians        `asinh`  Inverse
+    `cosh`   Hyperbolic Cosine of x radians      `acosh`  Inverse
+    `tanh`   Hyperbolic Tangent of x radians     `atanh`  Inverse
+    `csch`   Hyperbolic Cosecant of x radians    `acsch`  Inverse
+    `sech`   Hyperbolic Secant of x radians      `asech`  Inverse
+    `coth`   Hyperbolic Cotangent of x radians   `acoth`  Inverse
+
+                                                *rpn-bitwise-operators*  *Bitwise*
+
+  `&`  AND           `10 7 &`  becomes `2` (In binary, 1010 AND 111 = 10)
+  `|`  OR            `10 6 |`  becomes `14`            (1010 OR 110 = 1110)
+  `^`  XOR           `10 3 ^`  becomes `9`             (1010 XOR 11 = 1001)
+  `<<` Left Shift    `5 2 <<`  becomes `20`                   (101 -> 10100)
+  `>>` Right Shift   `58 2 >>` becomes `14`                (111010 -> 1110)
+  `~` 1's Complement `42 ~`    becomes `-43`    (101010 -> 1111111111110101)
+
+                                              *rpn-rounding-operators*  *Rounding*
+
+  `floor` Round down towards -infinity        `-3.5 floor` becomes `-4`
+  `ceil`  Round up towards +infinity          `6.2 ceil`   becomes `7`
+  `round` Round up or down to nearest integer `2.7 round`  becomes `3`
+  `trunc` Round toward zero                   `-5.8 trunc` becomes `-5`
+
+                                                      *rpn-constants*  *Constants*
+
+  `pi`  - A circle's circumference divided by its diameter, `3.1415926535...`
+  `e`   - Euler's number `2.7182818284590...`
+  `phi` - The golden ratio `1.6180339887499...`
+
+                                                    *rpn-other-operators*  *Other*
+
+  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` becomes `3.625`
+  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` becomes `3 37 30`

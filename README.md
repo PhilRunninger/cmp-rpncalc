@@ -1,88 +1,87 @@
 # cmp-rpncalc
-nvim-cmp source for math calculations using Reverse Polish Notation
+[nvim-cmp](https://github.com/hrsh7th/nvim-cmp) source for math calculations using Reverse Polish Notation
+
+## Installation
+
+Use your favorite plugin manager to install this plugin. [vim-pathogen](https://github.com/tpope/vim-pathogen), [Vundle.vim](https://github.com/VundleVim/Vundle.vim), [vim-plug](https://github.com/junegunn/vim-plug), [neobundle.vim](https://github.com/Shougo/neobundle.vim), and [Packer.nvim](https://github.com/wbthomason/packer.nvim) are some of the more popular ones. A lengthy discussion of these and other managers can be found on [vi.stackexchange.com](https://vi.stackexchange.com/questions/388/what-is-the-difference-between-the-vim-plugin-managers).
+
+If you have no favorite, or want to manage your plugins without 3rd-party dependencies, I recommend using packages, as described in Greg Hurrell's excellent Youtube video: [Vim screencast #75: Plugin managers](https://www.youtube.com/watch?v=X2_R3uxDN6g)
+
+## Setup
+
+```
+require'cmp'.setup {
+  formatting = {
+      fields = { "kind", "abbr", "menu" },
+      format = function(entry, vim_item)
+          -- Kind icons
+          vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+          vim_item.menu = ({
+              nvim_lsp = "[LSP]",
+              nvim_lua = "[NVIM_LUA]",
+              luasnip = "[Snippet]",
+              buffer = "[Buffer]",
+              path = "[Path]",
+              rpncalc = "[RPN]",
+          })[entry.source.name]
+          return vim_item
+      end,
+  },
+  sources = {
+    { name = 'rpncalc' }
+  }
+}
+```
 
 ## How Does RPN Work?
 
-RPN is a way of writing a mathematical expression where the operator follows the operand(s) it uses. This means there's no need for parentheses.
+RPN is a mathematical notation in which the operator follows its operand(s). This means there is no need for parentheses. Here are some examples:
+* Add 956 and 37: `956 37 +`
+* Divide 452 by 12 (Remember, division isn't commutative.): `452 12 /`
+* Find the tangent of 28 degrees: `28 rad tan`
+* Solve `3x²+13x-10 = 0` using the quadratic formula:
+    * `13 chs 13 2 ** 4 3 10 chs * * - sqrt + 2 3 * /`
+    * `13 chs 13 2 ** 4 3 10 chs * * - sqrt - 2 3 * /`
+
+Reading an expression from left to right, numbers are placed on a stack. When an operator is encountered one or more numbers (as needed by the operator) are popped from the stack and the result of the operation is pushed back on the stack.
 
 ## Operands
 
-Operands include numbers in any of the following formats:
-
-Regex (Vim format) | Example | Description
----|---
-`\v[+-]?\d+\.?\d*(e[+-]?\d+)?` | Decimal, Scientific Notation
-`\v[+-]?0b[01]+` | Binary
-`\v[+-]?0o[0-7]+` | Octal
-`\v\c[+-]?0x[0-9a-f]+` | Hexadecimal
-`\v[+-]?\d+\.?\d*(e[+-]?\d+)?[+-]\d+\.?\d*(e[+-]?\d+)?i` | Complex
+Numbers can be entered as integers, decimals, or in scientific notation.
 
 ## Operators
-### Arithmetic
-+    => 'Addition',
-*    => 'Multiplication',
--    => 'Subtraction',
-/    => 'Division',
-div  => 'Integer division',
-%    => 'Modulus',
-**   => 'Exponentiation',
-abs  => 'Absolute value',
-chs  => 'Negation',
-### Rounding
-'round'    => 'Round to nearest integer',
-'truncate' => 'Truncate to integer',
-'floor'    => 'Round down to nearest integer',
-'ceil'     => 'Round up to nearest integer',
-### Powers & Logs
-'exp'   => 'Raise e to the x power',
-'log'   => 'Natural Log of x',
-'log10' => 'Log (base 10) of x',
-'log2'  => 'Log (base 2) of x',
-'sqrt'  => 'Square Root',
-'\\'    => 'Reciprocal',
-### Trigonometry
-'sin'   => 'Sine of x',
-'asin'  => 'Arcsine of x',
-'cos'   => 'Cosine of x',
-'acos'  => 'Arccosine of x',
-'tan'   => 'Tangent of x',
-'atan'  => 'Artangent of x',
-### Statistics
-'!'       => 'Factorial',
-'perm'    => 'Permutation(Y, X)',
-'comb'    => 'Combination(Y, X)',
-'sum'     => 'Sum of stack',
-'product' => 'Product of stack',
-'mean'    => 'Mean average',
-'median'  => 'Median average',
-'std'     => 'Standard Deviation',
-'count'   => 'Size of stack',
-### Bitwise
-'&'  => 'AND',
-'|'  => 'OR',
-'^'  => 'XOR',
-'<<' => 'Left Shift',
-'>>' => 'Right Shift',
-'~'  => "1's complement",
-### Constants
-'pi'  => '3.141592653....',
-'e'   => '2.718281828...',
-'phi' => '0.618033989...',
-'i' => 'sqrt(-1)',
-### Stack
-'copy' => 'Copy top value on stack',
-'del'  => 'Delete top value from stack',
-'xy'   => 'Swap x and y',
-### Display Mode
-'bin'  => 'Binary: 0b[01]+',
-'oct'  => 'Octal: 0[0-7]+',
-'hex'  => 'Hexadecimal: 0x[0-9a-f]+',
-'dec'  => 'Decimal (integer)',
-'norm' => 'Normal mode',
-### Angle Mode
-'rad' => 'Switch to radians',
-'deg' => 'Switch to degrees',
-### Other
-'hrs' => 'Convert Z:Y:X to hours',
-'hms' => 'Convert X hours to Z:Y:X',
-    ]
+
+| Basic Arithmetic |                  | Powers & Logs    |                        |
+| :-:              | ---              | :-:              | ---                    |
+| <kbd>+</kbd>     | Addition         | <kbd>exp</kbd>   | Raise e to the x power |
+| <kbd>-</kbd>     | Subtraction      | <kbd>log</kbd>   | Natural Log of x       |
+| <kbd>*</kbd>     | Multiplication   | <kbd>log10</kbd> | Log (base 10) of x     |
+| <kbd>/</kbd>     | Division         | <kbd>log2</kbd>  | Log (base 2) of x      |
+| <kbd>div</kbd>   | Integer division | <kbd>sqrt</kbd>  | Square Root            |
+| <kbd>%</kbd>     | Modulus          | <kbd>**</kbd>    | Exponentiation         |
+| <kbd>abs</kbd>   | Absolute value   | <kbd>\</kbd>     | Reciprocal             |
+| <kbd>chs</kbd>   | Negation         |                  |                        |
+
+| Trigonometry | Base           | Inverse         | Hyperbolic      | Inverse Hyperbolic |
+| ---          | :-:            | :-:             | :-:             | :-:                |
+| Sine         | <kbd>sin</kbd> | <kbd>asin</kbd> | <kbd>sinh</kbd> | <kbd>asinh</kbd>   |
+| Cosine       | <kbd>cos</kbd> | <kbd>acos</kbd> | <kbd>cosh</kbd> | <kbd>acosh</kbd>   |
+| Tangent      | <kbd>tan</kbd> | <kbd>atan</kbd> | <kbd>tanh</kbd> | <kbd>atanh</kbd>   |
+| Cosecant     | <kbd>csc</kbd> | <kbd>acsc</kbd> | <kbd>csch</kbd> | <kbd>acsch</kbd>   |
+| Secant       | <kbd>sec</kbd> | <kbd>asec</kbd> | <kbd>sech</kbd> | <kbd>asech</kbd>   |
+| Cotangent    | <kbd>cot</kbd> | <kbd>acot</kbd> | <kbd>coth</kbd> | <kbd>acoth</kbd>   |
+
+| Bitwise       |                | Rounding         |                               |
+| :-:           | ---            | :-:              | ---                           |
+| <kbd>&</kbd>  | AND            | <kbd>floor</kbd> | Round down to nearest integer |
+| <kbd>\| </kbd>| OR             | <kbd>ceil</kbd>  | Round up to nearest integer   |
+| <kbd>^</kbd>  | XOR            | <kbd>round</kbd> | Round to nearest integer      |
+| <kbd><<</kbd> | Left Shift     | <kbd>trunc</kbd> | Truncate to integer           |
+| <kbd>>></kbd> | Right Shift    |                  |                               |
+| <kbd>~</kbd>  | 1's complement |                  |                               |
+
+| Constants      |                 | Other          |                          |
+| :-:            | ---             | :-:            | ---                      |
+| <kbd>pi</kbd>  | 3.141592653.... | <kbd>hrs</kbd> | Convert Z:Y:X to hours   |
+| <kbd>e</kbd>   | 2.718281828...  | <kbd>hms</kbd> | Convert X hours to Z:Y:X |
+| <kbd>phi</kbd> | 0.618033989...  |                |                          |
