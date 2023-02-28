@@ -11,22 +11,6 @@ If you have no favorite, or want to manage your plugins without 3rd-party depend
 
 ```
 require'cmp'.setup {
-  formatting = {
-      fields = { "kind", "abbr", "menu" },
-      format = function(entry, vim_item)
-          -- Kind icons
-          vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-          vim_item.menu = ({
-              nvim_lsp = "[LSP]",
-              nvim_lua = "[NVIM_LUA]",
-              luasnip = "[Snippet]",
-              buffer = "[Buffer]",
-              path = "[Path]",
-              rpncalc = "[RPN]",
-          })[entry.source.name]
-          return vim_item
-      end,
-  },
   sources = {
     { name = 'rpncalc' }
   }
