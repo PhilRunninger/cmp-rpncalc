@@ -33,7 +33,8 @@ the operation is placed back on the stack.
 |Constants|         `pi  e  phi`
 |Other|             `hrs  hms`
 
-                                        *rpn-basic-operators*   *Basic_Arithmetic*
+==============================================================================
+*Basic_Arithmetic*                                           *rpn-basic-operators*
 
   `+`    Addition               `8 2 +`    becomes `10`
   `-`    Subtraction            `8 2 -`    becomes `6`
@@ -44,7 +45,7 @@ the operation is placed back on the stack.
   `abs`  Absolute Value         `-9`       becomes `9`
   `chs`  Change Sign (Negation) `10 chs`   becomes `-10`
 
-                          *rpn-power-operators* *rpn-log-operators*  *Powers_&_Logs*
+*Powers_&_Logs*                            *rpn-power-operators* *rpn-log-operators*
 
   `exp`    Exponential function  `1 exp`      becomes `2.718281828...`
   `log`    Natural log function  `2.718 log`  becomes `0.99989631572895`
@@ -54,7 +55,7 @@ the operation is placed back on the stack.
   `**`     Exponentiation (y^x)  `3 4 **`     becomes `81`
   `\`      Reciprocal            `4 \`        becomes `0.25`
 
-                                      *rpn-trigonometry-operators*  *Trigonometry*
+*Trigonometry*                                        *rpn-trigonometry-operators*
   Ordinary
     `sin`    Sine of x radians         `asin`   Inverse
     `cos`    Cosine of x radians       `acos`   Inverse
@@ -71,7 +72,7 @@ the operation is placed back on the stack.
     `sech`   Hyperbolic Secant of x radians      `asech`  Inverse
     `coth`   Hyperbolic Cotangent of x radians   `acoth`  Inverse
 
-                                                *rpn-bitwise-operators*  *Bitwise*
+*Bitwise*                                                  *rpn-bitwise-operators*
 
   `&`  AND           `10 7 &`  becomes `2` (In binary, 1010 AND 111 = 10)
   `|`  OR            `10 6 |`  becomes `14`            (1010 OR 110 = 1110)
@@ -80,20 +81,20 @@ the operation is placed back on the stack.
   `>>` Right Shift   `58 2 >>` becomes `14`                (111010 -> 1110)
   `~` 1's Complement `42 ~`    becomes `-43`    (101010 -> 1111111111110101)
 
-                                              *rpn-rounding-operators*  *Rounding*
+*Rounding*                                                *rpn-rounding-operators*
 
   `floor` Round down towards -infinity        `-3.5 floor` becomes `-4`
   `ceil`  Round up towards +infinity          `6.2 ceil`   becomes `7`
   `round` Round up or down to nearest integer `2.7 round`  becomes `3`
   `trunc` Round toward zero                   `-5.8 trunc` becomes `-5`
 
-                                                      *rpn-constants*  *Constants*
+*Constants*                                                        *rpn-constants*
 
-  `pi`  - A circle's circumference divided by its diameter, `3.1415926535...`
-  `e`   - Euler's number `2.7182818284590...`
-  `phi` - The golden ratio `1.6180339887499...`
+  `pi`  - A circle's circumference divided by its diameter: `3.1415926535...`
+  `e`   - Euler's number: `2.7182818284590...`
+  `phi` - The golden ratio: `1.6180339887499...`
 
-                                                    *rpn-other-operators*  *Other*
+*Other*                                                      *rpn-other-operators*
 
   `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` becomes `3.625`
   `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` becomes `3 37 30`

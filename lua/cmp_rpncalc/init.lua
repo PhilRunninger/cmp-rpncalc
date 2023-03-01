@@ -104,13 +104,13 @@ end
 -- Create the regex that determines if the text a valid RPN expression.
 local operators = {}
 for op,_ in pairs(operatorFunc) do
-    operators[#operators+1] = vim.fn.escape(op, [[~^*/\+%]] )
+    operators[#operators+1] = vim.fn.escape(op, [[~^*/\+%|<>&]] )
 end
 
-local numberRegex = [[%([-+]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?)]]  -- 0, -42, 3.14, 6.02e23, etc.
+local numberRegex = [[[-+]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]  -- 0, -42, 3.14, 6.02e23, etc.
 local operatorsRegex = table.concat(operators,[[|]])  -- Concatenate all operators:  sin|cos|+|-|pi|...
 local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
-local expressionRegex = wordRegex .. [[( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
+local expressionRegex = wordRegex .. [[%( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
 expressionRegex = [[\v]] .. expressionRegex  -- Very magic
 
 -- source contains the callback functions that are needed to work in nvim-cmp.

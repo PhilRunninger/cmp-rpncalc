@@ -47,7 +47,7 @@ M.run = function(verbose)
         failedTests = failedTests + (pass and 0 or 1)
     end
 
-    print('Basic Arithmetic=======================================')
+    print('Basic Arithmetic ============================================================')
     count(assertEqual('3 2 +',     5))   -- Addtion
     count(assertEqual('3.1 2.2 +', 5.3))
     count(assertEqual('13 2 -',    11))  -- Subtraction
@@ -69,7 +69,7 @@ M.run = function(verbose)
     count(assertEqual('-8 chs',    8))   -- Change Sign
     count(assertEqual('8 chs',     -8))
 
-    print('Rounding=======================================')
+    print('Rounding ====================================================================')
     count(assertEqual('12.3 floor',  12))  -- Floor - round down to nearest integer
     count(assertEqual('-12.3 floor', -13))
     count(assertEqual('12.3 ceil',   13))  -- Ceiling - round up to nearest integer
@@ -81,7 +81,7 @@ M.run = function(verbose)
     count(assertEqual('12.7 trunc',  12))  -- Round toward zero
     count(assertEqual('-12.7 trunc', -12))
 
-    print('Powers & Logs=======================================')
+    print('Powers & Logs ===============================================================')
     count(assertEqual('2 exp',       7.3890560989, 1e-6))  -- Raise e to the x power
     count(assertEqual('0 exp',       1))
     count(assertEqual('0.1 exp',     1.1051709180, 1e-6))
@@ -105,7 +105,7 @@ M.run = function(verbose)
     count(assertEqual('10 \\',       0.1))  -- Reciprocal
     count(assertEqual('0 \\',        'inf'))
 
-    print('Trigonometry=======================================')
+    print('Trigonometry ================================================================')
     count(assertEqual('1.5707963267 deg', 90,           1e-6))  -- convert x to degrees
     count(assertEqual('90 rad',           1.5707963267, 1e-6))  -- convert x to radians
 
@@ -153,7 +153,7 @@ M.run = function(verbose)
     count(assertEqual('2.16395341373 acoth', 0.5,           1e-6))  -- Inverse hyperbolic cotangent
     count(assertEqual('0 acoth',             'nan'))
 
-    print('Bitwise=======================================')
+    print('Bitwise =====================================================================')
     count(assertEqual('60 13 &', 12))   -- AND
     count(assertEqual('60 13 |', 61))   -- OR
     count(assertEqual('60 13 ^', 49))   -- XOR
@@ -161,12 +161,12 @@ M.run = function(verbose)
     count(assertEqual('60 2 <<', 240))  -- Left Shift
     count(assertEqual('60 2 >>', 15))   -- Right Shift
 
-    print('Constants=======================================')
+    print('Constants ===================================================================')
     count(assertEqual('pi',  3.1415926535, 1e-6))  -- 3.141592653....
     count(assertEqual('e',   2.7182818284, 1e-6))  -- 2.718281828...
     count(assertEqual('phi', 1.6180339887, 1e-6))  -- golden ratio
 
-    print('Other=======================================')
+    print('Other =======================================================================')
     count(assertEqual('3 20 15 hrs', 3.3375))  -- Convert Z:Y:X to hours
     count(assertEqual('3.3375 hms', '3 20 15'))  -- Convert X hours to Z:Y:X
 
