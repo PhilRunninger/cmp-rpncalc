@@ -114,7 +114,7 @@ M.run = function(verbose)
     count(assertEqual( [[0.1 exp]],     1.1051709180, 1e-6))
     count(assertEqual( [[120 log]],     4.7874917427, 1e-6))  -- Natural log of x
     count(assertEqual( [[0 log]],       '-inf'))
-    count(assertEqual( [[625 5 logx]],  4))  -- Log y of x
+    count(assertEqual( [[625 5 logx]],  4))  -- Log (base x) of y
     count(assertEqual( [[625 -5 logx]], 'nan'))
     count(assertEqual( [[-625 5 logx]], 'nan'))
     count(assertEqual( [[1000 log10]],  3))  -- Log (base 10) of x
@@ -125,7 +125,6 @@ M.run = function(verbose)
     count(assertEqual( [[23.1 sqrt]],   4.8062459362, 1e-6))
     count(assertEqual( [[2 3 **]],      8))  -- Exponentiation
     count(assertEqual( [[-12 4 **]],    20736))
-    count(assertEqual( [[-7 3.3 **]],   'nan'))
     count(assertEqual( [[0 0 **]],      'nan'))
     count(assertEqual( [[12 -0.25 **]], 0.5372849659, 1e-6))
     count(assertEqual( [[10 \]],        0.1))  -- Reciprocal
@@ -240,37 +239,24 @@ M.run = function(verbose)
     count(assertEqual( [[-12.7,-4.3 trunc]], {-12,-4} ))
 
     print('Powers & Logs ===============================================================')
-    -- count(assertEqual( [[2,1 exp]],   {3.992324048,6.217676312}, 1e-6 )) -- Raise e to the a complex power
-
--- e^(a+bi)
--- (e^a)*(e*bi)
--- (e^a)*(cos(b)+i*sin(b))
--- {(e^a)cos(b), (e^a)sin(b)}
-
-
-    -- count(assertEqual( [[0.1 exp]],     1.1051709180, 1e-6 ))
-    -- count(assertEqual( [[120 log]],     4.7874917427, 1e-6 ))  -- Natural log of x
-    -- count(assertEqual( [[0 log]],       '-inf' ))
-    -- count(assertEqual( [[625 5 logx]],  4 ))  -- Log y of x
-    -- count(assertEqual( [[625 -5 logx]], 'nan' ))
-    -- count(assertEqual( [[-625 5 logx]], 'nan' ))
-    -- count(assertEqual( [[1000 log10]],  3 ))  -- Log (base 10) of x
-    -- count(assertEqual( [[12345 log10]], 4.0914910942, 1e-6 ))
-    -- count(assertEqual( [[1024 log2]],   10 ))  -- Log (base 2) of x
-    -- count(assertEqual( [[13 log2]],     3.7004397181, 1e-6 ))
-    -- count(assertEqual( [[36 sqrt]],     6 ))  -- Square Root
-    count(assertEqual( [[-4 sqrt]],     {0,2} ))
-    -- count(assertEqual( [[23.1 sqrt]],   4.8062459362, 1e-6 ))
-    count(assertEqual( [[0,1 2 **]],      {-1,0}, 1e-6 ))  -- Exponentiation
-    count(assertEqual( [[0,1 3 **]],    {0,-1}, 1e-6 ))
-    count(assertEqual( [[1,1 2 **]],    {0,2}, 1e-6 ))
-    count(assertEqual( [[3 1,-2 **]],   {-1.7587648,-2.4303798}, 1e-6))
-    count(assertEqual( [[-4,3 1,-2 **]],   {555.3814991,-487.8784553}, 1e-6))
-    -- count(assertEqual( [[-7 3.3 **]],   'nan' ))
-    -- count(assertEqual( [[0 0 **]],      'nan' ))
-    -- count(assertEqual( [[12 -0.25 **]], 0.5372849659, 1e-6 ))
-    -- count(assertEqual( [[10 \]],       0.1 ))  -- Reciprocal
-    -- count(assertEqual( [[0 \]],        'inf' ))
+    count(assertEqual( [[2,1 exp]],      {3.992324048,6.217676312}, 1e-6 )) -- Raise e to the x power
+    count(assertEqual( [[2,3 log]],      {1.282474678,0.982793723}, 1e-6 ))  -- Natural log of x
+    count(assertEqual( [[2,3 log10]],    {0.556971676,0.426821891}, 1e-6 ))  -- Log (base 10) of x
+    count(assertEqual( [[2,3 log2]],     {1.850219859,1.417871631}, 1e-6 ))  -- Log (base 2) of x
+    count(assertEqual( [[2,3 1,2 logx]], {1.131731655,-0.335771298}, 1e-6 ))  -- Log (base x) of y
+    count(assertEqual( [[-4 sqrt]],      {0,2}, 1e-6))  -- Square root
+    count(assertEqual( [[2,3.1 sqrt]],   {1.6865902,0.91901396}, 1e-6 ))
+    count(assertEqual( [[0,1 2 **]],     {-1,0}, 1e-6 ))  -- Exponentiation
+    count(assertEqual( [[0,1 3 **]],     {0,-1}, 1e-6 ))
+    count(assertEqual( [[1,1 2 **]],     {0,2}, 1e-6 ))
+    count(assertEqual( [[3 1,-2 **]],    {-1.7587648,-2.4303798}, 1e-6))
+    count(assertEqual( [[-4,3 1,-2 **]], {555.3814991,-487.8784553}, 1e-6))
+    count(assertEqual( [[-7 3.3 **]],    {-361.4449966, -497.4863586}, 1e-6))
+    count(assertEqual( [[0,0 0 **]],     'nan' ))
+    count(assertEqual( [[0 0,0 **]],     'nan' ))
+    count(assertEqual( [[0,0 0,0 **]],   'nan' ))
+    count(assertEqual( [[0,0 \]],        'inf' ))
+    count(assertEqual( [[2,3 \]],        {2/13, -3/13}, 1e-6))
 
     print(string.format('\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
 return M
