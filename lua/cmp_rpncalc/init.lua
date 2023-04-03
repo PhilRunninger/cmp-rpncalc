@@ -132,12 +132,45 @@ op[ [[sqrt]] ]  = function() push(0.5); pcall(op[ [[**]] ]) end -- Square root o
 op[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
 op[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to radians
 
-op[ [[sin]] ]   = function() push(math.sin(pop())) end -- Sine
-op[ [[cos]] ]   = function() push(math.cos(pop())) end -- Cosine
-op[ [[tan]] ]   = function() push(math.tan(pop())) end -- Tangent
-op[ [[csc]] ]   = function() push(1 / math.sin(pop())) end -- Cosecant
-op[ [[sec]] ]   = function() push(1 / math.cos(pop())) end -- Secant
-op[ [[cot]] ]   = function() push(1 / math.tan(pop())) end -- Cotangent
+-- Using these identities, we can calculate trig values of complex numbers:
+--    sin(z) = (e^iz - e^-iz) / 2i         cos(z) = (e^iz + e^-iz) / 2
+--    sin(iz) = (e^iiz - e^-iiz) / 2i      cos(iz) = (e^iiz + e^-iiz) / 2
+--            = i*(e^z - e^-z) / 2                 = (e^-z + e^z) / 2
+--            = i*sinh(z)                          = cosh(z)
+--
+-- sin(a+bi) = sin(a)*cos(bi) + cos(a)*sin(bi)*i   =   sin(a)*cosh(b) + cos(a)*sinh(b)*i
+-- cos(a+bi) = cos(z)*cos(bi) - sin(a)*sin(bi)*i   =   cos(a)*cosh(b) - sin(a)*sinh(b)*i
+
+-- sinh(a+bi) = -i*sin(ia+ibi) = -i*sin(-b+ai) = -i*(sin(-b)*cosh(a) + cos(-b)*sinh(a)*i) =  cos(b)*sinh(a) + sin(b)*cosh(a)*i
+-- cosh(a+bi) = cos(ia+ibi)    = cos(-b+ai)    = cos(-b)*cosh(a) - sin(-b)*sinh(a)*i =   cos(b)*cosh(a) + sin(b)*sinh(a)*i
+
+-- Then, as usual, tan = sin / cos,      csc = 1 / sin,     sec = 1 / cos,     cot = 1 / tan
+--                 tanh = sinh / cosh,   csch = 1 / sinh,   sech = 1 / cosh,   coth = 1 / tanh
+
+op[ [[sin]] ]   = function() local x = pop(); -- Sine
+        if math.iscomplex(x) then
+            push({math.sin(x[1])*math.cosh(x[2]), math.cos(x[1])*math.sinh(x[2])})
+        elseif math.isreal(x) then push(math.sin(x))
+        end
+    end
+op[ [[cos]] ]   = function() local x = pop(); -- Cosine
+        if math.iscomplex(x) then push({math.cos(x[1])*math.cosh(x[2]), -math.sin(x[1])*math.sinh(x[2])})
+        elseif math.isreal(x) then push(math.cos(x))
+        end
+    end
+op[ [[tan]] ]   = function() local x = pop(); -- Tangent
+        if math.iscomplex(x) then
+            push(x)
+            pcall(op[ [[sin]] ])
+            push(x)
+            pcall(op[ [[cos]] ])
+            pcall(op[ [[/]] ])
+        elseif math.isreal(x) then push(math.tan(x))
+        end
+    end
+op[ [[csc]] ]   = function() pcall(op[ [[sin]] ]); pcall(op[ [[\]] ]); end -- Cosecant
+op[ [[sec]] ]   = function() pcall(op[ [[cos]] ]); pcall(op[ [[\]] ]); end -- Secant
+op[ [[cot]] ]   = function() pcall(op[ [[tan]] ]); pcall(op[ [[\]] ]); end -- Cotangent
 
 op[ [[asin]] ]  = function() push(math.asin(pop())) end -- Inverse sine
 op[ [[acos]] ]  = function() push(math.acos(pop())) end -- Inverse cosine
@@ -146,16 +179,35 @@ op[ [[acsc]] ]  = function() push(math.asin(1 / pop())) end -- Inverse cosecant
 op[ [[asec]] ]  = function() push(math.acos(1 / pop())) end -- Inverse secant
 op[ [[acot]] ]  = function() push(math.atan(1 / pop())) end -- Inverse cotangent
 
-op[ [[sinh]] ]  = function() local x=pop(); push((math.exp(x) - math.exp(-x)) / 2) end -- Hyperbolic sine
-op[ [[cosh]] ]  = function() local x=pop(); push((math.exp(x) + math.exp(-x)) / 2) end -- Hyperbolic cosine
-op[ [[tanh]] ]  = function() local x=pop(); push((math.exp(2*x)-1) / (math.exp(2*x)+1)) end -- Hyperbolic tangent
+op[ [[sinh]] ]  = function() local x=pop(); -- Hyperbolic sine
+        if math.iscomplex(x) then push({math.cos(x[2])*math.sinh(x[1]), math.sin(x[2])*math.cosh(x[1])})
+        elseif math.isreal(x) then push(math.sinh(x))
+        end
+    end
+op[ [[cosh]] ]  = function() local x=pop(); -- Hyperbolic cosine
+        if math.iscomplex(x) then push({math.cos(x[2])*math.cosh(x[1]), math.sin(x[2])*math.sinh(x[1])})
+        elseif math.isreal(x) then push(math.cosh(x))
+        end
+    end
+op[ [[tanh]] ]  = function() local x=pop(); -- Hyperbolic tangent
+        if math.iscomplex(x) then
+            push(x)
+            pcall(op[ [[sinh]] ])
+            push(x)
+            pcall(op[ [[cosh]] ])
+            pcall(op[ [[/]] ])
+        elseif math.isreal(x) then
+    push(math.tanh(x))
+        end
+    end
+op[ [[csch]] ]  = function() pcall(op[ [[sinh]] ]); pcall(op[ [[\]] ]); end -- Hyperbolic cosecant
+op[ [[sech]] ]  = function() pcall(op[ [[cosh]] ]); pcall(op[ [[\]] ]); end -- Hyperbolic secant
+op[ [[coth]] ]  = function() pcall(op[ [[tanh]] ]); pcall(op[ [[\]] ]); end -- Hyperbolic cotangent
+
 op[ [[asinh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x+1))) end -- Inverse hyperbolic sine
 op[ [[acosh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x-1))) end -- Inverse hyperbolic cosine
 op[ [[atanh]] ] = function() local x=pop(); push(math.log((1+x) / (1-x)) / 2) end -- Inverse hyperbolic tangent
 
-op[ [[csch]] ]  = function() local x=pop(); push(2 / (math.exp(x) - math.exp(-x))) end -- Hyperbolic cosecant
-op[ [[sech]] ]  = function() local x=pop(); push(2 / (math.exp(x) + math.exp(-x))) end -- Hyperbolic secant
-op[ [[coth]] ]  = function() local x=pop(); push((math.exp(2*x)+1) / (math.exp(2*x)-1)) end -- Hyperbolic cotangent
 op[ [[acsch]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1+x*x)) / x)) end -- Inverse hyperbolic cosecant
 op[ [[asech]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1-x*x)) / x)) end -- Inverse hyperbolic secant
 op[ [[acoth]] ] = function() local x=pop(); push(math.log((x+1) / (x-1)) / 2) end -- Inverse hyperbolic cotangent

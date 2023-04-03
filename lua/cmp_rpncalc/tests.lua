@@ -24,6 +24,7 @@ local assertEqual = function(expression, expected, tolerance)
             if type(expected) == 'table' then
                 -- Split complex into real and imaginary: "1.23+4.5i" -> {"1.23", "+4.5"}
                 local parts = vim.fn.split(result, '\\(\\ze[+-]\\|i\\)')
+                -- vim.pretty_print(parts)
                 -- Side effect: it also splits mantissas from exponents: "1.2e-6+9.9e-8i" -> {"1.2e", "-6", "+9.9e", "-8"}
                 -- If that happens, smash them back together again: -> {"1.2e-6", "+9.9e-8"}
                 local i = 1
@@ -34,6 +35,7 @@ local assertEqual = function(expression, expected, tolerance)
                     end
                     i = i + 1
                 end
+                -- vim.pretty_print(parts, expected)
 
                 pass = #parts == #expected and
                     math.abs(tonumber(parts[1])-expected[1]) <= tolerance and
@@ -257,6 +259,21 @@ M.run = function(verbose)
     count(assertEqual( [[0,0 0,0 **]],   'nan' ))
     count(assertEqual( [[0,0 \]],        'inf' ))
     count(assertEqual( [[2,3 \]],        {2/13, -3/13}, 1e-6))
+
+    print('Trigonometry ================================================================')
+    count(assertEqual( [[1,1 sin]], {1.298457581,0.634963915}, 1e-6))
+    count(assertEqual( [[1,1 cos]], {0.833730025,-0.988897706}, 1e-6))
+    count(assertEqual( [[1,1 tan]], {0.271752585,1.083923327}, 1e-6))
+    count(assertEqual( [[1,1 csc]], {0.621518017,-0.303931002}, 1e-6))
+    count(assertEqual( [[1,1 sec]], {0.498337031,0.591083842}, 1e-6))
+    count(assertEqual( [[1,1 cot]], {0.217621562,-0.868014143}, 1e-6))
+
+    count(assertEqual( [[1,2 sinh]], {-0.489056259,1.403119251}, 1e-6))
+    count(assertEqual( [[1,2 cosh]], {-0.642148716,1.068607421}, 1e-6))
+    count(assertEqual( [[1,2 tanh]], {1.166736257,-0.243458201}, 1e-6))
+    count(assertEqual( [[1,2 csch]], {-0.221500931,-0.635493799}, 1e-6))
+    count(assertEqual( [[1,2 sech]], {-0.413149344,-0.687527439}, 1e-6))
+    count(assertEqual( [[1,2 coth]], {0.821329797,0.171383613}, 1e-6))
 
     print(string.format('\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
 return M
