@@ -275,5 +275,12 @@ M.run = function(verbose)
     count(assertEqual( [[1,2 sech]], {-0.413149344,-0.687527439}, 1e-6))
     count(assertEqual( [[1,2 coth]], {0.821329797,0.171383613}, 1e-6))
 
+    count(assertEqual( [[1,1 asin]], {0.666239432,1.061275062}, 1e-6))
+    count(assertEqual( [[1,1 acos]], {0.904556894,-1.061275062}, 1e-6))
+    count(assertEqual( [[1,1 atan]], {1.017221968,0.402359478}, 1e-6))
+    count(assertEqual( [[1,1 acsc]], {0.452278447,-0.530637531}, 1e-6))
+    count(assertEqual( [[1,1 asec]], {1.118517880,0.530637531}, 1e-6))
+    count(assertEqual( [[1,1 acot]], {0.553574359,-0.402359478}, 1e-6))
+
     print(string.format('\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
 return M
