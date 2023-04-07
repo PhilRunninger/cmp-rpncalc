@@ -277,15 +277,11 @@ op[ [[cosh]] ]  = function() -- Hyperbolic cosine
 end
 op[ [[tanh]] ]  = function() -- Hyperbolic tangent
     local x=pop()
-    if math.iscomplex(x) then
-        push(x)
-        pcall(op[ [[sinh]] ])
-        push(x)
-        pcall(op[ [[cosh]] ])
-        pcall(op[ [[/]] ])
-    elseif math.isreal(x) then
-        push(math.tanh(x))
-    end
+    push(x)
+    pcall(op[ [[sinh]] ])
+    push(x)
+    pcall(op[ [[cosh]] ])
+    pcall(op[ [[/]] ])
 end
 op[ [[csch]] ]  = function() -- Hyperbolic cosecant
     pcall(op[ [[sinh]] ])
