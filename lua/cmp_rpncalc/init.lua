@@ -17,7 +17,9 @@ math.trunc = function(x) return x>=0 and math.floor(x) or math.ceil(x) end -- Ro
 
 local op= {}
 
--- Basic Arithmetic --------------------------------------------------------------------------------
+-- #############################################################################################
+-- ############################################################################ Basic Arithmetic
+-- #############################################################################################
 op[ [[+]] ] = function()  -- Addtion
     local x,y = pop(), pop()
     if math.isreal(x)        and math.isreal(y)    then push(x + y)
@@ -78,7 +80,9 @@ op[ [[chs]] ]   = function() -- Change Sign
 end
 
 
--- Rounding --------------------------------------------------------------------------------
+-- #############################################################################################
+-- #################################################################################### Rounding
+-- #############################################################################################
 op[ [[floor]] ] = function() -- Floor - round down to nearest integer
     local x=pop()
     if math.isreal(x)        then push(math.floor(x))
@@ -105,8 +109,9 @@ op[ [[trunc]] ] = function() -- Round toward zero
 end
 
 
--- Powers & Logs --------------------------------------------------------------------------------
--- ln(a+bi)   =   ln(re^it)  =  ln(r)+ln(e^it)  =  ln(r)+it
+-- #############################################################################################
+-- ############################################################################### Powers & Logs
+-- #############################################################################################
 op[ [[log]] ]   = function() -- Natural log of x
         local x=pop()
     if math.iscomplex(x) then
@@ -155,25 +160,9 @@ op[ [[\]] ]     = function() push(-1); pcall(op[ [[**]] ]) end -- Reciprocal
 op[ [[sqrt]] ]  = function() push(0.5); pcall(op[ [[**]] ]) end -- Square root of x
 
 
--- Trigonometry --------------------------------------------------------------------------------
-op[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
-op[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to radians
---
--- Using these identities, we can calculate trig values of complex numbers:
---    sin(z) = (e^iz - e^-iz) / 2i         cos(z) = (e^iz + e^-iz) / 2
---    sin(iz) = (e^iiz - e^-iiz) / 2i      cos(iz) = (e^iiz + e^-iiz) / 2
---            = i*(e^z - e^-z) / 2                 = (e^-z + e^z) / 2
---            = i*sinh(z)                          = cosh(z)
---
--- sin(a+bi) = sin(a)*cos(bi) + cos(a)*sin(bi)*i   =   sin(a)*cosh(b) + cos(a)*sinh(b)*i
--- cos(a+bi) = cos(z)*cos(bi) - sin(a)*sin(bi)*i   =   cos(a)*cosh(b) - sin(a)*sinh(b)*i
---
--- sinh(a+bi) = -i*sin(ia+ibi) = -i*sin(-b+ai) = -i*(sin(-b)*cosh(a) + cos(-b)*sinh(a)*i) =  cos(b)*sinh(a) + sin(b)*cosh(a)*i
--- cosh(a+bi) = cos(ia+ibi)    = cos(-b+ai)    = cos(-b)*cosh(a) - sin(-b)*sinh(a)*i =   cos(b)*cosh(a) + sin(b)*sinh(a)*i
---
--- Then, as usual, tan = sin / cos,      csc = 1 / sin,     sec = 1 / cos,     cot = 1 / tan
---                 tanh = sinh / cosh,   csch = 1 / sinh,   sech = 1 / cosh,   coth = 1 / tanh
---
+-- #############################################################################################
+-- ################################################################################ Trigonometry
+-- #############################################################################################
 op[ [[sin]] ]   = function() -- Sine
     local x=pop()
     if math.iscomplex(x) then
@@ -201,6 +190,7 @@ end
 op[ [[csc]] ]   = function() pcall(op[ [[sin]] ]); pcall(op[ [[\]] ]); end -- Cosecant
 op[ [[sec]] ]   = function() pcall(op[ [[cos]] ]); pcall(op[ [[\]] ]); end -- Secant
 op[ [[cot]] ]   = function() pcall(op[ [[tan]] ]); pcall(op[ [[\]] ]); end -- Cotangent
+-- Inverse Trigonometry ------------------------------------------------------------------------
 op[ [[asin]] ]  = function() -- Inverse sine
     local x=pop()
     if math.iscomplex(x) then -- i*ln(sqrt(1-x^2)-ix)
@@ -263,16 +253,21 @@ op[ [[acot]] ]  = function() -- Inverse cotangent
     pcall(op[ [[\]] ])
     pcall(op[ [[atan]] ])
 end
+-- Hyperbolic Trigonometry ---------------------------------------------------------------------
 op[ [[sinh]] ]  = function() -- Hyperbolic sine
     local x=pop()
-    if math.iscomplex(x) then push({math.cos(x[2])*math.sinh(x[1]), math.sin(x[2])*math.cosh(x[1])})
-    elseif math.isreal(x) then push(math.sinh(x))
+    if math.iscomplex(x) then
+        push({math.cos(x[2])*math.sinh(x[1]), math.sin(x[2])*math.cosh(x[1])})
+    elseif math.isreal(x) then
+        push(math.sinh(x))
     end
 end
 op[ [[cosh]] ]  = function() -- Hyperbolic cosine
     local x=pop()
-    if math.iscomplex(x) then push({math.cos(x[2])*math.cosh(x[1]), math.sin(x[2])*math.sinh(x[1])})
-    elseif math.isreal(x) then push(math.cosh(x))
+    if math.iscomplex(x) then
+        push({math.cos(x[2])*math.cosh(x[1]), math.sin(x[2])*math.sinh(x[1])})
+    elseif math.isreal(x) then
+        push(math.cosh(x))
     end
 end
 op[ [[tanh]] ]  = function() -- Hyperbolic tangent
@@ -374,9 +369,14 @@ op[ [[acoth]] ] = function() -- Inverse hyperbolic cotangent
     push(2)
     pcall(op[ [[/]] ])
 end
+-- Angle Conversion ----------------------------------------------------------------------------
+op[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
+op[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to radians
 
 
--- Bitwise --------------------------------------------------------------------------------
+-- #############################################################################################
+-- ##################################################################################### Bitwise
+-- #############################################################################################
 op[ [[&]] ]     = function() push(bit.band(pop(),pop())) end -- AND
 op[ [[|]] ]     = function() push(bit.bor(pop(),pop())) end -- OR
 op[ [[^]] ]     = function() push(bit.bxor(pop(),pop())) end -- XOR
@@ -385,14 +385,18 @@ op[ [[<<]] ]    = function() local n=pop(); push(bit.lshift(pop(),n)) end -- Lef
 op[ [[>>]] ]    = function() local n=pop(); push(bit.rshift(pop(),n)) end -- Right Shift
 
 
--- Constants --------------------------------------------------------------------------------
+-- #############################################################################################
+-- ################################################################################### Constants
+-- #############################################################################################
 op[ [[pi]] ]    = function() push(math.pi) end -- 3.141592653....
 op[ [[e]] ]     = function() push(math.exp(1)) end -- 2.718281828...
 op[ [[phi]] ]   = function() push((1+math.sqrt(5)) / 2) end -- 1.618033989...
 op[ [[i]] ]     = function() push({0,1}) end -- the imaginary unit value
 
 
--- Other --------------------------------------------------------------------------------
+-- #############################################################################################
+-- ####################################################################################### Other
+-- #############################################################################################
 op[ [[hrs]] ]   = function() push((pop() / 60 + pop()) / 60 + pop()) end -- Convert Z:Y:X to hours
 op[ [[hms]] ]   = function()  -- Convert X hours to Z:Y:X
     local x=pop()
@@ -403,6 +407,8 @@ op[ [[hms]] ]   = function()  -- Convert X hours to Z:Y:X
     end
     push(x)
 end
+
+
 
 -- Get all unique characters from the op keys. These characters will
 -- trigger completion to begin on this source.
