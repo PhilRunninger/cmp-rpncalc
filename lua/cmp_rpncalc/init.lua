@@ -299,12 +299,85 @@ op[ [[coth]] ]  = function() -- Hyperbolic cotangent
     pcall(op[ [[tanh]] ])
     pcall(op[ [[\]] ])
 end
-op[ [[asinh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x+1))) end -- Inverse hyperbolic sine
-op[ [[acosh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x-1))) end -- Inverse hyperbolic cosine
-op[ [[atanh]] ] = function() local x=pop(); push(math.log((1+x) / (1-x)) / 2) end -- Inverse hyperbolic tangent
-op[ [[acsch]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1+x*x)) / x)) end -- Inverse hyperbolic cosecant
-op[ [[asech]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1-x*x)) / x)) end -- Inverse hyperbolic secant
-op[ [[acoth]] ] = function() local x=pop(); push(math.log((x+1) / (x-1)) / 2) end -- Inverse hyperbolic cotangent
+-- Inverse Hyperbolic Trigonometry -------------------------------------------------------------
+op[ [[asinh]] ] = function() -- Inverse hyperbolic sine
+    local x=pop()
+    push(x)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    push(1)
+    pcall(op[ [[+]] ])
+    pcall(op[ [[sqrt]] ])
+    pcall(op[ [[+]] ])
+    pcall(op[ [[log]] ])
+end
+op[ [[acosh]] ] = function() -- Inverse hyperbolic cosine
+    local x=pop()
+    push(x)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    push(1)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[sqrt]] ])
+    pcall(op[ [[+]] ])
+    pcall(op[ [[log]] ])
+end
+op[ [[atanh]] ] = function() -- Inverse hyperbolic tangent
+    local x=pop()
+    push(1)
+    push(x)
+    pcall(op[ [[+]] ])
+    push(1)
+    push(x)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[/]] ])
+    pcall(op[ [[log]] ])
+    push(2)
+    pcall(op[ [[/]] ])
+end
+op[ [[acsch]] ] = function() -- Inverse hyperbolic cosecant
+    local x=pop()
+    push(1)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    pcall(op[ [[+]] ])
+    pcall(op[ [[sqrt]] ])
+    push(1)
+    pcall(op[ [[+]] ])
+    push(x)
+    pcall(op[ [[/]] ])
+    pcall(op[ [[log]] ])
+end
+op[ [[asech]] ] = function() -- Inverse hyperbolic secant
+    local x=pop()
+    push(1)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    pcall(op[ [[-]] ])
+    pcall(op[ [[sqrt]] ])
+    push(1)
+    pcall(op[ [[+]] ])
+    push(x)
+    pcall(op[ [[/]] ])
+    pcall(op[ [[log]] ])
+end
+op[ [[acoth]] ] = function() -- Inverse hyperbolic cotangent
+    local x=pop()
+    push(x)
+    push(1)
+    pcall(op[ [[+]] ])
+    push(x)
+    push(1)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[/]] ])
+    pcall(op[ [[log]] ])
+    push(2)
+    pcall(op[ [[/]] ])
+end
 
 
 -- Bitwise --------------------------------------------------------------------------------

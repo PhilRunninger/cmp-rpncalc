@@ -161,7 +161,6 @@ M.run = function(verbose)
     count(assertEqual( [[-0.5 tanh]],          -0.462117157, 1e-6 )) -- Hyperbolic tangent
     count(assertEqual( [[3.6268604079 asinh]], 2.0, 1e-6 )) -- Inverse hyperbolic sine
     count(assertEqual( [[27.30823284 acosh]],  4.0, 1e-6 )) -- Inverse hyperbolic cosine
-    count(assertEqual( [[0 acosh]],            'nan' ))
     count(assertEqual( [[-0.462117157 atanh]], -0.5, 1e-6 )) -- Inverse hyperbolic tangent
     count(assertEqual( [[1 atanh]],            'inf' ))
     count(assertEqual( [[-1 atanh]],           '-inf' ))
@@ -176,7 +175,6 @@ M.run = function(verbose)
     count(assertEqual( [[0.27572056 acsch]],    2.0, 1e-6 ))  -- Inverse hyperbolic cosecant
     count(assertEqual( [[0 acsch]],             'inf' ))
     count(assertEqual( [[0.013475282 asech]],   5.0, 1e-6 ))  -- Inverse hyperbolic secant
-    count(assertEqual( [[-1 asech]],            'nan' ))
     count(assertEqual( [[2.16395341373 acoth]], 0.5, 1e-6 ))  -- Inverse hyperbolic cotangent
     count(assertEqual( [[0 acoth]],             'nan' ))
 
@@ -281,6 +279,13 @@ M.run = function(verbose)
     count(assertEqual( [[1,1 acsc]], {0.452278447,-0.530637531}, 1e-6))
     count(assertEqual( [[1,1 asec]], {1.118517880,0.530637531}, 1e-6))
     count(assertEqual( [[1,1 acot]], {0.553574359,-0.402359478}, 1e-6))
+
+    count(assertEqual( [[1,1 asinh]], {1.061275062,0.666239432}, 1e-6))
+    count(assertEqual( [[1,1 acosh]], {1.061275062,0.904556894}, 1e-6))
+    count(assertEqual( [[1,1 atanh]], {0.402359478,1.017221968}, 1e-6))
+    count(assertEqual( [[1,1 acsch]], {0.530637531,-0.452278447}, 1e-6))
+    count(assertEqual( [[1,1 asech]], {0.530637531,-1.118517880}, 1e-6))
+    count(assertEqual( [[1,1 acoth]], {0.402359478,-0.553574359}, 1e-6))
 
     print(string.format('\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
 return M
