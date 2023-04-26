@@ -1,3 +1,10 @@
+-- To run the tests, use these commands:
+--
+-- :wa|mess clear|lua require('cmp_rpncalc.tests').rerun(false)
+--          - false prints only failure messages
+--          - true prints all messages
+-- :messages
+
 M = {}
 
 local printAll = false
@@ -53,12 +60,12 @@ local assertEqual = function(expression, expected, tolerance)
     return pass
 end
 
+-- Rerun the tests after reloading (and recompiling) the source and test code.
 M.rerun = function(verbose)
     vim.schedule(function()
         package.loaded['cmp_rpncalc'] = nil
         package.loaded['cmp_rpncalc.tests'] = nil
         require('cmp_rpncalc.tests').run(verbose)
-        vim.cmd('messages')
     end)
 end
 
@@ -95,6 +102,9 @@ M.run = function(verbose)
     count(assertEqual( [[-23 -5 %]],  -3))
     count(assertEqual( [[7 abs]],     7))   -- Absolute Value
     count(assertEqual( [[-7 abs]],    7))
+    count(assertEqual( [[1 arg]],     0 ))  -- Arg
+    count(assertEqual( [[0 arg]],     0 ))
+    count(assertEqual( [[-1 arg]],    math.pi, 1e-6 ))
     count(assertEqual( [[-8 chs]],    8))   -- Change Sign
     count(assertEqual( [[8 chs]],     -8))
 
@@ -222,7 +232,6 @@ M.run = function(verbose)
     count(assertEqual( [[-3,1 arg]],     2.8198420991932, 1e-6 ))
     count(assertEqual( [[-3,-2 arg]],     -2.5535900500422, 1e-6 ))
     count(assertEqual( [[2,-1 arg]],     -0.46364760900081, 1e-6 ))
-    count(assertEqual( [[1 arg]],       'nan' ))
 
     count(assertEqual( [[-8,2 chs]],    {8,-2} ))   -- Change Sign
 
