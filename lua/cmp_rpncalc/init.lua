@@ -422,8 +422,8 @@ local function contains(table, val)
 end
 
 local triggerCharacters = vim.fn.split('0123456789.eE', '\\zs')
-for op,_ in pairs(op) do
-    for char in string.gmatch(op, '.') do
+for o,_ in pairs(op) do
+    for char in string.gmatch(o, '.') do
         if not contains(triggerCharacters, char) then
             triggerCharacters[#triggerCharacters+1] = char
         end
@@ -432,12 +432,12 @@ end
 
 -- Create the regex that determines if the text a valid RPN expression.
 local operators = {}
-for op,_ in pairs(op) do
-    operators[#operators+1] = vim.fn.escape(op, [[~^*/\+%|<>&]] )
+for o,_ in pairs(op) do
+    operators[#operators+1] = vim.fn.escape(o, [[~^*/\+%|<>&]] )
 end
 
 local numberRegex = [[[-+]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]  -- 0, -42, 3.14, 6.02e23, etc.
-local numberRegex = numberRegex .. '%(,' .. numberRegex .. ')?'  -- now they can be complex (an ordered pair)
+numberRegex = numberRegex .. '%(,' .. numberRegex .. ')?'  -- now they can be complex (an ordered pair)
 local operatorsRegex = table.concat(operators,[[|]])  -- Concatenate all operators:  sin|cos|+|-|pi|...
 local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
 local expressionRegex = wordRegex .. [[%( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
