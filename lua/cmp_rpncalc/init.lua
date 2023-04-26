@@ -68,7 +68,7 @@ op[ [[abs]] ]   = function() -- Absolute Value
 end
 op[ [[arg]] ]   = function() -- Arg
     local x=pop()
-    if math.isreal(x)        then push('nan')
+    if math.isreal(x)        then push(x < 0 and math.pi or 0)
     elseif math.iscomplex(x) then push(math.atan2(x[2], x[1]));
     end
 end
