@@ -60,6 +60,7 @@ op[ [[%]] ]     = function()  -- Modulus
     local x,y = pop(), pop()
     push(y % x)
 end
+
 op[ [[abs]] ]   = function() -- Absolute Value
     local x=pop()
     if math.isreal(x)        then push(math.abs(x))
@@ -128,9 +129,7 @@ op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[log]] ]); push(x); pcall
 op[ [[**]] ] = function() -- Exponentiation - y to the x power
     local x,y = pop(), pop()
     if ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
-        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push('nan')
-    elseif ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
-        (math.isreal(x) and x < 0) then push('inf')
+        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(0/0) -- Use math's NaN, not lua's result of 0^0=1.
     elseif math.iscomplex(x) and math.iscomplex(y) then
         local r = math.sqrt(y[1]*y[1] + y[2]*y[2])
         local theta = math.atan2(y[2],y[1])
@@ -481,10 +480,26 @@ source.complete = function(_, request, callback)
     end
     local value = ''
     for _,n in ipairs(stack) do
-        if math.iscomplex(n) then
-            value = value .. ' ' .. n[1] .. (n[2] >= 0 and '+' or '') .. n[2] .. 'i'
-        else
+        if tostring(n) == tostring(0/0) then
+            value = value .. ' NaN'
+        elseif tostring(n) == tostring(0^-1) then
+            value = value .. ' Infinity'
+        elseif tostring(n) == tostring(-0^-1) then
+            value = value .. ' -Infinity'
+        elseif math.iscomplex(n) then
+            if tostring(n[1]) == tostring(0/0) or tostring(n[2]) == tostring(0/0) then
+                value = value .. ' NaN'
+            elseif tostring(n[1]) == tostring(0^-1) or tostring(n[2]) == tostring(0^-1) then
+                value = value .. ' Infinity'
+            elseif tostring(n[1]) == tostring(-0^-1) or tostring(n[2]) == tostring(-0^-1) then
+                value = value .. ' -Infinity'
+            else
+                value = value .. ' ' .. n[1] .. (n[2] >= 0 and '+' or '') .. n[2] .. 'i'
+            end
+        elseif math.isreal(n) then
             value = value .. ' ' .. n
+        else
+            value = value .. ' ' .. 'Error'
         end
     end
     value = string.gsub(value, "^%s*(.-)%s*$", "%1")

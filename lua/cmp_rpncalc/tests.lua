@@ -85,8 +85,8 @@ M.run = function(verbose)
     count(assertEqual( [[1.4 .3 *]],  0.42))
     count(assertEqual( [[24 8 /]],    3))   -- Division
     count(assertEqual( [[8 24 /]],    0.333333333333, 1e-6))
-    count(assertEqual( [[7 0 /]],     'inf'))
-    count(assertEqual( [[0 0 /]],     'nan'))
+    count(assertEqual( [[7 0 /]],     'Infinity'))
+    count(assertEqual( [[0 0 /]],     'NaN'))
     count(assertEqual( [[23 5 div]],  4))   -- Integer part of division
     count(assertEqual( [[-23 5 div]], -4))
     count(assertEqual( [[23 5 %]],    3))   -- Remainder of division
@@ -115,10 +115,10 @@ M.run = function(verbose)
     count(assertEqual( [[0 exp]],       1))
     count(assertEqual( [[0.1 exp]],     1.1051709180, 1e-6))
     count(assertEqual( [[120 log]],     4.7874917427, 1e-6))  -- Natural log of x
-    count(assertEqual( [[0 log]],       '-inf'))
+    count(assertEqual( [[0 log]],       '-Infinity'))
     count(assertEqual( [[625 5 logx]],  4))  -- Log (base x) of y
-    count(assertEqual( [[625 -5 logx]], 'nan'))
-    count(assertEqual( [[-625 5 logx]], 'nan'))
+    count(assertEqual( [[625 -5 logx]], 'NaN'))
+    count(assertEqual( [[-625 5 logx]], 'NaN'))
     count(assertEqual( [[1000 log10]],  3))  -- Log (base 10) of x
     count(assertEqual( [[12345 log10]], 4.0914910942, 1e-6))
     count(assertEqual( [[1024 log2]],   10))  -- Log (base 2) of x
@@ -127,10 +127,10 @@ M.run = function(verbose)
     count(assertEqual( [[23.1 sqrt]],   4.8062459362, 1e-6))
     count(assertEqual( [[2 3 **]],      8))  -- Exponentiation
     count(assertEqual( [[-12 4 **]],    20736))
-    count(assertEqual( [[0 0 **]],      'nan'))
+    count(assertEqual( [[0 0 **]],      'NaN'))
     count(assertEqual( [[12 -0.25 **]], 0.5372849659, 1e-6))
     count(assertEqual( [[10 \]],        0.1))  -- Reciprocal
-    count(assertEqual( [[0 \]],         'inf'))
+    count(assertEqual( [[0 \]],         'Infinity'))
 
     print('Trigonometry ================================================================')
     count(assertEqual( [[pi 2 / deg]], 90,           1e-6))  -- convert x to degrees
@@ -139,21 +139,21 @@ M.run = function(verbose)
     count(assertEqual( [[30 rad sin]], 0.5 ))  -- Sine
     count(assertEqual( [[60 rad cos]], 0.5 ))  -- Cosine
     count(assertEqual( [[45 rad tan]], 1.0 ))  -- Tangent
-    -- count(assertEqual( [[90 rad tan]], 'inf' ))  -- The actual is VERY large, but not inf.
+    -- count(assertEqual( [[90 rad tan]], 'Infinity' ))  -- The actual is VERY large, but not inf.
     count(assertEqual( [[30 rad csc]], 2.0 ))  -- Cosecant
     count(assertEqual( [[60 rad sec]], 2.0 ))  -- Secant
     count(assertEqual( [[45 rad cot]], 1.0 ))  -- Cotangent
-    count(assertEqual( [[0 cot]],      'inf' ))  -- Cotangent
+    count(assertEqual( [[0 cot]],      'Infinity' ))  -- Cotangent
 
     count(assertEqual( [[0.5 asin deg]], 30 ))  -- Inverse sine
-    count(assertEqual( [[10 asin]],      'nan' ))
+    count(assertEqual( [[10 asin]],      'NaN' ))
     count(assertEqual( [[0.5 acos deg]], 60 ))  -- Inverse cosine
-    count(assertEqual( [[-10 acos]],     'nan' ))
+    count(assertEqual( [[-10 acos]],     'NaN' ))
     count(assertEqual( [[1 atan deg]],   45 ))    -- Inverse Tangent
     count(assertEqual( [[2.0 acsc deg]], 30 ))  -- Inverse cosecant
-    count(assertEqual( [[0 acsc]],       'nan' ))  -- Inverse cosecant
+    count(assertEqual( [[0 acsc]],       'NaN' ))  -- Inverse cosecant
     count(assertEqual( [[2.0 asec deg]], 60 ))  -- Inverse secant
-    count(assertEqual( [[0 asec]],       'nan' ))  -- Inverse secant
+    count(assertEqual( [[0 asec]],       'NaN' ))  -- Inverse secant
     count(assertEqual( [[1 acot deg]],   45 ))  -- Inverse cotangent
 
     count(assertEqual( [[2 sinh]],             3.6268604078, 1e-6 )) -- Hyperbolic sine
@@ -162,21 +162,21 @@ M.run = function(verbose)
     count(assertEqual( [[3.6268604079 asinh]], 2.0, 1e-6 )) -- Inverse hyperbolic sine
     count(assertEqual( [[27.30823284 acosh]],  4.0, 1e-6 )) -- Inverse hyperbolic cosine
     count(assertEqual( [[-0.462117157 atanh]], -0.5, 1e-6 )) -- Inverse hyperbolic tangent
-    count(assertEqual( [[1 atanh]],            'inf' ))
-    count(assertEqual( [[-1 atanh]],           '-inf' ))
-    count(assertEqual( [[10 atanh]],           'nan' ))
+    count(assertEqual( [[1 atanh]],            'Infinity' ))
+    count(assertEqual( [[-1 atanh]],           '-Infinity' ))
+    count(assertEqual( [[10 atanh]],           'NaN' ))
 
     count(assertEqual( [[2 csch]],              0.27572056, 1e-6 ))  -- Hyperbolic cosecant
-    count(assertEqual( [[0 csch]],              'inf' ))
+    count(assertEqual( [[0 csch]],              'Infinity' ))
     count(assertEqual( [[-5 sech]],             0.013475282, 1e-6 ))  -- Hyperbolic secant
     count(assertEqual( [[0 sech]],              1 ))
     count(assertEqual( [[0.5 coth]],            2.16395341373, 1e-6 ))  -- Hyperbolic cotangent
-    count(assertEqual( [[0 coth]],              'inf' ))
+    count(assertEqual( [[0 coth]],              'Infinity' ))
     count(assertEqual( [[0.27572056 acsch]],    2.0, 1e-6 ))  -- Inverse hyperbolic cosecant
-    count(assertEqual( [[0 acsch]],             'inf' ))
+    count(assertEqual( [[0 acsch]],             'Infinity' ))
     count(assertEqual( [[0.013475282 asech]],   5.0, 1e-6 ))  -- Inverse hyperbolic secant
     count(assertEqual( [[2.16395341373 acoth]], 0.5, 1e-6 ))  -- Inverse hyperbolic cotangent
-    count(assertEqual( [[0 acoth]],             'nan' ))
+    count(assertEqual( [[0 acoth]],             'NaN' ))
 
     print('Bitwise =====================================================================')
     count(assertEqual( [[60 13 &]], 12 ))   -- AND
@@ -252,10 +252,10 @@ M.run = function(verbose)
     count(assertEqual( [[3 1,-2 **]],    {-1.7587648,-2.4303798}, 1e-6))
     count(assertEqual( [[-4,3 1,-2 **]], {555.3814991,-487.8784553}, 1e-6))
     count(assertEqual( [[-7 3.3 **]],    {-361.4449966, -497.4863586}, 1e-6))
-    count(assertEqual( [[0,0 0 **]],     'nan' ))
-    count(assertEqual( [[0 0,0 **]],     'nan' ))
-    count(assertEqual( [[0,0 0,0 **]],   'nan' ))
-    count(assertEqual( [[0,0 \]],        'inf' ))
+    count(assertEqual( [[0,0 0 **]],     'NaN' ))
+    count(assertEqual( [[0 0,0 **]],     'NaN' ))
+    count(assertEqual( [[0,0 0,0 **]],   'NaN' ))
+    count(assertEqual( [[0,0 \]],        'NaN' ))
     count(assertEqual( [[2,3 \]],        {2/13, -3/13}, 1e-6))
 
     print('Trigonometry ================================================================')
