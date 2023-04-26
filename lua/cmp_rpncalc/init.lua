@@ -113,7 +113,7 @@ end
 -- #############################################################################################
 -- ############################################################################### Powers & Logs
 -- #############################################################################################
-op[ [[log]] ]   = function() -- Natural log of x
+op[ [[ln]] ]   = function() -- Natural log of x
         local x=pop()
     if math.iscomplex(x) then
             local r = math.sqrt(x[1]*x[1] + x[2]*x[2])
@@ -123,9 +123,9 @@ op[ [[log]] ]   = function() -- Natural log of x
             push(math.log(x))
         end
     end
-op[ [[log10]] ] = function() pcall(op[ [[log]] ]); push(10); pcall(op[ [[log]] ]); pcall(op[ [[/]] ]) end -- Log (base 10) of x
-op[ [[log2]] ] = function() pcall(op[ [[log]] ]); push(2); pcall(op[ [[log]] ]); pcall(op[ [[/]] ]) end -- Log (base 2) of x
-op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[log]] ]); push(x); pcall(op[ [[log]] ]); pcall(op[ [[/]] ]) end -- Log y of x
+op[ [[log]] ] = function() pcall(op[ [[ln]] ]); push(10); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log (base 10) of x
+op[ [[log2]] ] = function() pcall(op[ [[ln]] ]); push(2); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log (base 2) of x
+op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[ln]] ]); push(x); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log y of x
 op[ [[**]] ] = function() -- Exponentiation - y to the x power
     local x,y = pop(), pop()
     if ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
@@ -204,7 +204,7 @@ op[ [[asin]] ]  = function() -- Inverse sine
         push(x)
         pcall(op[ [[*]] ])
         pcall(op[ [[-]] ])
-        pcall(op[ [[log]] ])
+        pcall(op[ [[ln]] ])
         pcall(op[ [[*]] ])
     else
         push(math.asin(x))
@@ -234,7 +234,7 @@ op[ [[atan]] ]  = function() -- Inverse Tangent
         pcall(op[ [[*]] ])
         pcall(op[ [[-]] ])
         pcall(op[ [[/]] ])
-        pcall(op[ [[log]] ])
+        pcall(op[ [[ln]] ])
         pcall(op[ [[*]] ])
     else
         push(math.atan(x))
@@ -300,7 +300,7 @@ op[ [[asinh]] ] = function() -- Inverse hyperbolic sine
     pcall(op[ [[+]] ])
     pcall(op[ [[sqrt]] ])
     pcall(op[ [[+]] ])
-    pcall(op[ [[log]] ])
+    pcall(op[ [[ln]] ])
 end
 op[ [[acosh]] ] = function() -- Inverse hyperbolic cosine
     local x=pop()
@@ -312,7 +312,7 @@ op[ [[acosh]] ] = function() -- Inverse hyperbolic cosine
     pcall(op[ [[-]] ])
     pcall(op[ [[sqrt]] ])
     pcall(op[ [[+]] ])
-    pcall(op[ [[log]] ])
+    pcall(op[ [[ln]] ])
 end
 op[ [[atanh]] ] = function() -- Inverse hyperbolic tangent
     local x=pop()
@@ -323,7 +323,7 @@ op[ [[atanh]] ] = function() -- Inverse hyperbolic tangent
     push(x)
     pcall(op[ [[-]] ])
     pcall(op[ [[/]] ])
-    pcall(op[ [[log]] ])
+    pcall(op[ [[ln]] ])
     push(2)
     pcall(op[ [[/]] ])
 end
@@ -339,7 +339,7 @@ op[ [[acsch]] ] = function() -- Inverse hyperbolic cosecant
     pcall(op[ [[+]] ])
     push(x)
     pcall(op[ [[/]] ])
-    pcall(op[ [[log]] ])
+    pcall(op[ [[ln]] ])
 end
 op[ [[asech]] ] = function() -- Inverse hyperbolic secant
     local x=pop()
@@ -353,7 +353,7 @@ op[ [[asech]] ] = function() -- Inverse hyperbolic secant
     pcall(op[ [[+]] ])
     push(x)
     pcall(op[ [[/]] ])
-    pcall(op[ [[log]] ])
+    pcall(op[ [[ln]] ])
 end
 op[ [[acoth]] ] = function() -- Inverse hyperbolic cotangent
     local x=pop()
@@ -364,7 +364,7 @@ op[ [[acoth]] ] = function() -- Inverse hyperbolic cotangent
     push(1)
     pcall(op[ [[-]] ])
     pcall(op[ [[/]] ])
-    pcall(op[ [[log]] ])
+    pcall(op[ [[ln]] ])
     push(2)
     pcall(op[ [[/]] ])
 end

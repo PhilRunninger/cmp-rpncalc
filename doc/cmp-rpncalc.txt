@@ -23,7 +23,7 @@ the operation is placed back on the stack.
 ==============================================================================
                                                                  *rpn-operators*
 |Basic_Arithmetic|  `+  -  *  /  div  %  abs  chs`
-|Powers_&_Logs|     `exp  log  log10  log2  sqrt  **  \`
+|Powers_&_Logs|     `exp  ln  log  log2  sqrt  **  \`
 |Trigonometry|      `sin    cos    tan    csc    sec    cot`
                   `asin   acos   atan   acsc   asec   acot`
                   `sinh   cosh   tanh   csch   sech   coth`
@@ -47,13 +47,13 @@ the operation is placed back on the stack.
 
 *Powers_&_Logs*                            *rpn-power-operators* *rpn-log-operators*
 
-  `exp`    Exponential function  `1 exp`      becomes `2.718281828...`
-  `log`    Natural log function  `2.718 log`  becomes `0.99989631572895`
-  `log10`  Common log function   `1000 log10` becomes `3`
-  `log2`   Log, base 2 function  `512 log2`   becomes `9`
-  `sqrt`   Square root           `121 sqrt`   becomes `11`
-  `**`     Exponentiation (y^x)  `3 4 **`     becomes `81`
-  `\`      Reciprocal            `4 \`        becomes `0.25`
+  `exp`   Exponential function  `1 exp`    becomes `2.718281828...`
+  `ln`    Natural log function  `2.718 ln` becomes `0.99989631572895`
+  `log`   Common log function   `1000 log` becomes `3`
+  `log2`  Log, base 2 function  `512 log2` becomes `9`
+  `sqrt`  Square root           `121 sqrt` becomes `11`
+  `**`    Exponentiation (y^x)  `3 4 **`   becomes `81`
+  `\`     Reciprocal            `4 \`      becomes `0.25`
 
 *Trigonometry*                                        *rpn-trigonometry-operators*
   Ordinary

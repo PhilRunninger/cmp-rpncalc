@@ -124,13 +124,13 @@ M.run = function(verbose)
     tally(assert( [[2 exp]],       7.3890560989, 1e-6))  -- Raise e to the x power
     tally(assert( [[0 exp]],       1))
     tally(assert( [[0.1 exp]],     1.1051709180, 1e-6))
-    tally(assert( [[120 log]],     4.7874917427, 1e-6))  -- Natural log of x
-    tally(assert( [[0 log]],       '-Infinity'))
+    tally(assert( [[120 ln]],     4.7874917427, 1e-6))  -- Natural log of x
+    tally(assert( [[0 ln]],       '-Infinity'))
     tally(assert( [[625 5 logx]],  4))  -- Log (base x) of y
     tally(assert( [[625 -5 logx]], 'NaN'))
     tally(assert( [[-625 5 logx]], 'NaN'))
-    tally(assert( [[1000 log10]],  3))  -- Log (base 10) of x
-    tally(assert( [[12345 log10]], 4.0914910942, 1e-6))
+    tally(assert( [[1000 log]],  3))  -- Log (base 10) of x
+    tally(assert( [[12345 log]], 4.0914910942, 1e-6))
     tally(assert( [[1024 log2]],   10))  -- Log (base 2) of x
     tally(assert( [[13 log2]],     3.7004397181, 1e-6))
     tally(assert( [[36 sqrt]],     6))  -- Square Root
@@ -249,8 +249,8 @@ M.run = function(verbose)
 
     print('Powers & Logs ===============================================================')
     tally(assert( [[2,1 exp]],      {3.992324048,6.217676312}, 1e-6 )) -- Raise e to the x power
-    tally(assert( [[2,3 log]],      {1.282474678,0.982793723}, 1e-6 ))  -- Natural log of x
-    tally(assert( [[2,3 log10]],    {0.556971676,0.426821891}, 1e-6 ))  -- Log (base 10) of x
+    tally(assert( [[2,3 ln]],      {1.282474678,0.982793723}, 1e-6 ))  -- Natural log of x
+    tally(assert( [[2,3 log]],    {0.556971676,0.426821891}, 1e-6 ))  -- Log (base 10) of x
     tally(assert( [[2,3 log2]],     {1.850219859,1.417871631}, 1e-6 ))  -- Log (base 2) of x
     tally(assert( [[2,3 1,2 logx]], {1.131731655,-0.335771298}, 1e-6 ))  -- Log (base x) of y
     tally(assert( [[-4 sqrt]],      {0,2}, 1e-6))  -- Square root
