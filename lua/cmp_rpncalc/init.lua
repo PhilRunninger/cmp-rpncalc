@@ -457,7 +457,7 @@ source.complete = function(_, request, callback)
     local input = request.context.cursor_before_line
     local s,e = vim.regex(expressionRegex):match_str(input)
     if not s or not e then
-        return callback({isIncomplete=true})
+        return callback({})
     end
     input = string.sub(input, s+1)
 
@@ -474,7 +474,7 @@ source.complete = function(_, request, callback)
             local f = op[word]
             local ok,_ = pcall(f)
             if not ok then
-                return callback({isIncomplete=true})
+                return callback({})
             end
         end
         -- vim.pretty_print(stack)
