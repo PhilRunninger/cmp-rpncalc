@@ -8,7 +8,7 @@ Use your favorite plugin manager to install this plugin. [vim-pathogen](https://
 If you have no favorite, or want to manage your plugins without 3rd-party dependencies, use packages, as described in Greg Hurrell's excellent Youtube video: [Vim screencast #75: Plugin managers](https://www.youtube.com/watch?v=X2_R3uxDN6g)
 
 ## Setup
-Add **rpncalc** to the list of sources in your **nvim-cmp** setup, as shown in the following snippet.
+There is no setup required specifically for this plugin; however, you need to add **rpncalc** to the list of sources in your **nvim-cmp** setup. The following snippet shows how to do that.
 ```
 require'cmp'.setup {
   sources = {
@@ -20,11 +20,10 @@ require'cmp'.setup {
 ## How Does RPN Work?
 
 RPN is a mathematical notation in which the operator follows its operand(s). This means there is no need for parentheses. Here are some examples:
-* Add 956 and 37: `956 37 +`
-* Divide 452 by 12 (Remember, the order of operands is important.): `452 12 /`
-* Find the arctangent of 1/√3: `3 sqrt \ atan deg`
-* Evaluate `3x²+13x-10` at `x=4`:
-    * `3 4 2 ** * 13 4 * + 10 -`
+* Add **956** and **37**: `956 37 +`
+* Divide **452** by **12** (Remember, the order of operands is important.): `452 12 /`
+* Find the **arctangent** of **1/√3**: `3 sqrt \ atan deg`
+* Evaluate **3x²+13x-10** at **x=4**: `3 4 2 ** * 13 4 * + 10 -`
 
 Reading an expression from left to right, numbers are placed on a stack. The top four numbers are labeled `X`, `Y`, `Z`, and `T` from the top down. Although these labels are not shown when using the plugin, they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back on the stack.
 
@@ -86,19 +85,19 @@ The operator categories and certain exceptional functions show the domain over w
 * <kbd>&</kbd>  - AND
 * <kbd>\|</kbd> - OR
 * <kbd>^</kbd>  - XOR
+* <kbd>~</kbd>  - NOT
 * <kbd><<</kbd> - Left Shift (Y shifted X places)
 * <kbd>>></kbd> - Right Shift (Y shifted X places)
-* <kbd>~</kbd>  - 1's complement
 
 ### Constants - ℝ and ℂ
 * <kbd>pi</kbd>  - 3.141592653...
 * <kbd>e</kbd>   - 2.718281828...
-* <kbd>phi</kbd> - the golden ratio, 0.618033989...
+* <kbd>phi</kbd> - the golden ratio, 1.618033989...
 * <kbd>i</kbd>   - 0+1i
 
 ### Other - ℝ
-* <kbd>hrs</kbd> - Convert Z:Y:X to X hours
-* <kbd>hms</kbd> - Convert X hours to Z:Y:X
+* <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
+* <kbd>hms</kbd> - Convert X hours to (Z hours:Y minutes:X seconds)
 
 ## Feedback
 Please don't rely on this for important calculations, or at the very least double-check them with another calculator. It's quite possible computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).
