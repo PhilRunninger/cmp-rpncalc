@@ -129,7 +129,8 @@ op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[ln]] ]); push(x); pcall(
 op[ [[**]] ] = function() -- Exponentiation - y to the x power
     local x,y = pop(), pop()
     if ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
-        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(0/0) -- Use math's NaN, not lua's result of 0^0=1.
+        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(0/0)
+        -- Lua says 0^0=1, but use math's convention - undefined (or NaN) - instead.
     elseif math.iscomplex(x) and math.iscomplex(y) then
         local r = math.sqrt(y[1]*y[1] + y[2]*y[2])
         local theta = math.atan2(y[2],y[1])
@@ -407,7 +408,9 @@ op[ [[hms]] ]   = function()  -- Convert X hours to Z:Y:X
     push(x)
 end
 
-
+-- #############################################################################################
+-- ############################################################### End of Operators' Definitions
+-- #############################################################################################
 
 -- Get all unique characters from the op keys. These characters will
 -- trigger completion to begin on this source.
