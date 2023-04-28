@@ -14,87 +14,105 @@ nationality of logician Jan Łukasiewicz, who invented Polish notation in 1924.
                                                                   *rpn-operands*
 
 Numbers, formally called operands, are pushed onto a stack in the order they
-are read by the processor. Supported formats are: integers, decimals, and
-scientific notation. The top number on the stack is called X, with Y, Z, W,
-and other unnamed positions positioned below. When an operator is encountered,
-X and if necessary, other numbers are taken off the stack, and the result of
-the operation is placed back on the stack.
+are read by the processor. The top number on the stack is called X, with Y, Z,
+W, and other unnamed positions underneath. When an operator is encountered, X
+and if necessary, other numbers are taken off the stack, and the result of the
+operation is placed back on the stack.
+
+Supported number formats are: integers, decimals, and scientific notation.
+Complex numbers are entered as ordered pairs: `real,imaginary`. For example
+`1.2,-3` evaluates to `1.2-3i`.
 
 ==============================================================================
                                                                  *rpn-operators*
-|Basic_Arithmetic|  `+  -  *  /  div  %  abs  chs`
-|Powers_&_Logs|     `exp  ln  log  log2  sqrt  **  \`
+
+Most operators work on complex numbers. Exceptions are noted below.
+
+|Basic_Arithmetic|  `+      -      *      /      div    %     abs  arg  chs`
+|Powers_&_Logs|     `exp    ln     log    log2   logx   sqrt  **   \`
 |Trigonometry|      `sin    cos    tan    csc    sec    cot`
                   `asin   acos   atan   acsc   asec   acot`
                   `sinh   cosh   tanh   csch   sech   coth`
                   `asinh  acosh  atanh  acsch  asech  acoth`
-|Bitwise|           `&  |  ^  <<  >>  ~`
+|Bitwise|           `&      |      ^      <<     >>     ~`
 |Rounding|          `floor  ceil  round  trunc`
-|Constants|         `pi  e  phi`
-|Other|             `hrs  hms`
+|Constants|         `pi     e     phi    i`
+|Other|             `hrs    hms`
 
 ==============================================================================
 *Basic_Arithmetic*                                           *rpn-basic-operators*
 
-  `+`    Addition               `8 2 +`    becomes `10`
-  `-`    Subtraction            `8 2 -`    becomes `6`
-  `*`    Multiplication         `8 2 *`    becomes `16`
-  `/`    Division               `8 2 *`    becomes `4`
-  `div`  Integer Division       `25 7 div` becomes `3`
-  `%`    Remainder              `25 7 %`   becomes `4`
-  `abs`  Absolute Value         `-9`       becomes `9`
-  `chs`  Change Sign (Negation) `10 chs`   becomes `-10`
+  `+`    Addition
+  `-`    Subtraction
+  `*`    Multiplication
+  `/`    Division
+  `div`  Integer Division
+  `%`    Remainder of Y / X (real numbers only)
+  `abs`  Absolute Value
+  `arg`  Argument, the angle between x-axis and X
+  `chs`  Change Sign of X
 
 *Powers_&_Logs*                            *rpn-power-operators* *rpn-log-operators*
 
-  `exp`   Exponential function  `1 exp`    becomes `2.718281828...`
-  `ln`    Natural log function  `2.718 ln` becomes `0.99989631572895`
-  `log`   Common log function   `1000 log` becomes `3`
-  `log2`  Log, base 2 function  `512 log2` becomes `9`
-  `sqrt`  Square root           `121 sqrt` becomes `11`
-  `**`    Exponentiation (y^x)  `3 4 **`   becomes `81`
-  `\`     Reciprocal            `4 \`      becomes `0.25`
+  `exp`   Exponential function: e to the X power
+  `ln`    Natural log: ln(X)
+  `log`   Common log (base 10) of X
+  `log2`  Log (base 2) of X
+  `logx`  Log (base X) of Y
+  `sqrt`  Square root of X
+  `**`    Exponentiation: Y to the X power
+  `\`     Reciprocal of X
 
 *Trigonometry*                                        *rpn-trigonometry-operators*
+
+  `deg`  Convert X from radians to degrees
+  `rad`  Convert X from degrees to radians
+
   Ordinary
-    `sin`    Sine of x radians         `asin`   Inverse
-    `cos`    Cosine of x radians       `acos`   Inverse
-    `tan`    Tangent of x radians      `atan`   Inverse
-    `csc`    Cosecant of x radians     `acsc`   Inverse
-    `sec`    Secant of x radians       `asec`   Inverse
-    `cot`    Cotangent of x radians    `acot`   Inverse
+    `sin`    Sine of X radians         `asin`   Inverse
+    `cos`    Cosine of X radians       `acos`   Inverse
+    `tan`    Tangent of X radians      `atan`   Inverse
+    `csc`    Cosecant of X radians     `acsc`   Inverse
+    `sec`    Secant of X radians       `asec`   Inverse
+    `cot`    Cotangent of X radians    `acot`   Inverse
 
   Hyperbolic
-    `sinh`   Hyperbolic Sine of x radians        `asinh`  Inverse
-    `cosh`   Hyperbolic Cosine of x radians      `acosh`  Inverse
-    `tanh`   Hyperbolic Tangent of x radians     `atanh`  Inverse
-    `csch`   Hyperbolic Cosecant of x radians    `acsch`  Inverse
-    `sech`   Hyperbolic Secant of x radians      `asech`  Inverse
-    `coth`   Hyperbolic Cotangent of x radians   `acoth`  Inverse
+    `sinh`   Hyperbolic Sine of X radians        `asinh`  Inverse
+    `cosh`   Hyperbolic Cosine of X radians      `acosh`  Inverse
+    `tanh`   Hyperbolic Tangent of X radians     `atanh`  Inverse
+    `csch`   Hyperbolic Cosecant of X radians    `acsch`  Inverse
+    `sech`   Hyperbolic Secant of X radians      `asech`  Inverse
+    `coth`   Hyperbolic Cotangent of X radians   `acoth`  Inverse
 
 *Bitwise*                                                  *rpn-bitwise-operators*
 
-  `&`  AND           `10 7 &`  becomes `2` (In binary, 1010 AND 111 = 10)
-  `|`  OR            `10 6 |`  becomes `14`            (1010 OR 110 = 1110)
-  `^`  XOR           `10 3 ^`  becomes `9`             (1010 XOR 11 = 1001)
-  `<<` Left Shift    `5 2 <<`  becomes `20`                   (101 -> 10100)
-  `>>` Right Shift   `58 2 >>` becomes `14`                (111010 -> 1110)
-  `~` 1's Complement `42 ~`    becomes `-43`    (101010 -> 1111111111110101)
+  These functions work best with natural numbers, and don't work at all with
+  complex numbers.
+
+  `&`  AND         `10 7 &`  is `2`  In binary, 1010 AND 111 = 10
+  `|`  OR          `10 6 |`  is `14`             1010 OR 110 = 1110
+  `^`  XOR         `10 3 ^`  is `9`              1010 XOR 11 = 1001
+  `~`  NOT         `42 ~`    is `-43`               101010 ~ = 1...111111110101
+  `<<` Left Shift  `5 3 <<`  is `40`                  101 << = 101000
+  `>>` Right Shift `58 2 >>` is `14`               111010 >> = 1110
 
 *Rounding*                                                *rpn-rounding-operators*
 
-  `floor` Round down towards -infinity        `-3.5 floor` becomes `-4`
-  `ceil`  Round up towards +infinity          `6.2 ceil`   becomes `7`
-  `round` Round up or down to nearest integer `2.7 round`  becomes `3`
-  `trunc` Round toward zero                   `-5.8 trunc` becomes `-5`
+  `floor` Round down towards -infinity
+  `ceil`  Round up towards +infinity
+  `round` Round up or down to nearest integer
+  `trunc` Round toward zero
 
 *Constants*                                                        *rpn-constants*
 
-  `pi`  - A circle's circumference divided by its diameter: `3.1415926535...`
+  `pi`  - The ratio of a circle's circumference to its diameter: `3.1415926535...`
   `e`   - Euler's number: `2.7182818284590...`
   `phi` - The golden ratio: `1.6180339887499...`
+  `i`   - The imaginary unit: `0+1i`
 
 *Other*                                                      *rpn-other-operators*
 
-  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` becomes `3.625`
-  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` becomes `3 37 30`
+  These functions work only with real numbers.
+
+  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` is `3.625`
+  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`

@@ -29,7 +29,7 @@ RPN is a mathematical notation in which the operator follows its operand(s). Thi
 Reading an expression from left to right, numbers are placed on a stack. The top four numbers are labeled `X`, `Y`, `Z`, and `T` from the top down. Although these labels are not shown when using the plugin, they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back on the stack.
 
 ## Complex Numbers
-Most of the operators also will process complex numbers. The following Wikipedia pages were used as reference for some of the more arcane derivations for complex numbers. Where the complete answer is an infinte number of answers, only the principal value is given. *As a side note, I don't know how useful these functions are, but it was a fun exercise implementing them. Leave a comment if you know of any practical use for, let's say, the hyperbolic arctangent of a complex number.*
+Most of the operators also will process complex numbers. The following Wikipedia pages were used as reference for some of the more arcane derivations for complex numbers. Where the complete answer is an infinte number of answers, only the principal value is given.
 * [logarithms](https://en.wikipedia.org/wiki/Complex_logarithm)
 * [exponentiation](https://en.wikipedia.org/wiki/exponential_function#computation_of_ab_where_both_a_and_b_are_complex)
 * [ordinary trig functions](https://en.wikipedia.org/wiki/sine_and_cosine#complex_exponential_function_definitions)
@@ -100,7 +100,9 @@ The operator categories and certain exceptional functions show the domain over w
 * <kbd>hrs</kbd> - Convert Z:Y:X to X hours
 * <kbd>hms</kbd> - Convert X hours to Z:Y:X
 
-## Errors and Enhancements
-Please don't use this for important calculations, or at the very least double-check them with another calculator. It's quite possible computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).
+## Feedback
+Please don't rely on this for important calculations, or at the very least double-check them with another calculator. It's quite possible computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).
 
 If you spot any errors, or have suggestions for improvements, added operators, etc., create an issue or a pull request.
+
+Finally, I don't know how useful some of the complex number functions are. It was a fun exercise implementing them, but was it just that, an exercise? Leave a comment (in an issue is fine) if you know of any real-world (pun intended) use for, let's say, the hyperbolic arctangent of a complex number, or any of the others for that matter.
