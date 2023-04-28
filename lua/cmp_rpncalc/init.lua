@@ -9,79 +9,410 @@ local function push(value)
     table.insert(stack, value)
 end
 
-local operatorFunc= {}
---[[ Basic Arithmetic ]]
-operatorFunc[ [[+]] ]     = function() push(pop() + pop()) end  -- Addtion
-operatorFunc[ [[-]] ]     = function() push(-pop() + pop()) end -- Subtraction
-operatorFunc[ [[*]] ]     = function() push(pop() * pop()) end  -- Multiplication
-operatorFunc[ [[/]] ]     = function() push(1 / pop()*pop()) end  -- Division
-operatorFunc[ [[div]] ]   = function() local r=1 / pop() * pop(); push(r>=0 and math.floor(r) or math.ceil(r)) end -- Integer part of division
-operatorFunc[ [[%]] ]     = function() local x=pop(); local y=pop(); push(y % x) end  -- Modulus
-operatorFunc[ [[abs]] ]   = function() push(math.abs(pop())) end  -- Absolute Value
-operatorFunc[ [[chs]] ]   = function() push(-pop()) end  -- Change Sign
---[[ Rounding ]]
-operatorFunc[ [[floor]] ] = function() push(math.floor(pop())) end  -- Floor - round down to nearest integer
-operatorFunc[ [[ceil]] ]  = function() push(math.ceil(pop())) end  -- Ceiling - round up to nearest integer
-operatorFunc[ [[round]] ] = function() local x=pop(); push(x>=0 and math.floor(x+0.5) or math.ceil(x-0.5)) end -- Round to nearest integer
-operatorFunc[ [[trunc]] ] = function() local r=pop(); push(r>=0 and math.floor(r) or math.ceil(r)) end -- Round toward zero
---[[ Powers & Logs ]]
-operatorFunc[ [[exp]] ]   = function() push(math.exp(pop())) end -- Raise e to the x power
-operatorFunc[ [[log]] ]   = function() push(math.log(pop())) end -- Natural log of x
-operatorFunc[ [[logx]] ]  = function() local x=pop(); push(math.log(pop(),x)) end -- Log y of x
-operatorFunc[ [[log10]] ] = function() push(math.log(pop(),10)) end -- Log (base 10) of x
-operatorFunc[ [[log2]] ]  = function() push(math.log(pop(),2) )end -- Log (base 2) of x
-operatorFunc[ [[sqrt]] ]  = function() push(math.sqrt(pop())) end -- Square Root
-operatorFunc[ [[**]] ]    = function() local x=pop(); local y=pop(); push((y==0 and x==0) and 'nan' or y ^ x) end  -- Exponentiation
-operatorFunc[ [[\]] ]     = function() push(1 / pop()) end -- Reciprocal
---[[ Trigonometry ]]
-operatorFunc[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
-operatorFunc[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to radians
+-- Extend the math library with some basic functions I'll need below.
+math.isreal = function(x) return type(x) == 'number' end
+math.iscomplex = function(x) return type(x) == 'table' and #x == 2 and type(x[1]) == 'number' and type(x[2]) == 'number' end
+math.round = function(x) return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5) end -- Round to nearest integer
+math.trunc = function(x) return x>=0 and math.floor(x) or math.ceil(x) end -- Round toward zero
 
-operatorFunc[ [[sin]] ]   = function() push(math.sin(pop())) end -- Sine
-operatorFunc[ [[cos]] ]   = function() push(math.cos(pop())) end -- Cosine
-operatorFunc[ [[tan]] ]   = function() push(math.tan(pop())) end -- Tangent
-operatorFunc[ [[csc]] ]   = function() push(1 / math.sin(pop())) end -- Cosecant
-operatorFunc[ [[sec]] ]   = function() push(1 / math.cos(pop())) end -- Secant
-operatorFunc[ [[cot]] ]   = function() push(1 / math.tan(pop())) end -- Cotangent
+local op= {}
 
-operatorFunc[ [[asin]] ]  = function() push(math.asin(pop())) end -- Inverse sine
-operatorFunc[ [[acos]] ]  = function() push(math.acos(pop())) end -- Inverse cosine
-operatorFunc[ [[atan]] ]  = function() push(math.atan(pop())) end -- Inverse Tangent
-operatorFunc[ [[acsc]] ]  = function() push(math.asin(1 / pop())) end -- Inverse cosecant
-operatorFunc[ [[asec]] ]  = function() push(math.acos(1 / pop())) end -- Inverse secant
-operatorFunc[ [[acot]] ]  = function() push(math.atan(1 / pop())) end -- Inverse cotangent
+-- #############################################################################################
+-- ############################################################################ Basic Arithmetic
+-- #############################################################################################
+op[ [[+]] ] = function()  -- Addtion
+    local x,y = pop(), pop()
+    if math.isreal(x)        and math.isreal(y)    then push(x + y)
+    elseif math.iscomplex(x) and math.isreal(y)    then push({x[1] + y, x[2]})
+    elseif math.isreal(x)    and math.iscomplex(y) then push({x + y[1], y[2]})
+    elseif math.iscomplex(x) and math.iscomplex(y) then push({x[1] + y[1], x[2] + y[2]})
+    end
+end
+op[ [[-]] ] = function() -- Subtraction
+    local x,y = pop(), pop()
+    if math.isreal(x)        and math.isreal(y)    then push(y - x)
+    elseif math.iscomplex(x) and math.isreal(y)    then push({y - x[1], -x[2]})
+    elseif math.isreal(x)    and math.iscomplex(y) then push({y[1] - x, y[2]})
+    elseif math.iscomplex(x) and math.iscomplex(y) then push({y[1] - x[1], y[2] - x[2]})
+    end
+end
+op[ [[*]] ] = function() -- Multiplication
+    local x,y = pop(), pop()
+    if math.isreal(x)        and math.isreal(y)    then push(x * y)
+    elseif math.iscomplex(x) and math.isreal(y)    then push({x[1] * y, x[2] * y})
+    elseif math.isreal(x)    and math.iscomplex(y) then push({x * y[1], x * y[2]})
+    elseif math.iscomplex(x) and math.iscomplex(y) then push({x[1]*y[1] - x[2]*y[2], x[1]*y[2] + x[2]*y[1]})
+    end
+end
+op[ [[/]] ] = function() -- Division
+    local x,y = pop(), pop()
+    if     math.isreal(x)    and math.isreal(y)    then push(y / x)
+    elseif math.iscomplex(x) and math.isreal(y)    then push({y*x[1]/(x[1]*x[1] + x[2]*x[2]), -y*x[2]/(x[1]*x[1] + x[2]*x[2])})
+    elseif math.isreal(x)    and math.iscomplex(y) then push({y[1] / x, y[2] / x})
+    elseif math.iscomplex(x) and math.iscomplex(y) then push({(y[1]*x[1]+y[2]*x[2]) / (x[1]*x[1]+x[2]*x[2]), (y[2]*x[1]-y[1]*x[2]) / (x[1]*x[1]+x[2]*x[2])})
+    end
+end
+op[ [[div]] ]   = function()  -- Integer part of division
+    local x,y = pop(), pop()
+    push(math.trunc(y / x))
+end
+op[ [[%]] ]     = function()  -- Modulus
+    local x,y = pop(), pop()
+    push(y % x)
+end
 
-operatorFunc[ [[sinh]] ]  = function() local x=pop(); push((math.exp(x) - math.exp(-x)) / 2) end -- Hyperbolic sine
-operatorFunc[ [[cosh]] ]  = function() local x=pop(); push((math.exp(x) + math.exp(-x)) / 2) end -- Hyperbolic cosine
-operatorFunc[ [[tanh]] ]  = function() local x=pop(); push((math.exp(2*x)-1) / (math.exp(2*x)+1)) end -- Hyperbolic tangent
-operatorFunc[ [[asinh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x+1))) end -- Inverse hyperbolic sine
-operatorFunc[ [[acosh]] ] = function() local x=pop(); push(math.log(x + math.sqrt(x*x-1))) end -- Inverse hyperbolic cosine
-operatorFunc[ [[atanh]] ] = function() local x=pop(); push(math.log((1+x) / (1-x)) / 2) end -- Inverse hyperbolic tangent
-
-operatorFunc[ [[csch]] ]  = function() local x=pop(); push(2 / (math.exp(x) - math.exp(-x))) end -- Hyperbolic cosecant
-operatorFunc[ [[sech]] ]  = function() local x=pop(); push(2 / (math.exp(x) + math.exp(-x))) end -- Hyperbolic secant
-operatorFunc[ [[coth]] ]  = function() local x=pop(); push((math.exp(2*x)+1) / (math.exp(2*x)-1)) end -- Hyperbolic cotangent
-operatorFunc[ [[acsch]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1+x*x)) / x)) end -- Inverse hyperbolic cosecant
-operatorFunc[ [[asech]] ] = function() local x=pop(); push(math.log((1+math.sqrt(1-x*x)) / x)) end -- Inverse hyperbolic secant
-operatorFunc[ [[acoth]] ] = function() local x=pop(); push(math.log((x+1) / (x-1)) / 2) end -- Inverse hyperbolic cotangent
-
---[[ Bitwise ]]
-operatorFunc[ [[&]] ]     = function() push(bit.band(pop(),pop())) end -- AND
-operatorFunc[ [[|]] ]     = function() push(bit.bor(pop(),pop())) end -- OR
-operatorFunc[ [[^]] ]     = function() push(bit.bxor(pop(),pop())) end -- XOR
-operatorFunc[ [[~]] ]     = function() push(bit.bnot(pop())) end -- NOT
-operatorFunc[ [[<<]] ]    = function() local n=pop(); push(bit.lshift(pop(),n)) end -- Left Shift
-operatorFunc[ [[>>]] ]    = function() local n=pop(); push(bit.rshift(pop(),n)) end -- Right Shift
---[[ Constants ]]
-operatorFunc[ [[pi]] ]    = function() push(math.pi) end -- 3.141592653....
-operatorFunc[ [[e]] ]     = function() push(math.exp(1)) end -- 2.718281828...
-operatorFunc[ [[phi]] ]   = function() push((1+math.sqrt(5)) / 2) end -- 1.618033989...
---[[ Other ]]
-operatorFunc[ [[hrs]] ]   = function() push((pop() / 60 + pop()) / 60 + pop()) end -- Convert Z:Y:X to hours
-operatorFunc[ [[hms]] ]   = function() local x=pop(); for _=1,2 do local t=x<0 and math.ceil(x) or math.floor(x); push(t); x=60*(x-t); end; push(x) end -- Convert X hours to Z:Y:X
+op[ [[abs]] ]   = function() -- Absolute Value
+    local x=pop()
+    if math.isreal(x)        then push(math.abs(x))
+    elseif math.iscomplex(x) then push(math.sqrt(x[1]*x[1] + x[2]*x[2]))
+    end
+end
+op[ [[arg]] ]   = function() -- Arg
+    local x=pop()
+    if math.isreal(x)        then push(x < 0 and math.pi or 0)
+    elseif math.iscomplex(x) then push(math.atan2(x[2], x[1]));
+    end
+end
+op[ [[chs]] ]   = function() -- Change Sign
+    local x=pop()
+    if math.isreal(x)        then push(-x)
+    elseif math.iscomplex(x) then push({-x[1], -x[2]})
+    end
+end
 
 
--- Get all unique characters from the operatorFunc keys. These characters will
+-- #############################################################################################
+-- #################################################################################### Rounding
+-- #############################################################################################
+op[ [[floor]] ] = function() -- Floor - round down to nearest integer
+    local x=pop()
+    if math.isreal(x)        then push(math.floor(x))
+    elseif math.iscomplex(x) then push({math.floor(x[1]), math.floor(x[2])})
+    end
+end
+op[ [[ceil]] ]  = function() -- Ceiling - round up to nearest integer
+    local x=pop()
+    if math.isreal(x)        then push(math.ceil(x))
+    elseif math.iscomplex(x) then push({math.ceil(x[1]), math.ceil(x[2])})
+    end
+end
+op[ [[round]] ] = function() -- Round to nearest integer
+    local x=pop()
+    if math.isreal(x)        then push(math.round(x))
+    elseif math.iscomplex(x) then push({math.round(x[1]), math.round(x[2])})
+    end
+end
+op[ [[trunc]] ] = function() -- Round toward zero
+    local x=pop()
+    if math.isreal(x)        then push(math.trunc(x))
+    elseif math.iscomplex(x) then push({math.trunc(x[1]), math.trunc(x[2])})
+    end
+end
+
+
+-- #############################################################################################
+-- ############################################################################### Powers & Logs
+-- #############################################################################################
+op[ [[ln]] ]   = function() -- Natural log of x
+        local x=pop()
+    if math.iscomplex(x) then
+            local r = math.sqrt(x[1]*x[1] + x[2]*x[2])
+            local theta = math.atan2(x[2],x[1])
+            push({math.log(r), theta})
+        elseif math.isreal(x) then
+            push(math.log(x))
+        end
+    end
+op[ [[log]] ] = function() pcall(op[ [[ln]] ]); push(10); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log (base 10) of x
+op[ [[log2]] ] = function() pcall(op[ [[ln]] ]); push(2); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log (base 2) of x
+op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[ln]] ]); push(x); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log y of x
+op[ [[**]] ] = function() -- Exponentiation - y to the x power
+    local x,y = pop(), pop()
+    if ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
+        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(0/0)
+        -- Lua says 0^0=1, but use math's convention - undefined (or NaN) - instead.
+    elseif math.iscomplex(x) and math.iscomplex(y) then
+        local r = math.sqrt(y[1]*y[1] + y[2]*y[2])
+        local theta = math.atan2(y[2],y[1])
+        local m = math.exp(x[1]*math.log(r) - x[2]*theta)
+        push({m*math.cos(x[2]*math.log(r) + x[1]*theta), m*math.sin(x[2]*math.log(r) + x[1]*theta)})
+    elseif math.isreal(x) and math.iscomplex(y) then
+        local r = math.sqrt(y[1]*y[1]+y[2]*y[2])
+        local theta = math.atan2(y[2],y[1])
+        push({math.pow(r,x)*math.cos(theta*x), math.pow(r,x)*math.sin(theta*x)})
+    elseif math.iscomplex(x) then
+        push({math.pow(y,x[1])*math.cos(x[2]*math.log(y)), math.pow(y,x[1])*math.sin(x[2]*math.log(y))})
+    elseif y < 0 and x ~= math.round(x) then
+        push({y,0})
+        push(x)
+        pcall(op[ [[**]] ])
+    else
+        push(y ^ x)
+    end
+end
+op[ [[exp]] ]   = function()
+    local x=pop()
+    push(math.exp(1))
+    push(x)
+    pcall(op[ [[**]] ])
+end -- Raise e to the x power
+op[ [[\]] ]     = function() push(-1); pcall(op[ [[**]] ]) end -- Reciprocal
+op[ [[sqrt]] ]  = function() push(0.5); pcall(op[ [[**]] ]) end -- Square root of x
+
+
+-- #############################################################################################
+-- ################################################################################ Trigonometry
+-- #############################################################################################
+op[ [[sin]] ]   = function() -- Sine
+    local x=pop()
+    if math.iscomplex(x) then
+        push({math.sin(x[1])*math.cosh(x[2]), math.cos(x[1])*math.sinh(x[2])})
+    elseif math.isreal(x) then push(math.sin(x))
+    end
+end
+op[ [[cos]] ]   = function() -- Cosine
+    local x=pop()
+    if math.iscomplex(x) then push({math.cos(x[1])*math.cosh(x[2]), -math.sin(x[1])*math.sinh(x[2])})
+    elseif math.isreal(x) then push(math.cos(x))
+    end
+end
+op[ [[tan]] ]   = function() -- Tangent
+    local x=pop()
+    if math.iscomplex(x) then
+        push(x)
+        pcall(op[ [[sin]] ])
+        push(x)
+        pcall(op[ [[cos]] ])
+        pcall(op[ [[/]] ])
+    elseif math.isreal(x) then push(math.tan(x))
+    end
+end
+op[ [[csc]] ]   = function() pcall(op[ [[sin]] ]); pcall(op[ [[\]] ]); end -- Cosecant
+op[ [[sec]] ]   = function() pcall(op[ [[cos]] ]); pcall(op[ [[\]] ]); end -- Secant
+op[ [[cot]] ]   = function() pcall(op[ [[tan]] ]); pcall(op[ [[\]] ]); end -- Cotangent
+-- Inverse Trigonometry ------------------------------------------------------------------------
+op[ [[asin]] ]  = function() -- Inverse sine
+    local x=pop()
+    if math.iscomplex(x) then -- i*ln(sqrt(1-x^2)-ix)
+        push({0,1})
+        push(1)
+        push(x)
+        push(2)
+        pcall(op[ [[**]] ])
+        pcall(op[ [[-]] ])
+        pcall(op[ [[sqrt]] ])
+        push({0,1})
+        push(x)
+        pcall(op[ [[*]] ])
+        pcall(op[ [[-]] ])
+        pcall(op[ [[ln]] ])
+        pcall(op[ [[*]] ])
+    else
+        push(math.asin(x))
+    end
+end
+op[ [[acos]] ]  = function() -- Inverse cosine = pi/2 - asin(x)
+    local x=pop()
+    pcall(op[ [[pi]] ])
+    push(2)
+    pcall(op[ [[/]] ])
+    push(x)
+    pcall(op[ [[asin]] ])
+    pcall(op[ [[-]] ])
+end
+op[ [[atan]] ]  = function() -- Inverse Tangent
+    local x=pop()
+    if math.iscomplex(x) then -- -i/2*ln((1+ix)/(1-ix))
+        push({0,-0.5})
+        push(1)
+        push({0,1})
+        push(x)
+        pcall(op[ [[*]] ])
+        pcall(op[ [[+]] ])
+        push(1)
+        push({0,1})
+        push(x)
+        pcall(op[ [[*]] ])
+        pcall(op[ [[-]] ])
+        pcall(op[ [[/]] ])
+        pcall(op[ [[ln]] ])
+        pcall(op[ [[*]] ])
+    else
+        push(math.atan(x))
+    end
+end
+op[ [[acsc]] ]  = function() -- Inverse cosecant
+    pcall(op[ [[\]] ])
+    pcall(op[ [[asin]] ])
+end
+op[ [[asec]] ]  = function() -- Inverse secant
+    pcall(op[ [[\]] ])
+    pcall(op[ [[acos]] ])
+end
+op[ [[acot]] ]  = function() -- Inverse cotangent
+    pcall(op[ [[\]] ])
+    pcall(op[ [[atan]] ])
+end
+-- Hyperbolic Trigonometry ---------------------------------------------------------------------
+op[ [[sinh]] ]  = function() -- Hyperbolic sine
+    local x=pop()
+    if math.iscomplex(x) then
+        push({math.cos(x[2])*math.sinh(x[1]), math.sin(x[2])*math.cosh(x[1])})
+    elseif math.isreal(x) then
+        push(math.sinh(x))
+    end
+end
+op[ [[cosh]] ]  = function() -- Hyperbolic cosine
+    local x=pop()
+    if math.iscomplex(x) then
+        push({math.cos(x[2])*math.cosh(x[1]), math.sin(x[2])*math.sinh(x[1])})
+    elseif math.isreal(x) then
+        push(math.cosh(x))
+    end
+end
+op[ [[tanh]] ]  = function() -- Hyperbolic tangent
+    local x=pop()
+    push(x)
+    pcall(op[ [[sinh]] ])
+    push(x)
+    pcall(op[ [[cosh]] ])
+    pcall(op[ [[/]] ])
+end
+op[ [[csch]] ]  = function() -- Hyperbolic cosecant
+    pcall(op[ [[sinh]] ])
+    pcall(op[ [[\]] ])
+end
+op[ [[sech]] ]  = function() -- Hyperbolic secant
+    pcall(op[ [[cosh]] ])
+    pcall(op[ [[\]] ])
+end
+op[ [[coth]] ]  = function() -- Hyperbolic cotangent
+    pcall(op[ [[tanh]] ])
+    pcall(op[ [[\]] ])
+end
+-- Inverse Hyperbolic Trigonometry -------------------------------------------------------------
+op[ [[asinh]] ] = function() -- Inverse hyperbolic sine
+    local x=pop()
+    push(x)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    push(1)
+    pcall(op[ [[+]] ])
+    pcall(op[ [[sqrt]] ])
+    pcall(op[ [[+]] ])
+    pcall(op[ [[ln]] ])
+end
+op[ [[acosh]] ] = function() -- Inverse hyperbolic cosine
+    local x=pop()
+    push(x)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    push(1)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[sqrt]] ])
+    pcall(op[ [[+]] ])
+    pcall(op[ [[ln]] ])
+end
+op[ [[atanh]] ] = function() -- Inverse hyperbolic tangent
+    local x=pop()
+    push(1)
+    push(x)
+    pcall(op[ [[+]] ])
+    push(1)
+    push(x)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[/]] ])
+    pcall(op[ [[ln]] ])
+    push(2)
+    pcall(op[ [[/]] ])
+end
+op[ [[acsch]] ] = function() -- Inverse hyperbolic cosecant
+    local x=pop()
+    push(1)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    pcall(op[ [[+]] ])
+    pcall(op[ [[sqrt]] ])
+    push(1)
+    pcall(op[ [[+]] ])
+    push(x)
+    pcall(op[ [[/]] ])
+    pcall(op[ [[ln]] ])
+end
+op[ [[asech]] ] = function() -- Inverse hyperbolic secant
+    local x=pop()
+    push(1)
+    push(x)
+    push(x)
+    pcall(op[ [[*]] ])
+    pcall(op[ [[-]] ])
+    pcall(op[ [[sqrt]] ])
+    push(1)
+    pcall(op[ [[+]] ])
+    push(x)
+    pcall(op[ [[/]] ])
+    pcall(op[ [[ln]] ])
+end
+op[ [[acoth]] ] = function() -- Inverse hyperbolic cotangent
+    local x=pop()
+    push(x)
+    push(1)
+    pcall(op[ [[+]] ])
+    push(x)
+    push(1)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[/]] ])
+    pcall(op[ [[ln]] ])
+    push(2)
+    pcall(op[ [[/]] ])
+end
+-- Angle Conversion ----------------------------------------------------------------------------
+op[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
+op[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to radians
+
+
+-- #############################################################################################
+-- ##################################################################################### Bitwise
+-- #############################################################################################
+op[ [[&]] ]     = function() push(bit.band(pop(),pop())) end -- AND
+op[ [[|]] ]     = function() push(bit.bor(pop(),pop())) end -- OR
+op[ [[^]] ]     = function() push(bit.bxor(pop(),pop())) end -- XOR
+op[ [[~]] ]     = function() push(bit.bnot(pop())) end -- NOT
+op[ [[<<]] ]    = function() local n=pop(); push(bit.lshift(pop(),n)) end -- Left Shift
+op[ [[>>]] ]    = function() local n=pop(); push(bit.rshift(pop(),n)) end -- Right Shift
+
+
+-- #############################################################################################
+-- ################################################################################### Constants
+-- #############################################################################################
+op[ [[pi]] ]    = function() push(math.pi) end -- 3.141592653....
+op[ [[e]] ]     = function() push(math.exp(1)) end -- 2.718281828...
+op[ [[phi]] ]   = function() push((1+math.sqrt(5)) / 2) end -- 1.618033989...
+op[ [[i]] ]     = function() push({0,1}) end -- the imaginary unit value
+
+
+-- #############################################################################################
+-- ####################################################################################### Other
+-- #############################################################################################
+op[ [[hrs]] ]   = function() push((pop() / 60 + pop()) / 60 + pop()) end -- Convert Z:Y:X to hours
+op[ [[hms]] ]   = function()  -- Convert X hours to Z:Y:X
+    local x=pop()
+    for _=1,2 do
+        local t=x<0 and math.ceil(x) or math.floor(x)
+        push(t)
+        x=60*(x-t)
+    end
+    push(x)
+end
+
+-- #############################################################################################
+-- ############################################################### End of Operators' Definitions
+-- #############################################################################################
+
+-- Get all unique characters from the op keys. These characters will
 -- trigger completion to begin on this source.
 local function contains(table, val)
    for i=1,#table do
@@ -92,9 +423,9 @@ local function contains(table, val)
    return false
 end
 
-local triggerCharacters = {' ', '', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'E', 'e'}
-for op,_ in pairs(operatorFunc) do
-    for char in string.gmatch(op, '.') do
+local triggerCharacters = vim.fn.split('0123456789.eE', '\\zs')
+for o,_ in pairs(op) do
+    for char in string.gmatch(o, '.') do
         if not contains(triggerCharacters, char) then
             triggerCharacters[#triggerCharacters+1] = char
         end
@@ -103,11 +434,12 @@ end
 
 -- Create the regex that determines if the text a valid RPN expression.
 local operators = {}
-for op,_ in pairs(operatorFunc) do
-    operators[#operators+1] = vim.fn.escape(op, [[~^*/\+%|<>&]] )
+for o,_ in pairs(op) do
+    operators[#operators+1] = vim.fn.escape(o, [[~^*/\+%|<>&]] )
 end
 
 local numberRegex = [[[-+]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]  -- 0, -42, 3.14, 6.02e23, etc.
+numberRegex = numberRegex .. '%(,' .. numberRegex .. ')?'  -- now they can be complex (an ordered pair)
 local operatorsRegex = table.concat(operators,[[|]])  -- Concatenate all operators:  sin|cos|+|-|pi|...
 local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
 local expressionRegex = wordRegex .. [[%( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
@@ -127,27 +459,53 @@ source.complete = function(_, request, callback)
     local input = request.context.cursor_before_line
     local s,e = vim.regex(expressionRegex):match_str(input)
     if not s or not e then
-        return callback({isIncomplete=true})
+        return callback({})
     end
     input = string.sub(input, s+1)
 
     stack = {}
     for _,word in ipairs(vim.fn.split(input, ' \\+')) do
         local number = tonumber(word)
+        -- vim.pretty_print(word)
         if number then
             push(number)
+        elseif word:match('.+,.+') then
+            local c = vim.fn.split(word, ',')
+            push({tonumber(c[1]), tonumber(c[2])})
         else
-            local f = operatorFunc[word]
+            local f = op[word]
             local ok,_ = pcall(f)
             if not ok then
-                return callback({isIncomplete=true})
+                return callback({})
             end
         end
+        -- vim.pretty_print(stack)
     end
     local value = ''
     for _,n in ipairs(stack) do
-        value = string.gsub(value .. ' ' .. n, "^%s*(.-)%s*$", "%1")
+        if tostring(n) == tostring(0/0) then
+            value = value .. ' NaN'
+        elseif tostring(n) == tostring(0^-1) then
+            value = value .. ' Infinity'
+        elseif tostring(n) == tostring(-0^-1) then
+            value = value .. ' -Infinity'
+        elseif math.iscomplex(n) then
+            if tostring(n[1]) == tostring(0/0) or tostring(n[2]) == tostring(0/0) then
+                value = value .. ' NaN'
+            elseif tostring(n[1]) == tostring(0^-1) or tostring(n[2]) == tostring(0^-1) then
+                value = value .. ' Infinity'
+            elseif tostring(n[1]) == tostring(-0^-1) or tostring(n[2]) == tostring(-0^-1) then
+                value = value .. ' -Infinity'
+            else
+                value = value .. ' ' .. n[1] .. (n[2] >= 0 and '+' or '') .. n[2] .. 'i'
+            end
+        elseif math.isreal(n) then
+            value = value .. ' ' .. n
+        else
+            value = value .. ' ' .. 'Error'
+        end
     end
+    value = string.gsub(value, "^%s*(.-)%s*$", "%1")
     input = string.gsub(input, "^%s*(.-)%s*$", "%1")
 
     callback({
