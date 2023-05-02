@@ -455,17 +455,19 @@ expressionRegex = [[\v]] .. expressionRegex  -- Very magic
 
 local function changeBase(num)
     if type(num) == 'string' then return num end
+
+    local sign = num < 0 and '-' or ''
     if base == 10 then return string.format('%s', num) end
-    if base == 16 then return string.format('0x%x', num) end
+    if base == 16 then return string.format('%s0x%x', sign, math.abs(num)) end
     if base == 2 then
-        num = math.floor(num)
+        num = math.floor(math.abs(num))
         local bits = math.max(1, select(2, math.frexp(num)))
         local t={}
         for b = bits,1,-1 do
             t[b] = math.fmod(num,2)
             num = math.floor((num-t[b]) / 2)
         end
-        return '0b' .. table.concat(t)
+        return string.format('%s0b%s', sign, table.concat(t))
     end
 end
 

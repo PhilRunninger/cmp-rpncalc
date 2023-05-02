@@ -314,6 +314,8 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[bin 150]], '0b10010110'))
     tally(assert( [[bin 20.1234]], '0b10100'))
     tally(assert( [[bin 20.1234,42.8352]], '0b10100+0b101010i'))
+    tally(assert( [[-150 hex]], '-0x96'))
+    tally(assert( [[-150 bin]], '-0b10010110'))
 
 
     -- All done. Print the final tally.
