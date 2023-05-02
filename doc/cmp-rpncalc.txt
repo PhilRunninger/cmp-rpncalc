@@ -19,9 +19,12 @@ W, and other unnamed positions underneath. When an operator is encountered, X
 and if necessary, other numbers are taken off the stack, and the result of the
 operation is placed back on the stack.
 
-Supported number formats are: integers, decimals, and scientific notation.
-Complex numbers are entered as ordered pairs: `real,imaginary`. For example
-`1.2,-3` evaluates to `1.2-3i`.
+Operands can take on any of these forms:
+  Decimal - integer, floating point, scientific notation
+  Binary - `0b` prefix, followed by digits `0` and `1`.
+  Hexadecimal - `0x` prefix, followed by digits `0`-`9` and letters `a`-`f`.
+  Complex - an ordered pair of numbers in any of the above formats. For
+            example `1.2,-0x43` represents `1.2-67i`.
 
 ==============================================================================
                                                                  *rpn-operators*
@@ -116,3 +119,5 @@ Most operators work on complex numbers. Exceptions are noted below.
 
   `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` is `3.625`
   `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
+  `bin` - Print results in binary.
+  `hex` - Print results in hexadecimal.
