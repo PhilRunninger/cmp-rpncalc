@@ -1,3 +1,5 @@
+-- vim: set foldmethod=marker
+--
 -- To run the tests, use these commands:
 --
 -- :wa|mess clear|lua require('cmp_rpncalc.tests').rerun(false)
@@ -5,15 +7,15 @@
 --          - true prints all messages
 -- :messages
 
-M = {}
+M = {}  -- Setup {{{1
 
 local printAll = false
 
-local mockRequest = function(str)
+local mockRequest = function(str)  -- {{{2
     return { context = { cursor_before_line = str, cursor = { row = 1, col = 1 } } }
 end
 
-local assert = function(expression, expected, tolerance)
+local assert = function(expression, expected, tolerance)  -- {{{2
     local msg = type(expected) == 'table'
         and string.format('    %25s  should equal {%s, %s} ', expression, expected[1], expected[2])
         or string.format('    %25s  should equal  %s ', expression, expected)
@@ -22,33 +24,40 @@ local assert = function(expression, expected, tolerance)
         or  '')
     local pass = false
     local checkResult = function(response)
-        local result = response.items[1].textEdit.newText
-        if type(expected) == 'string' then
-            local s,e = vim.regex([[^]]..expected..[[$]]):match_str(result)
-            pass = s and e
+        -- vim.pretty_print('response', response)
+        local result = ''
+        if next(response) == nil then
+            result = ''
+            pass = false
         else
-            tolerance = tolerance or 0
-            if type(expected) == 'table' then
-                -- Split complex into real and imaginary: "1.23+4.5i" -> {"1.23", "+4.5"}
-                local parts = vim.fn.split(result, '\\(\\ze[+-]\\|i\\)')
-                -- vim.pretty_print(parts)
-                -- Side effect: it also splits mantissas from exponents: "1.2e-6+9.9e-8i" -> {"1.2e", "-6", "+9.9e", "-8"}
-                -- If that happens, smash them back together again: -> {"1.2e-6", "+9.9e-8"}
-                local i = 1
-                while i < #parts do
-                    if string.match(parts[i],'[Ee]$') then
-                        parts[i] = parts[i] .. parts[i+1]
-                        table.remove(parts, i+1)
-                    end
-                    i = i + 1
-                end
-                -- vim.pretty_print(parts, expected)
-
-                pass = #parts == #expected and
-                    math.abs(tonumber(parts[1])-expected[1]) <= tolerance and
-                    math.abs(tonumber(parts[2])-expected[2]) <= tolerance
+            result = response.items[1].textEdit.newText
+            if type(expected) == 'string' then
+                local s,e = vim.regex([[^]]..expected..[[$]]):match_str(result)
+                pass = s and e
             else
-                pass = math.abs(tonumber(result)-expected) <= tolerance
+                tolerance = tolerance or 0
+                if type(expected) == 'table' then
+                    -- Split complex into real and imaginary: "1.23+4.5i" -> {"1.23", "+4.5"}
+                    local parts = vim.fn.split(result, '\\(\\ze[+-]\\|i\\)')
+                    -- vim.pretty_print(parts)
+                    -- Side effect: it also splits mantissas from exponents: "1.2e-6+9.9e-8i" -> {"1.2e", "-6", "+9.9e", "-8"}
+                    -- If that happens, smash them back together again: -> {"1.2e-6", "+9.9e-8"}
+                    local i = 1
+                    while i < #parts do
+                        if string.match(parts[i],'[Ee]$') then
+                            parts[i] = parts[i] .. parts[i+1]
+                            table.remove(parts, i+1)
+                        end
+                        i = i + 1
+                    end
+                    -- vim.pretty_print(parts, expected)
+
+                    pass = #parts == #expected and
+                        math.abs(tonumber(parts[1])-expected[1]) <= tolerance and
+                        math.abs(tonumber(parts[2])-expected[2]) <= tolerance
+                else
+                    pass = math.abs(tonumber(result)-expected) <= tolerance
+                end
             end
         end
         msg = msg .. (pass and '' or '  Got "' .. result .. '"')
@@ -60,8 +69,8 @@ local assert = function(expression, expected, tolerance)
     return pass
 end
 
--- Rerun the tests after reloading (and recompiling) the source and test code.
-M.rerun = function(verbose)
+M.rerun = function(verbose)  -- {{{2
+    -- Rerun the tests after reloading (and recompiling) the source and test code.
     vim.schedule(function()
         package.loaded['cmp_rpncalc'] = nil
         package.loaded['cmp_rpncalc.tests'] = nil
@@ -69,7 +78,7 @@ M.rerun = function(verbose)
     end)
 end
 
-M.run = function(verbose)
+M.run = function(verbose) -- Unit Tests {{{1
     printAll = verbose and true or false
     local passedTests = 0
     local failedTests = 0
@@ -296,5 +305,19 @@ M.run = function(verbose)
     tally(assert( [[1,1 asech]], {0.530637531,-1.118517880}, 1e-6))
     tally(assert( [[1,1 acoth]], {0.402359478,-0.553574359}, 1e-6))
 
+    print('Bases (Reading & Writing) ================================================================')
+    tally(assert( [[0x22]], 34))
+    tally(assert( [[0b100011]], 35))
+    tally(assert( [[150 hex]], '0x96'))
+    tally(assert( [[150 bin]], '0b10010110'))
+    tally(assert( [[hex 150]], '0x96'))
+    tally(assert( [[bin 150]], '0b10010110'))
+    tally(assert( [[bin 20.1234]], '0b10100'))
+    tally(assert( [[bin 20.1234,42.8352]], '0b10100+0b101010i'))
+    tally(assert( [[-150 hex]], '-0x96'))
+    tally(assert( [[-150 bin]], '-0b10010110'))
+
+
+    -- All done. Print the final tally.
     print(string.format('\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
 return M

@@ -38,7 +38,11 @@ Most of the operators also will process complex numbers. The following Wikipedia
 
 ## Operands
 
-Numbers can be entered as integers, decimals, or in scientific notation. Complex numbers are entered as an ordered pair: `real,imaginary`. For example `1.2,-3` represents `1.2-3i`.
+Operands can take on any of these forms:
+* Decimal - integer, floating point, scientific notation
+* Binary - `0b` prefix, followed by digits `0` and `1`.
+* Hexadecimal - `0x` prefix, followed by digits `0`-`9` and letters `a`-`f`.
+* Complex - an ordered pair of numbers in any of the above formats. For example `1.2,-0x43` represents `1.2-67i`.
 
 ## Operators
 
@@ -98,6 +102,8 @@ The operator categories and certain exceptional functions show the domain over w
 ### Other - ℝ
 * <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
 * <kbd>hms</kbd> - Convert X hours to (Z hours:Y minutes:X seconds)
+* <kbd>bin</kbd> - Print results in binary.
+* <kbd>hex</kbd> - Print results in hexadecimal.
 
 ## Feedback
 Please don't rely on this for important calculations, or at the very least double-check them with another calculator. It's quite possible computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).

@@ -1,5 +1,6 @@
 local bit=require('bit')
 local stack = {}
+local base = 10
 
 local function pop()
     return table.remove(stack)
@@ -409,6 +410,12 @@ op[ [[hms]] ]   = function()  -- Convert X hours to Z:Y:X
 end
 
 -- #############################################################################################
+-- ################################################################### Bases (Reading & Writing)
+-- #############################################################################################
+op[ [[bin]] ] = function() base = 2 end  -- Change output to binary
+op[ [[hex]] ] = function() base = 16 end -- Change output to hexadecimal
+
+-- #############################################################################################
 -- ############################################################### End of Operators' Definitions
 -- #############################################################################################
 
@@ -423,7 +430,7 @@ local function contains(table, val)
    return false
 end
 
-local triggerCharacters = vim.fn.split('0123456789.eE', '\\zs')
+local triggerCharacters = vim.fn.split('bx0123456789.eE', '\\zs')
 for o,_ in pairs(op) do
     for char in string.gmatch(o, '.') do
         if not contains(triggerCharacters, char) then
@@ -432,21 +439,41 @@ for o,_ in pairs(op) do
     end
 end
 
--- Create the regex that determines if the text a valid RPN expression.
+-- Create the regex that determines if the text is a valid RPN expression.
 local operators = {}
 for o,_ in pairs(op) do
     operators[#operators+1] = vim.fn.escape(o, [[~^*/\+%|<>&]] )
 end
 
-local numberRegex = [[[-+]?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]  -- 0, -42, 3.14, 6.02e23, etc.
-numberRegex = numberRegex .. '%(,' .. numberRegex .. ')?'  -- now they can be complex (an ordered pair)
+local numberRegex = [[-?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]  -- 0, .5, -42, 3.14, 6.02e23, etc.
+numberRegex = [[%(]] .. numberRegex .. [[|-?0b[01]+|-?0x[0-9a-fA-F]+]] .. [[)]] -- Include binary and hexadecimal.
+numberRegex = numberRegex .. '%(,' .. numberRegex .. ')?'  -- Complex number, an ordered pair.
 local operatorsRegex = table.concat(operators,[[|]])  -- Concatenate all operators:  sin|cos|+|-|pi|...
 local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
 local expressionRegex = wordRegex .. [[%( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
 expressionRegex = [[\v]] .. expressionRegex  -- Very magic
 
+local function changeBase(num)
+    if type(num) == 'string' then return num end
+
+    local sign = num < 0 and '-' or ''
+    if base == 10 then return string.format('%s', num) end
+    if base == 16 then return string.format('%s0x%x', sign, math.abs(num)) end
+    if base == 2 then
+        num = math.floor(math.abs(num))
+        local bits = math.max(1, select(2, math.frexp(num)))
+        local t={}
+        for b = bits,1,-1 do
+            t[b] = math.fmod(num,2)
+            num = math.floor((num-t[b]) / 2)
+        end
+        return string.format('%s0b%s', sign, table.concat(t))
+    end
+end
+
 -- source contains the callback functions that are needed to work in nvim-cmp.
 local source = {}
+
 source.new = function()
     return setmetatable({}, { __index = source })
 end
@@ -456,8 +483,10 @@ source.get_trigger_characters = function()
 end
 
 source.complete = function(_, request, callback)
+    base = 10
     local input = request.context.cursor_before_line
     local s,e = vim.regex(expressionRegex):match_str(input)
+    -- vim.pretty_print(s,e,input)
     if not s or not e then
         return callback({})
     end
@@ -497,10 +526,10 @@ source.complete = function(_, request, callback)
             elseif tostring(n[1]) == tostring(-0^-1) or tostring(n[2]) == tostring(-0^-1) then
                 value = value .. ' -Infinity'
             else
-                value = value .. ' ' .. n[1] .. (n[2] >= 0 and '+' or '') .. n[2] .. 'i'
+                value = value .. ' ' .. changeBase(n[1]) .. (n[2] >= 0 and '+' or '') .. changeBase(n[2]) .. 'i'
             end
         elseif math.isreal(n) then
-            value = value .. ' ' .. n
+            value = value .. ' ' .. changeBase(n)
         else
             value = value .. ' ' .. 'Error'
         end
