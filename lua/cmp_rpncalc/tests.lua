@@ -305,7 +305,7 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[1,1 asech]], {0.530637531,-1.118517880}, 1e-6))
     tally(assert( [[1,1 acoth]], {0.402359478,-0.553574359}, 1e-6))
 
-    print('Bases (Reading & Writing) ================================================================')
+    print('Bases (Reading & Writing) ===================================================')
     tally(assert( [[0x22]], 34))
     tally(assert( [[0b100011]], 35))
     tally(assert( [[150 hex]], '0x96'))
@@ -317,7 +317,24 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[-150 hex]], '-0x96'))
     tally(assert( [[-150 bin]], '-0b10010110'))
 
+    print('Memory and Stack Manipulation ===============================================')
+    -- xm cannot be tested by itself, as it doesn't change the stack.
+    tally(assert( [[1 xm rm]], '1 1'))
+    tally(assert( [[1 xm m+ rm]], '1 2'))
+    tally(assert( [[1 xm 3 m- rm]], '1 3 -2'))
+    tally(assert( [[1 2 xy]], '2 1'))
+    tally(assert( [[rm]], ''))  -- Don't fail if memory is not set.
+    tally(assert( [[xm rm]], ''))  -- Don't fail if stack is empty.
+    tally(assert( [[1 x]], '1 1'))
+    tally(assert( [[1 2 + x]], '3 2'))
+    tally(assert( [[1,2 x]], '1+2i 1+2i'))
+    tally(assert( [[pi]], math.pi, 1e-6))
+    tally(assert( [[x]], ''))  -- Don't fail if stack is empty.
+    tally(assert( [[1 drop]], ''))
+    tally(assert( [[1 2 drop]], 1))
+    tally(assert( [[drop]], ''))  -- Don't fail if stack is empty.
+
 
     -- All done. Print the final tally.
-    print(string.format('\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
+    print(string.format('\nDone.\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
 return M
