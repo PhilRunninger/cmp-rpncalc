@@ -99,11 +99,20 @@ The operator categories and certain exceptional functions show the domain over w
 * <kbd>phi</kbd> - the golden ratio, 1.618033989...
 * <kbd>i</kbd>   - 0+1i
 
-### Other - ℝ
+### Miscellaneous - ℝ
 * <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
 * <kbd>hms</kbd> - Convert X hours to (Z hours:Y minutes:X seconds)
 * <kbd>bin</kbd> - Print results in binary.
 * <kbd>hex</kbd> - Print results in hexadecimal.
+
+### Memory and Stack Manipulation - ℝ and ℂ
+xm   - Store the value of X to memory
+rm   - Recall the value in memory and put it on the stack
+m+   - Add X to the value in memory
+m-   - Subtract X from the value in memory
+xy   - swap X and Y on the stack
+x    - place the value of X from the last operation back on the stack
+drop - take X off the stack
 
 ## Feedback
 Please don't rely on this for important calculations, or at the very least double-check them with another calculator. It's quite possible computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).
