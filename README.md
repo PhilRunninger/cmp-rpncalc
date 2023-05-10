@@ -102,8 +102,9 @@ The operator categories and certain exceptional functions show the domain over w
 ### Other - ℝ
 * <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
 * <kbd>hms</kbd> - Convert X hours to (Z hours:Y minutes:X seconds)
-* <kbd>bin</kbd> - Print results in binary.
-* <kbd>hex</kbd> - Print results in hexadecimal.
+* <kbd>bin</kbd> - Print results in binary (base 2).
+* <kbd>hex</kbd> - Print results in hexadecimal (base 16).
+* <kbd>dec</kbd> - Print results in decimal (base 10).
 
 ## Feedback
 Please don't rely on this for important calculations, or at the very least double-check them with another calculator. It's quite possible computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).
