@@ -121,7 +121,7 @@ x    - Place the value of X from the last operation back on the stack
 drop - Remove X from the stack
 
 ## Disclaimer ⚠
-The author of this plugin does not make any warranties about the completeness, reliability and accuracy of this calculator. Any action you take upon the results you get from it, is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
+The author of this plugin does not make any warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it, is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
 
 ## Feedback 📣
 This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn). It's quite possible that computational errors made their way in, despite all efforts to ensure accuracy.
