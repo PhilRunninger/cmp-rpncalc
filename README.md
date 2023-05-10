@@ -19,11 +19,14 @@ require'cmp'.setup {
 
 ## How Does RPN Work?
 
-RPN is a mathematical notation in which the operator follows its operand(s). This means there is no need for parentheses. Here are some examples:
-* Add **956** and **37**: `956 37 +`
-* Divide **452** by **12** (Remember, the order of operands is important.): `452 12 /`
-* Find the **arctangent** of **1/√3**: `3 sqrt \ atan deg`
-* Evaluate **3x²+13x-10** at **x=4**: `3 4 2 ** * 13 4 * + 10 -`
+RPN is a mathematical notation in which the operator follows its operand(s). This means there is no need for parentheses. Here are some examples, comparing algebraic notation to RPN.
+| Algebraic | RPN (this plugin's flavor) | Result |
+|---|---|---|
+| $956 + 37$ | `956 37 +` | `993` |
+| $\frac{452}{12}$ | `452 12 /` | `37.666666666667` |
+| $\arctan(\frac{1}{\sqrt{3}})$ | `1 3 sqrt / atan deg` or `3 sqrt \ atan deg` | `30` |
+| $3x^2+6x-5 \vert _{x=\frac{\sqrt{17}}{4}}$ | `17 sqrt 4 / xm drop 3 rm 2 ** * 6 rm * + 5 -` | `4.3721584384265` |
+| $e^{i\pi}$ | `e i pi * **` | `-1+1.2246467991474e-16i`<br>*round off error* 🙁 |
 
 Reading an expression from left to right, numbers are placed on a stack. The top four numbers are labeled `X`, `Y`, `Z`, and `T` from the top down. Although these labels are not shown when using the plugin, they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back on the stack.
 
@@ -46,7 +49,7 @@ Operands can take on any of these forms:
 
 ## Operators
 
-The operator categories and certain exceptional functions show the domain over which they are valid.
+The operator categories and certain exceptional functions show the types of numbers for which they are valid.
 * ℝ - real
 * ℕ - natural
 * ℂ - complex
@@ -86,6 +89,7 @@ The operator categories and certain exceptional functions show the domain over w
 * <kbd>trunc</kbd> - Truncate to integer
 
 ### Bitwise - ℕ
+These operators will truncate non-integer operands.
 * <kbd>&</kbd>  - AND
 * <kbd>\|</kbd> - OR
 * <kbd>^</kbd>  - XOR
@@ -114,11 +118,11 @@ xy   - swap X and Y on the stack
 x    - place the value of X from the last operation back on the stack
 drop - take X off the stack
 
-## Disclaimer
+## Disclaimer ⚠
 The author of this plugin does not make any warranties about the completeness, reliability and accuracy of this calculator. Any action you take upon the results you get from it, is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
 
-## Feedback
-It's quite possible that computational errors made their way in, despite all efforts to ensure accuracy. This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn).
+## Feedback 📣
+This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn). It's quite possible that computational errors made their way in, despite all efforts to ensure accuracy.
 
 If you spot any errors, or have suggestions for improvements, added operators, etc., create an issue or a pull request.
 
