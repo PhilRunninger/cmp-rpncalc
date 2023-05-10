@@ -416,6 +416,7 @@ end
 -- #############################################################################################
 op[ [[bin]] ] = function() base = 2 end  -- Change output to binary
 op[ [[hex]] ] = function() base = 16 end -- Change output to hexadecimal
+op[ [[dec]] ] = function() base = 10 end -- Change output to decimal
 
 -- #############################################################################################
 -- ################################################################# Memory & Stack Manipulation
