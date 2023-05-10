@@ -21,14 +21,14 @@ require'cmp'.setup {
 
 RPN is a mathematical notation in which the operator follows its operand(s). This means there is no need for parentheses. Here are some examples, comparing algebraic notation to RPN.
 | Algebraic | RPN (this plugin's flavor) | Result |
-|---|---|---|
+|:-:|:--|:-:|
 | $956 + 37$ | `956 37 +` | `993` |
 | $\frac{452}{12}$ | `452 12 /` | `37.666666666667` |
-| $\arctan(\frac{1}{\sqrt{3}})$ | `1 3 sqrt / atan deg` or `3 sqrt \ atan deg` | `30` |
+| $\tan^{-1}(\frac{1}{\sqrt{3}})$ | `1 3 sqrt / atan deg` or `3 sqrt \ atan deg` | `30` |
 | $3x^2+6x-5 \vert _{x=\frac{\sqrt{17}}{4}}$ | `17 sqrt 4 / xm drop 3 rm 2 ** * 6 rm * + 5 -` | `4.3721584384265` |
 | $e^{i\pi}$ | `e i pi * **` | `-1+1.2246467991474e-16i`<br>*round off error* 🙁 |
 
-Reading an expression from left to right, numbers are placed on a stack. The top four numbers are labeled `X`, `Y`, `Z`, and `T` from the top down. Although these labels are not shown when using the plugin, they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back on the stack.
+Reading an RPN expression from left to right, numbers are placed on a stack. The top four numbers are labeled `X`, `Y`, `Z`, and `T` from the top down. Although these labels are not shown when using the plugin, they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back on the stack.
 
 ## Complex Numbers
 Most of the operators also will process complex numbers. The following Wikipedia pages were used as reference for some of the more arcane derivations for complex numbers. Where the complete answer is an infinte number of answers, only the principal value is given.
@@ -75,6 +75,7 @@ The operator categories and certain exceptional functions show the types of numb
 * <kbd>\\</kbd>    - Reciprocal
 
 ### Trigonometry - ℝ and ℂ
+Variations: `a***` are inverse, and `***h` are hyperbolic.
 * Sine      - <kbd>sin</kbd>   <kbd>asin</kbd>   <kbd>sinh</kbd>   <kbd>asinh</kbd>
 * Cosine    - <kbd>cos</kbd>   <kbd>acos</kbd>   <kbd>cosh</kbd>   <kbd>acosh</kbd>
 * Tangent   - <kbd>tan</kbd>   <kbd>atan</kbd>   <kbd>tanh</kbd>   <kbd>atanh</kbd>
@@ -115,9 +116,9 @@ xm   - Store the value of X to memory
 rm   - Recall the value in memory and put it on the stack
 m+   - Add X to the value in memory
 m-   - Subtract X from the value in memory
-xy   - swap X and Y on the stack
-x    - place the value of X from the last operation back on the stack
-drop - take X off the stack
+xy   - Swap X and Y on the stack
+x    - Place the value of X from the last operation back on the stack
+drop - Remove X from the stack
 
 ## Disclaimer ⚠
 The author of this plugin does not make any warranties about the completeness, reliability and accuracy of this calculator. Any action you take upon the results you get from it, is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
@@ -127,4 +128,4 @@ This was mainly an exercise to learn lua and Neovim plugins by porting my prior 
 
 If you spot any errors, or have suggestions for improvements, added operators, etc., create an issue or a pull request.
 
-Finally, I don't know how useful some of the complex number functions are. It was a fun exercise implementing them, but was it just that, an exercise? Leave a comment (in an issue is fine) if you know of any real-world (pun intended) use for, let's say, the hyperbolic arctangent of a complex number, or any of the others for that matter.
+Finally, I don't know how useful some of the complex number functions are. It was a fun exercise implementing them, but was it just that, an exercise? Leave a comment (in an issue is fine) if you know of any real-world use (pun intended) for, let's say, the inverse hyperbolic cotangent of a complex number.

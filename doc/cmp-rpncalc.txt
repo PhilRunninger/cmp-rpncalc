@@ -122,6 +122,7 @@ Most operators work on complex numbers. Exceptions are noted below.
   `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
   `bin` - Print results in binary.
   `hex` - Print results in hexadecimal.
+  `dec` - Print results in decimal.
 
 *Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
 
