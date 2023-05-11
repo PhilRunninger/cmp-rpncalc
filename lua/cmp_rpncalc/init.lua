@@ -1,6 +1,8 @@
 local bit=require('bit')
 local stack = {}
 local base = 10
+local memory = nil
+local lastx = nil
 
 local function pop()
     return table.remove(stack)
@@ -389,10 +391,10 @@ op[ [[>>]] ]    = function() local n=pop(); push(bit.rshift(pop(),n)) end -- Rig
 -- #############################################################################################
 -- ################################################################################### Constants
 -- #############################################################################################
-op[ [[pi]] ]    = function() push(math.pi) end -- 3.141592653....
-op[ [[e]] ]     = function() push(math.exp(1)) end -- 2.718281828...
-op[ [[phi]] ]   = function() push((1+math.sqrt(5)) / 2) end -- 1.618033989...
-op[ [[i]] ]     = function() push({0,1}) end -- the imaginary unit value
+op[ [[pi]] ]  = function() push(math.pi);            lastx = stack[#stack] end -- 3.141592653...
+op[ [[e]] ]   = function() push(math.exp(1));        lastx = stack[#stack] end -- 2.718281828...
+op[ [[phi]] ] = function() push((1+math.sqrt(5))/2); lastx = stack[#stack] end -- 1.618033989
+op[ [[i]] ]   = function() push({0,1});              lastx = stack[#stack] end -- the imaginary unit value
 
 
 -- #############################################################################################
@@ -415,6 +417,17 @@ end
 op[ [[bin]] ] = function() base = 2 end  -- Change output to binary
 op[ [[hex]] ] = function() base = 16 end -- Change output to hexadecimal
 op[ [[dec]] ] = function() base = 10 end -- Change output to decimal
+
+-- #############################################################################################
+-- ################################################################# Memory & Stack Manipulation
+-- #############################################################################################
+op[ [[xm]] ]   = function() local x = pop(); memory = x; push(x); end -- store X in memory
+op[ [[rm]] ]   = function() push(memory); end -- recall memory to the stack
+op[ [[m+]] ]   = function() local x = pop(); memory = memory + x; push(x); end -- add X to memory
+op[ [[m-]] ]   = function() local x = pop(); memory = memory - x; push(x); end -- subtract X from memory
+op[ [[xy]] ]   = function() local x,y = pop(), pop(); push(x); push(y); end -- swap X and Y
+op[ [[x]] ]    = function() push(lastx); end -- swap X and Y
+op[ [[drop]] ] = function() pop(); end; -- drop X off the stack
 
 -- #############################################################################################
 -- ############################################################### End of Operators' Definitions
@@ -485,6 +498,8 @@ end
 
 source.complete = function(_, request, callback)
     base = 10
+    memory = nil
+    lastx = nil
     local input = request.context.cursor_before_line
     local s,e = vim.regex(expressionRegex):match_str(input)
     -- vim.pretty_print(s,e,input)
@@ -499,9 +514,11 @@ source.complete = function(_, request, callback)
         -- vim.pretty_print(word)
         if number then
             push(number)
+            lastx = stack[#stack]
         elseif word:match('.+,.+') then
             local c = vim.fn.split(word, ',')
             push({tonumber(c[1]), tonumber(c[2])})
+            lastx = stack[#stack]
         else
             local f = op[word]
             local ok,_ = pcall(f)

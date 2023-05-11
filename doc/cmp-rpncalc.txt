@@ -40,7 +40,8 @@ Most operators work on complex numbers. Exceptions are noted below.
 |Bitwise|           `&      |      ^      <<     >>     ~`
 |Rounding|          `floor  ceil  round  trunc`
 |Constants|         `pi     e     phi    i`
-|Other|             `hrs    hms`
+|Miscellaneous|     `hrs    hms`
+|Memory_&_Stack|    `xm`     `rm`    `m+`     `m-`      `xy`     `x`     `drop`
 
 ==============================================================================
 *Basic_Arithmetic*                                           *rpn-basic-operators*
@@ -113,7 +114,7 @@ Most operators work on complex numbers. Exceptions are noted below.
   `phi` - The golden ratio: `1.6180339887499...`
   `i`   - The imaginary unit: `0+1i`
 
-*Other*                                                      *rpn-other-operators*
+*Miscellaneous*                                      *rpn-miscellaneous-operators*
 
   These functions work only with real numbers.
 
@@ -121,3 +122,14 @@ Most operators work on complex numbers. Exceptions are noted below.
   `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
   `bin` - Print results in binary.
   `hex` - Print results in hexadecimal.
+  `dec` - Print results in decimal.
+
+*Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
+
+  `xm`   - Store the value of X to memory
+  `rm`   - Recall the value in memory and put it on the stack
+  `m+`   - Add X to the value in memory
+  `m-`   - Subtract X from the value in memory
+  `xy`   - swap X and Y on the stack
+  `x`    - place the value of X from the last operation back on the stack
+  `drop` - take X off the stack
