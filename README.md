@@ -112,20 +112,18 @@ These operators will truncate non-integer operands.
 * <kbd>dec</kbd> - Print results in decimal (base 10).
 
 ### Memory and Stack Manipulation - ℝ and ℂ
-xm   - Store the value of X to memory
-rm   - Recall the value in memory and put it on the stack
-m+   - Add X to the value in memory
-m-   - Subtract X from the value in memory
-xy   - Swap X and Y on the stack
-x    - Place the value of X from the last operation back on the stack
-drop - Remove X from the stack
+* <kbd>xm</kbd>   - Store the value of X to memory
+* <kbd>rm</kbd>   - Recall the value in memory and put it on the stack
+* <kbd>m+</kbd>   - Add X to the value in memory
+* <kbd>m-</kbd>   - Subtract X from the value in memory
+* <kbd>xy</kbd>   - Swap X and Y on the stack
+* <kbd>x</kbd>    - Place the value of X from the last operation back on the stack
+* <kbd>drop</kbd> - Remove X from the stack
 
 ## Disclaimer ⚠
-The author of this plugin does not make any warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it, is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
+The author of this plugin does not make any warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
 
 ## Feedback 📣
-This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn). It's quite possible that computational errors made their way in, despite all efforts to ensure accuracy.
-
-If you spot any errors, or have suggestions for improvements, added operators, etc., create an issue or a pull request.
+This was mainly an exercise to learn lua and Neovim plugins by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn). It's quite possible that computational errors made their way in, despite all efforts to ensure its accuracy. If you spot any errors, or have suggestions for improvements, new operators, etc., create an issue or a pull request.
 
 Finally, I don't know how useful some of the complex number functions are. It was a fun exercise implementing them, but was it just that, an exercise? Leave a comment (in an issue is fine) if you know of any real-world use (pun intended) for, let's say, the inverse hyperbolic cotangent of a complex number.

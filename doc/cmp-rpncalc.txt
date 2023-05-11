@@ -130,6 +130,6 @@ Most operators work on complex numbers. Exceptions are noted below.
   `rm`   - Recall the value in memory and put it on the stack
   `m+`   - Add X to the value in memory
   `m-`   - Subtract X from the value in memory
-  `xy`   - swap X and Y on the stack
-  `x`    - place the value of X from the last operation back on the stack
-  `drop` - take X off the stack
+  `xy`   - Swap X and Y on the stack
+  `x`    - Place the value of X from the last operation back on the stack
+  `drop` - Remove X from the stack
