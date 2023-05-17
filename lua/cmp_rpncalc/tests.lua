@@ -55,8 +55,10 @@ local assert = function(expression, expected, tolerance)  -- {{{2
                     pass = #parts == #expected and
                         math.abs(tonumber(parts[1])-expected[1]) <= tolerance and
                         math.abs(tonumber(parts[2])-expected[2]) <= tolerance
-                else
+                elseif tonumber(expected) and tonumber(result) then
                     pass = math.abs(tonumber(result)-expected) <= tolerance
+                else
+                    pass = false
                 end
             end
         end
@@ -215,13 +217,11 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[3 20 15 hrs]], 3.3375 ))  -- Convert Z:Y:X to hours
     tally(assert( [[3.3375 hms]], [[3 20 15]] ))  -- Convert X hours to Z:Y:X
 
-    print('AGAIN, BUT WITH COMPLEX NUMBERS ~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~')
-
-    print('No Operator (return the input) ==============================================')
+    print('Complex: No Operator (return the input) ======================================')
     tally(assert( [[12,2]],       {12,2} ))
     tally(assert( [[1,-2 3,4]],  [[1-2i 3+4i]] ))
 
-    print('Basic Arithmetic ============================================================')
+    print('Complex: Basic Arithmetic ====================================================')
     tally(assert( [[3,1  2,6 +]],    {5,7} ))   -- Addtion
     tally(assert( [[3.5  2,6 +]],    {5.5,6} ))
     tally(assert( [[3,1  6 +]],      {9,1} ))
@@ -244,7 +244,7 @@ M.run = function(verbose) -- Unit Tests {{{1
 
     tally(assert( [[-8,2 chs]],    {8,-2} ))   -- Change Sign
 
-    print('Rounding ====================================================================')
+    print('Complex: Rounding ============================================================')
     tally(assert( [[12.3,4.2 floor]],   {12,4} ))  -- Floor - round down to nearest integer
     tally(assert( [[-12.3,-4.2 floor]], {-13,-5} ))
     tally(assert( [[12.3,4.2 ceil]],    {13,5} ))  -- Ceiling - round up to nearest integer
@@ -256,7 +256,7 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[12.7,4.3 trunc]],   {12,4} ))  -- Round toward zero
     tally(assert( [[-12.7,-4.3 trunc]], {-12,-4} ))
 
-    print('Powers & Logs ===============================================================')
+    print('Complex: Powers & Logs =======================================================')
     tally(assert( [[2,1 exp]],      {3.992324048,6.217676312}, 1e-6 )) -- Raise e to the x power
     tally(assert( [[2,3 ln]],      {1.282474678,0.982793723}, 1e-6 ))  -- Natural log of x
     tally(assert( [[2,3 log]],    {0.556971676,0.426821891}, 1e-6 ))  -- Log (base 10) of x
@@ -276,7 +276,7 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[0,0 \]],        'NaN' ))
     tally(assert( [[2,3 \]],        {2/13, -3/13}, 1e-6))
 
-    print('Trigonometry ================================================================')
+    print('Complex: Trigonometry ========================================================')
     tally(assert( [[1,1 sin]], {1.298457581,0.634963915}, 1e-6))
     tally(assert( [[1,1 cos]], {0.833730025,-0.988897706}, 1e-6))
     tally(assert( [[1,1 tan]], {0.271752585,1.083923327}, 1e-6))
@@ -339,6 +339,20 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[1 2 drop]], 1))
     tally(assert( [[drop]], ''))  -- Don't fail if stack is empty.
 
+    print('Statistics ==================================================================')
+    tally(assert( [[6 !]], 720))
+    tally(assert( [[0 !]], 1))
+    tally(assert( [[3.14 !]], 'NaN'))
+    tally(assert( [[-5 !]], 'NaN'))
+    tally(assert( [[2,5 !]], 'NaN'))
+    tally(assert( [[5 3 perm]], 60))
+    tally(assert( [[5 3 comb]], 10))
+    tally(assert( [[2 5 7 11 mean]], 6.25))
+    tally(assert( [[2,1 5,2 7 1,1 mean]], {3.75,1}))
+    tally(assert( [[2 5 7 11 std]], 3.774917218, 1e-6))
+    tally(assert( [[2,5 7 11 std]], 'NaN'))
+    tally(assert( [[2 5 7 11 count]], 4))
+    tally(assert( [[count]], 0))
 
     -- All done. Print the final tally.
     print(string.format('\nDone.\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end

@@ -13,6 +13,10 @@ local function push(value)
 end
 
 -- Extend the math library with some basic functions I'll need below.
+math.nan = 0/0
+math.isNan = function(x) return tostring(x) == tostring(math.nan) end
+math.isPosInf = function(x) return tostring(x) == tostring(0^-1) end
+math.isNegInf = function(x) return tostring(x) == tostring(-0^-1) end
 math.isreal = function(x) return type(x) == 'number' end
 math.iscomplex = function(x) return type(x) == 'table' and #x == 2 and type(x[1]) == 'number' and type(x[2]) == 'number' end
 math.round = function(x) return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5) end -- Round to nearest integer
@@ -132,8 +136,7 @@ op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[ln]] ]); push(x); pcall(
 op[ [[**]] ] = function() -- Exponentiation - y to the x power
     local x,y = pop(), pop()
     if ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
-        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(0/0)
-        -- Lua says 0^0=1, but use math's convention - undefined (or NaN) - instead.
+        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(math.nan)
     elseif math.iscomplex(x) and math.iscomplex(y) then
         local r = math.sqrt(y[1]*y[1] + y[2]*y[2])
         local theta = math.atan2(y[2],y[1])
@@ -430,6 +433,74 @@ op[ [[x]] ]    = function() push(lastx); end -- swap X and Y
 op[ [[drop]] ] = function() pop(); end; -- drop X off the stack
 
 -- #############################################################################################
+-- ################################################################################## Statistics
+-- #############################################################################################
+op[ [[!]] ] = function()  -- Factorial
+    local x = pop();
+    if math.iscomplex(x) or math.floor(x) ~= x or x < 0 then
+        push(math.nan)
+        return
+    end
+
+    local f = 1
+    for i=1,x do
+        f = f * i
+    end
+    push(f)
+end
+op[ [[perm]] ] = function()  -- Permutations of Y things taken X at a time
+    local x,y = pop(),pop()
+    push(y)
+    pcall(op[ [[!]] ])
+    push(y)
+    push(x)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[!]] ])
+    pcall(op[ [[/]] ])
+end
+op[ [[comb]] ] = function()  -- Combinations of Y things taken X at a time
+    local x,y = pop(),pop()
+    push(y)
+    pcall(op[ [[!]] ])
+    push(y)
+    push(x)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[!]] ])
+    push(x)
+    pcall(op[ [[!]] ])
+    pcall(op[ [[*]] ])
+    pcall(op[ [[/]] ])
+end
+op[ [[count]] ] = function()  -- Count of all number on stack
+    stack = {#stack}
+end
+op[ [[mean]] ] = function()  -- Mean average of all number on stack
+    local n = #stack
+    for _ = 1,n-1 do
+        pcall(op[ [[+]] ])
+    end
+    push(n)
+    pcall(op[ [[/]] ])
+end
+op[ [[std]] ] = function()  -- Standard Deviation of all number on stack
+    local s = {unpack(stack)}
+    local n = #stack
+
+    pcall(op[ [[mean]] ])
+    local mean = stack[#stack]
+    if math.iscomplex(mean) then
+        stack = {math.nan}
+    else
+        local sum = 0
+        for i = 1,n do
+            sum = sum + (s[i] - mean) ^ 2
+        end
+        stack = {math.sqrt(sum / (n-1))}
+    end
+end
+
+
+-- #############################################################################################
 -- ############################################################### End of Operators' Definitions
 -- #############################################################################################
 
@@ -528,20 +599,21 @@ source.complete = function(_, request, callback)
         end
         -- vim.pretty_print(stack)
     end
+
     local value = ''
     for _,n in ipairs(stack) do
-        if tostring(n) == tostring(0/0) then
+        if math.isNan(n) then
             value = value .. ' NaN'
-        elseif tostring(n) == tostring(0^-1) then
+        elseif math.isPosInf(n) then
             value = value .. ' Infinity'
-        elseif tostring(n) == tostring(-0^-1) then
+        elseif math.isNegInf(n) then
             value = value .. ' -Infinity'
         elseif math.iscomplex(n) then
-            if tostring(n[1]) == tostring(0/0) or tostring(n[2]) == tostring(0/0) then
+            if math.isNan(n[1]) or math.isNan(n[2]) then
                 value = value .. ' NaN'
-            elseif tostring(n[1]) == tostring(0^-1) or tostring(n[2]) == tostring(0^-1) then
+            elseif math.isPosInf(n[1]) or math.isPosInf(n[2]) then
                 value = value .. ' Infinity'
-            elseif tostring(n[1]) == tostring(-0^-1) or tostring(n[2]) == tostring(-0^-1) then
+            elseif math.isNegInf(n[1]) or math.isNegInf(n[2]) then
                 value = value .. ' -Infinity'
             else
                 value = value .. ' ' .. changeBase(n[1]) .. (n[2] >= 0 and '+' or '') .. changeBase(n[2]) .. 'i'
