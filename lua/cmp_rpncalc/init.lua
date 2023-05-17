@@ -433,6 +433,74 @@ op[ [[x]] ]    = function() push(lastx); end -- swap X and Y
 op[ [[drop]] ] = function() pop(); end; -- drop X off the stack
 
 -- #############################################################################################
+-- ################################################################################## Statistics
+-- #############################################################################################
+op[ [[!]] ] = function()  -- Factorial
+    local x = pop();
+    if math.iscomplex(x) or math.floor(x) ~= x or x < 0 then
+        push(math.nan)
+        return
+    end
+
+    local f = 1
+    for i=1,x do
+        f = f * i
+    end
+    push(f)
+end
+op[ [[perm]] ] = function()  -- Permutations of Y things taken X at a time
+    local x,y = pop(),pop()
+    push(y)
+    pcall(op[ [[!]] ])
+    push(y)
+    push(x)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[!]] ])
+    pcall(op[ [[/]] ])
+end
+op[ [[comb]] ] = function()  -- Combinations of Y things taken X at a time
+    local x,y = pop(),pop()
+    push(y)
+    pcall(op[ [[!]] ])
+    push(y)
+    push(x)
+    pcall(op[ [[-]] ])
+    pcall(op[ [[!]] ])
+    push(x)
+    pcall(op[ [[!]] ])
+    pcall(op[ [[*]] ])
+    pcall(op[ [[/]] ])
+end
+op[ [[count]] ] = function()  -- Count of all number on stack
+    stack = {#stack}
+end
+op[ [[mean]] ] = function()  -- Mean average of all number on stack
+    local n = #stack
+    for _ = 1,n-1 do
+        pcall(op[ [[+]] ])
+    end
+    push(n)
+    pcall(op[ [[/]] ])
+end
+op[ [[std]] ] = function()  -- Standard Deviation of all number on stack
+    local s = {unpack(stack)}
+    local n = #stack
+
+    pcall(op[ [[mean]] ])
+    local mean = stack[#stack]
+    if math.iscomplex(mean) then
+        stack = {math.nan}
+    else
+        local sum = 0
+        for i = 1,n do
+            sum = sum + (s[i] - mean) ^ 2
+        end
+        stack = {math.sqrt(sum / (n-1))}
+    end
+end
+
+
+-- #############################################################################################
 -- ############################################################### End of Operators' Definitions
 -- #############################################################################################
 
