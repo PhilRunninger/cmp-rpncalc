@@ -133,3 +133,14 @@ Most operators work on complex numbers. Exceptions are noted below.
   `xy`   - Swap X and Y on the stack
   `x`    - Place the value of X from the last operation back on the stack
   `drop` - Remove X from the stack
+
+*Statistics*                                            *rpn-statistics-operators*
+
+  These functions work only with real numbers, except `mean`.
+
+  `!`     - Factorial
+  `perm`  - Permutation of Y things taken X at a time
+  `comb`  - Combination of Y things taken X at a time
+  `mean`  - Average of all numbers on the stack (also complex numbers)
+  `std`   - Sample standard deviation of all numbers on the stack
+  `count` - Sample size

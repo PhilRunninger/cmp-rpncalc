@@ -104,13 +104,6 @@ These operators will truncate non-integer operands.
 * <kbd>phi</kbd> - the golden ratio, 1.618033989...
 * <kbd>i</kbd>   - 0+1i
 
-### Miscellaneous - ℝ
-* <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
-* <kbd>hms</kbd> - Convert X hours to (Z hours:Y minutes:X seconds)
-* <kbd>bin</kbd> - Print results in binary (base 2).
-* <kbd>hex</kbd> - Print results in hexadecimal (base 16).
-* <kbd>dec</kbd> - Print results in decimal (base 10).
-
 ### Memory and Stack Manipulation - ℝ and ℂ
 * <kbd>xm</kbd>   - Store the value of X to memory
 * <kbd>rm</kbd>   - Recall the value in memory and put it on the stack
@@ -119,6 +112,21 @@ These operators will truncate non-integer operands.
 * <kbd>xy</kbd>   - Swap X and Y on the stack
 * <kbd>x</kbd>    - Place the value of X from the last operation back on the stack
 * <kbd>drop</kbd> - Remove X from the stack
+
+### Statistics - ℝ
+* <kbd>!</kbd> - Factorial
+* <kbd>perm</kbd> - Permutation of Y things taken X at a time
+* <kbd>comb</kbd> - Combination of Y things taken X at a time
+* <kbd>mean</kbd> - Average of all numbers on the stack (also ℂ)
+* <kbd>std</kbd> - Sample standard deviation of all numbers on the stack
+* <kbd>count</kbd> - Sample size
+
+### Miscellaneous - ℝ
+* <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
+* <kbd>hms</kbd> - Convert X hours to (Z hours:Y minutes:X seconds)
+* <kbd>bin</kbd> - Print results in binary (base 2).
+* <kbd>hex</kbd> - Print results in hexadecimal (base 16).
+* <kbd>dec</kbd> - Print results in decimal (base 10).
 
 ## Disclaimer ⚠
 The author of this plugin does not make any warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
