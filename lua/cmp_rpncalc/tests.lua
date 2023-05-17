@@ -55,8 +55,10 @@ local assert = function(expression, expected, tolerance)  -- {{{2
                     pass = #parts == #expected and
                         math.abs(tonumber(parts[1])-expected[1]) <= tolerance and
                         math.abs(tonumber(parts[2])-expected[2]) <= tolerance
-                else
+                elseif tonumber(expected) and tonumber(result) then
                     pass = math.abs(tonumber(result)-expected) <= tolerance
+                else
+                    pass = false
                 end
             end
         end
