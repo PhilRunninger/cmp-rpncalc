@@ -471,18 +471,33 @@ op[ [[comb]] ] = function()  -- Combinations of Y things taken X at a time
     pcall(op[ [[*]] ])
     pcall(op[ [[/]] ])
 end
-op[ [[count]] ] = function()  -- Count of all number on stack
+op[ [[count]] ] = function()  -- Count of all numbers on stack
     stack = {#stack}
 end
-op[ [[mean]] ] = function()  -- Mean average of all number on stack
+op[ [[sum]] ] = function()  -- Sum of all numbers on stack
     local n = #stack
     for _ = 1,n-1 do
         pcall(op[ [[+]] ])
     end
+end
+op[ [[sumsq]] ] = function()  -- Sum of sqares of all numbers on stack
+    local n = #stack
+    push(2)
+    pcall(op[ [[**]] ])
+    for _ = 1,n-1 do
+        pcall(op[ [[xy]] ])
+        push(2)
+        pcall(op[ [[**]] ])
+        pcall(op[ [[+]] ])
+    end
+end
+op[ [[mean]] ] = function()  -- Mean average of all numbers on stack
+    local n = #stack
+    pcall(op[ [[sum]] ])
     push(n)
     pcall(op[ [[/]] ])
 end
-op[ [[std]] ] = function()  -- Standard Deviation of all number on stack
+op[ [[std]] ] = function()  -- Standard Deviation of all numbers on stack
     local s = {unpack(stack)}
     local n = #stack
 

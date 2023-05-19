@@ -40,8 +40,9 @@ Most operators work on complex numbers. Exceptions are noted below.
 |Bitwise|           `&      |      ^      <<     >>     ~`
 |Rounding|          `floor  ceil  round  trunc`
 |Constants|         `pi     e     phi    i`
+|Statistics|        `!      perm  comb   mean    std    sum   sumsq   count`
+|Memory_&_Stack|    `xm     rm    m+     m-      xy     x     drop`
 |Miscellaneous|     `hrs    hms`
-|Memory_&_Stack|    `xm`     `rm`    `m+`     `m-`      `xy`     `x`     `drop`
 
 ==============================================================================
 *Basic_Arithmetic*                                           *rpn-basic-operators*
@@ -114,15 +115,18 @@ Most operators work on complex numbers. Exceptions are noted below.
   `phi` - The golden ratio: `1.6180339887499...`
   `i`   - The imaginary unit: `0+1i`
 
-*Miscellaneous*                                      *rpn-miscellaneous-operators*
+*Statistics*                                            *rpn-statistics-operators*
 
-  These functions work only with real numbers.
+  These functions work only with real numbers, except `mean`.
 
-  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` is `3.625`
-  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
-  `bin` - Print results in binary.
-  `hex` - Print results in hexadecimal.
-  `dec` - Print results in decimal.
+  `!`     - Factorial
+  `perm`  - Permutation of Y things taken X at a time
+  `comb`  - Combination of Y things taken X at a time
+  `mean`  - Average of all numbers on the stack (also complex numbers)
+  `std`   - Sample standard deviation of all numbers on the stack
+  `sum`   - Sum of all numbers on the stack (also complex numbers)
+  `sumsq` - Sum of squares of all numbers on the stack (also complex numbers)
+  `count` - Sample size
 
 *Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
 
@@ -134,13 +138,12 @@ Most operators work on complex numbers. Exceptions are noted below.
   `x`    - Place the value of X from the last operation back on the stack
   `drop` - Remove X from the stack
 
-*Statistics*                                            *rpn-statistics-operators*
+*Miscellaneous*                                      *rpn-miscellaneous-operators*
 
-  These functions work only with real numbers, except `mean`.
+  These functions work only with real numbers.
 
-  `!`     - Factorial
-  `perm`  - Permutation of Y things taken X at a time
-  `comb`  - Combination of Y things taken X at a time
-  `mean`  - Average of all numbers on the stack (also complex numbers)
-  `std`   - Sample standard deviation of all numbers on the stack
-  `count` - Sample size
+  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` is `3.625`
+  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
+  `bin` - Print results in binary.
+  `hex` - Print results in hexadecimal.
+  `dec` - Print results in decimal.

@@ -353,6 +353,10 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[2,5 7 11 std]], 'NaN'))
     tally(assert( [[2 5 7 11 count]], 4))
     tally(assert( [[count]], 0))
+    tally(assert( [[2 5 7 11 sum]], 25))
+    tally(assert( [[2,1 5,2 7 1,1 sum]], {15,4}))
+    tally(assert( [[2 5 7 11 sumsq]], 199))
+    tally(assert( [[2,1 5,2 7 1,1 sumsq]], {73,26}))
 
     -- All done. Print the final tally.
     print(string.format('\nDone.\n%4d test(s) passed.  %4d test(s) failed.', passedTests, failedTests)) end
