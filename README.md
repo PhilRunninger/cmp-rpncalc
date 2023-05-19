@@ -9,7 +9,7 @@ If you have no favorite, or want to manage your plugins without 3rd-party depend
 
 ## Setup
 There is no setup required specifically for this plugin; however, you need to add **rpncalc** to the list of sources in your **nvim-cmp** setup. The following snippet shows how to do that.
-```
+```lua
 require'cmp'.setup {
   sources = {
     { name = 'rpncalc' }
@@ -104,6 +104,16 @@ These operators will truncate non-integer operands.
 * <kbd>phi</kbd> - the golden ratio, 1.618033989...
 * <kbd>i</kbd>   - 0+1i
 
+### Statistics - ℝ
+* <kbd>!</kbd> - Factorial
+* <kbd>perm</kbd> - Permutation of Y things taken X at a time
+* <kbd>comb</kbd> - Combination of Y things taken X at a time
+* <kbd>mean</kbd> - Average of all numbers on the stack (also ℂ)
+* <kbd>std</kbd> - Sample standard deviation of all numbers on the stack
+* <kbd>sum</kbd> - Sum of all numbers on the stack (also ℂ)
+* <kbd>sumsq</kbd> - Sum of squares of all numbers on the stack (also ℂ)
+* <kbd>count</kbd> - Sample size
+
 ### Memory and Stack Manipulation - ℝ and ℂ
 * <kbd>xm</kbd>   - Store the value of X to memory
 * <kbd>rm</kbd>   - Recall the value in memory and put it on the stack
@@ -112,14 +122,6 @@ These operators will truncate non-integer operands.
 * <kbd>xy</kbd>   - Swap X and Y on the stack
 * <kbd>x</kbd>    - Place the value of X from the last operation back on the stack
 * <kbd>drop</kbd> - Remove X from the stack
-
-### Statistics - ℝ
-* <kbd>!</kbd> - Factorial
-* <kbd>perm</kbd> - Permutation of Y things taken X at a time
-* <kbd>comb</kbd> - Combination of Y things taken X at a time
-* <kbd>mean</kbd> - Average of all numbers on the stack (also ℂ)
-* <kbd>std</kbd> - Sample standard deviation of all numbers on the stack
-* <kbd>count</kbd> - Sample size
 
 ### Miscellaneous - ℝ
 * <kbd>hrs</kbd> - Convert (Z hours:Y minutes:X seconds) to X hours
