@@ -111,7 +111,7 @@ These operators will truncate non-integer operands.
 * <kbd>mean</kbd> - Average of all numbers on the stack (also ℂ)
 * <kbd>std</kbd> - Sample standard deviation of all numbers on the stack
 * <kbd>sum</kbd> - Sum of all numbers on the stack (also ℂ)
-* <kbd>sumsq</kbd> - Sum of squares of all numbers on the stack (also ℂ)
+* <kbd>ssq</kbd> - Sum of squares of all numbers on the stack (also ℂ)
 * <kbd>count</kbd> - Sample size
 
 ### Memory and Stack Manipulation - ℝ and ℂ

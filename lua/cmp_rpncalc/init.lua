@@ -480,7 +480,7 @@ op[ [[sum]] ] = function()  -- Sum of all numbers on stack
         pcall(op[ [[+]] ])
     end
 end
-op[ [[sumsq]] ] = function()  -- Sum of squares of all numbers on stack
+op[ [[ssq]] ] = function()  -- Sum of squares of all numbers on stack
     local n = #stack
     push(2)
     pcall(op[ [[**]] ])
@@ -497,7 +497,7 @@ op[ [[mean]] ] = function()  -- Mean average of all numbers on stack
     push(n)
     pcall(op[ [[/]] ])
 end
-op[ [[std]] ] = function()  -- Standard Deviation of all numbers on stack
+op[ [[std]] ] = function()  -- Standard deviation of all numbers on stack
     local s = {unpack(stack)}
     local n = #stack
 

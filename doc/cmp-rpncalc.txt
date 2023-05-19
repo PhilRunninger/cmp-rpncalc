@@ -40,7 +40,7 @@ Most operators work on complex numbers. Exceptions are noted below.
 |Bitwise|           `&      |      ^      <<     >>     ~`
 |Rounding|          `floor  ceil  round  trunc`
 |Constants|         `pi     e     phi    i`
-|Statistics|        `!      perm  comb   mean    std    sum   sumsq   count`
+|Statistics|        `!      perm  comb   mean    std    sum   ssq   count`
 |Memory_&_Stack|    `xm     rm    m+     m-      xy     x     drop`
 |Miscellaneous|     `hrs    hms`
 
@@ -125,7 +125,7 @@ Most operators work on complex numbers. Exceptions are noted below.
   `mean`  - Average of all numbers on the stack (also complex numbers)
   `std`   - Sample standard deviation of all numbers on the stack
   `sum`   - Sum of all numbers on the stack (also complex numbers)
-  `sumsq` - Sum of squares of all numbers on the stack (also complex numbers)
+  `ssq`   - Sum of squares of all numbers on the stack (also complex numbers)
   `count` - Sample size
 
 *Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
