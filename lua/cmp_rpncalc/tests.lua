@@ -37,7 +37,7 @@ local assert = function(expression, expected, tolerance)  -- {{{2
             else
                 tolerance = tolerance or 0
                 if type(expected) == 'table' then
-                    -- Split complex into real and imaginary: "1.23+4.5i" -> {"1.23", "+4.5"}
+                    -- Split complex result into real and imaginary: "1.23+4.5i" -> {"1.23", "+4.5"}
                     local parts = vim.fn.split(result, '\\(\\ze[+-]\\|i\\)')
                     -- vim.pretty_print(parts)
                     -- Side effect: it also splits mantissas from exponents: "1.2e-6+9.9e-8i" -> {"1.2e", "-6", "+9.9e", "-8"}
@@ -333,7 +333,7 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[1 x]], '1 1'))
     tally(assert( [[1 2 + x]], '3 2'))
     tally(assert( [[1,2 x]], '1+2i 1+2i'))
-    tally(assert( [[pi]], math.pi, 1e-6))
+    tally(assert( [[i x]], '0+1i 0+1i'))
     tally(assert( [[x]], ''))  -- Don't fail if stack is empty.
     tally(assert( [[1 drop]], ''))
     tally(assert( [[1 2 drop]], 1))
