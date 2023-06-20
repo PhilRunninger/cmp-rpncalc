@@ -471,7 +471,7 @@ op[ [[comb]] ] = function()  -- Combinations of Y things taken X at a time
     pcall(op[ [[*]] ])
     pcall(op[ [[/]] ])
 end
-op[ [[count]] ] = function()  -- Count of all numbers on stack
+op[ [[n]] ] = function()  -- Count of all numbers on stack
     stack = {#stack}
 end
 op[ [[sum]] ] = function()  -- Sum of all numbers on stack

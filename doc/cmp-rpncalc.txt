@@ -16,8 +16,8 @@ nationality of logician Jan Łukasiewicz, who invented Polish notation in 1924.
 Numbers, formally called operands, are pushed onto a stack in the order they
 are read by the processor. The top number on the stack is called X, with Y, Z,
 W, and other unnamed positions underneath. When an operator is encountered, X
-and if necessary, other numbers are taken off the stack, and the result of the
-operation is placed back on the stack.
+and maybe other numbers are popped off the stack, and the result of the
+operation is pushed back onto the stack.
 
 Operands can take on any of these forms:
   Decimal - integer, floating point, scientific notation
@@ -40,7 +40,7 @@ Most operators work on complex numbers. Exceptions are noted below.
 |Bitwise|           `&      |      ^      <<     >>     ~`
 |Rounding|          `floor  ceil  round  trunc`
 |Constants|         `pi     e     phi    i`
-|Statistics|        `!      perm  comb   mean    std    sum   ssq   count`
+|Statistics|        `!      perm  comb   mean    std    sum   ssq   n`
 |Memory_&_Stack|    `xm     rm    m+     m-      xy     x     drop`
 |Miscellaneous|     `hrs    hms`
 
@@ -51,11 +51,11 @@ Most operators work on complex numbers. Exceptions are noted below.
   `-`    Subtraction
   `*`    Multiplication
   `/`    Division
-  `div`  Integer Division
+  `div`  Integer division
   `%`    Remainder of Y / X (real numbers only)
-  `abs`  Absolute Value
-  `arg`  Argument, the angle between x-axis and X
-  `chs`  Change Sign of X
+  `abs`  Absolute value
+  `arg`  Argument - the angle between the positive x-axis and X
+  `chs`  Change sign of X
 
 *Powers_&_Logs*                            *rpn-power-operators* *rpn-log-operators*
 
@@ -117,16 +117,14 @@ Most operators work on complex numbers. Exceptions are noted below.
 
 *Statistics*                                            *rpn-statistics-operators*
 
-  These functions work only with real numbers, except `mean`.
-
-  `!`     - Factorial
-  `perm`  - Permutation of Y things taken X at a time
-  `comb`  - Combination of Y things taken X at a time
-  `mean`  - Average of all numbers on the stack (also complex numbers)
-  `std`   - Sample standard deviation of all numbers on the stack
-  `sum`   - Sum of all numbers on the stack (also complex numbers)
-  `ssq`   - Sum of squares of all numbers on the stack (also complex numbers)
-  `count` - Sample size
+  `!`    - Factorial (natural numbers only)
+  `perm` - Permutation of Y things taken X at a time (natural numbers only)
+  `comb` - Combination of Y things taken X at a time (natural numbers only)
+  `mean` - Average of all numbers on the stack (real and complex numbers)
+  `std`  - Sample standard deviation of the entire stack (real numbers only)
+  `sum`  - Sum of all numbers on the stack (real and complex numbers)
+  `ssq`  - Sum of squares of all numbers on the stack (real and complex numbers)
+  `n`    - Sample size (real and complex numbers)
 
 *Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
 
