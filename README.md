@@ -72,13 +72,14 @@ The operator categories show the types of numbers for which they are valid. Some
 * <kbd>\\</kbd>   - Reciprocal
 
 ### Trigonometry - ℝeal and ℂomplex
-Variations: `a***` are inverse, and `***h` are hyperbolic.
-* <kbd>sin</kbd> - Sine      <kbd>asin</kbd> <kbd>sinh</kbd> <kbd>asinh</kbd>
-* <kbd>cos</kbd> - Cosine    <kbd>acos</kbd> <kbd>cosh</kbd> <kbd>acosh</kbd>
-* <kbd>tan</kbd> - Tangent   <kbd>atan</kbd> <kbd>tanh</kbd> <kbd>atanh</kbd>
-* <kbd>csc</kbd> - Cosecant  <kbd>acsc</kbd> <kbd>csch</kbd> <kbd>acsch</kbd>
-* <kbd>sec</kbd> - Secant    <kbd>asec</kbd> <kbd>sech</kbd> <kbd>asech</kbd>
-* <kbd>cot</kbd> - Cotangent <kbd>acot</kbd> <kbd>coth</kbd> <kbd>acoth</kbd>
+* <kbd>sin</kbd> - Sine 🞳 <kbd>asin</kbd>, <kbd>sinh</kbd>, <kbd>asinh</kbd>
+* <kbd>cos</kbd> - Cosine 🞳 <kbd>acos</kbd>, <kbd>cosh</kbd>, <kbd>acosh</kbd>
+* <kbd>tan</kbd> - Tangent 🞳 <kbd>atan</kbd>, <kbd>tanh</kbd>, <kbd>atanh</kbd>
+* <kbd>csc</kbd> - Cosecant 🞳 <kbd>acsc</kbd>, <kbd>csch</kbd>, <kbd>acsch</kbd>
+* <kbd>sec</kbd> - Secant 🞳 <kbd>asec</kbd>, <kbd>sech</kbd>, <kbd>asech</kbd>
+* <kbd>cot</kbd> - Cotangent 🞳 <kbd>acot</kbd>, <kbd>coth</kbd>, <kbd>acoth</kbd>
+
+🞳 Variations: `a` prefixes indicate inverse functions, and `h` suffixes indicate hyperbolic functions.
 
 ### Rounding - ℝeal and ℂomplex
 * <kbd>floor</kbd> - Round down to nearest integer
