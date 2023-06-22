@@ -24,8 +24,8 @@ RPN is a mathematical notation in which the operator follows its operand(s). Thi
 |:-:|:--|:-:|
 | $956 + 37$ | `956 37 +` | `993` |
 | $\frac{452}{12}$ | `452 12 /` | `37.666666666667` |
-| $\tan^{-1}(\frac{1}{\sqrt{3}})$ | `1 3 sqrt / atan deg` or `3 sqrt \ atan deg` | `30` |
-| $3x^2+6x-5 \vert _{x=\frac{\sqrt{17}}{4}}$ | `17 sqrt 4 / xm drop 3 rm 2 ** * 6 rm * + 5 -` | `4.3721584384265` |
+| $\tan^{-1}(\frac{1}{\sqrt{3}})$ | `1 3 sqrt / atan deg` <br> or <br> `3 sqrt \ atan deg` | `30` |
+| $3x^2+\frac{5}{x} \text{, where } {x=\frac{\sqrt{17}}{4}}$ | `17 sqrt 4 / sto 2 ** 3 * 5 rcl / +` | `8.0382125007267` |
 | $e^{i\pi}$ | `e i pi * **` | `-1+1.2246467991474e-16i`<br>*round off error* 🙁 |
 
 Reading an RPN expression from left to right, numbers are placed on a stack. The top four numbers are labeled `X`, `Y`, `Z`, and `T` from the top down. These labels are not shown when using the plugin, but they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back on the stack.
@@ -113,8 +113,8 @@ These operators will truncate non-integer operands.
 * <kbd>std</kbd>  - Sample standard deviation of all numbers on the stack (ℝeal only)
 
 ### Memory and Stack Manipulation - ℝeal and ℂomplex
-* <kbd>xm</kbd>   - Store the value of X to memory
-* <kbd>rm</kbd>   - Recall the value in memory and put it on the stack
+* <kbd>sto</kbd>  - Store the value of X to memory
+* <kbd>rcl</kbd>  - Recall the value in memory and put it on the stack
 * <kbd>m+</kbd>   - Add X to the value in memory
 * <kbd>m-</kbd>   - Subtract X from the value in memory
 * <kbd>xy</kbd>   - Swap X and Y on the stack

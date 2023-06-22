@@ -424,8 +424,8 @@ op[ [[dec]] ] = function() base = 10 end -- Change output to decimal
 -- #############################################################################################
 -- ################################################################# Memory & Stack Manipulation
 -- #############################################################################################
-op[ [[xm]] ]   = function() local x = pop(); memory = x; push(x); end -- store X in memory
-op[ [[rm]] ]   = function() push(memory); end -- recall memory to the stack
+op[ [[sto]] ]  = function() local x = pop(); memory = x; push(x); end -- store X in memory
+op[ [[rcl]] ]  = function() push(memory); end -- recall memory to the stack
 op[ [[m+]] ]   = function() local x = pop(); memory = memory + x; push(x); end -- add X to memory
 op[ [[m-]] ]   = function() local x = pop(); memory = memory - x; push(x); end -- subtract X from memory
 op[ [[xy]] ]   = function() local x,y = pop(), pop(); push(x); push(y); end -- swap X and Y

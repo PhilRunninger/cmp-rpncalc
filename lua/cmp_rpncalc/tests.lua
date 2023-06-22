@@ -323,13 +323,13 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[-0x37 dec]], -55))
 
     print('Memory and Stack Manipulation ===============================================')
-    -- xm cannot be tested by itself, as it doesn't change the stack.
-    tally(assert( [[1 xm rm]], '1 1'))
-    tally(assert( [[1 xm m+ rm]], '1 2'))
-    tally(assert( [[1 xm 3 m- rm]], '1 3 -2'))
+    -- sto cannot be tested by itself, as it doesn't change the stack.
+    tally(assert( [[1 sto rcl]], '1 1'))
+    tally(assert( [[1 sto m+ rcl]], '1 2'))
+    tally(assert( [[1 sto 3 m- rcl]], '1 3 -2'))
     tally(assert( [[1 2 xy]], '2 1'))
-    tally(assert( [[rm]], ''))  -- Don't fail if memory is not set.
-    tally(assert( [[xm rm]], ''))  -- Don't fail if stack is empty.
+    tally(assert( [[rcl]], ''))  -- Don't fail if memory is not set.
+    tally(assert( [[sto rcl]], ''))  -- Don't fail if stack is empty.
     tally(assert( [[1 x]], '1 1'))
     tally(assert( [[1 2 + x]], '3 2'))
     tally(assert( [[1,2 x]], '1+2i 1+2i'))
