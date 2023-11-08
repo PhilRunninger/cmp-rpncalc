@@ -539,19 +539,24 @@ for o,_ in pairs(op) do
     end
 end
 
--- Create the regex that determines if the text is a valid RPN expression.
-local operators = {}
+-- Build the regex that tests the input for a valid RPN expression.
+local numRegex = [[-?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]       -- 0, .5, -42, 3.14, 6.02e23, etc.
+numRegex = [[%(]] .. numRegex .. [[|-?0b[01]+|-?0x[0-9a-fA-F]+]] .. [[)]]   -- Include binary and hexadecimal.
+numRegex = numRegex .. '%(,' .. numRegex .. ')?'                            -- Complex numbers are entered as ordered pairs.
+
+local operRegex = ''
 for o,_ in pairs(op) do
-    operators[#operators+1] = vim.fn.escape(o, [[~^*/\+%|<>&]] )
+    o = vim.fn.escape(o, [[~^*/\+%|<>&]] )                                  -- Escape special characters.
+    o = (o:match('%a.*') and '<' or '') .. o                                -- Add beginning-of-word marker to alphabetic operators.
+    operRegex = operRegex .. (operRegex == '' and '' or [[|]]) .. o         -- Concatenate all operators:  <sin|<cos|+|-|<pi|...
 end
 
-local numberRegex = [[-?%(0|0?\.\d+|[1-9]\d*%(\.\d+)?)%([Ee][+-]?\d+)?]]  -- 0, .5, -42, 3.14, 6.02e23, etc.
-numberRegex = [[%(]] .. numberRegex .. [[|-?0b[01]+|-?0x[0-9a-fA-F]+]] .. [[)]] -- Include binary and hexadecimal.
-numberRegex = numberRegex .. '%(,' .. numberRegex .. ')?'  -- Complex number, an ordered pair.
-local operatorsRegex = table.concat(operators,[[|]])  -- Concatenate all operators:  sin|cos|+|-|pi|...
-local wordRegex = [[%(]] .. numberRegex .. [[|]] .. operatorsRegex .. [[)]]  -- A word is a number or an operator.
-local expressionRegex = wordRegex .. [[%( +]] .. wordRegex .. [[)*]]  -- Multiple space-delimited words.
-expressionRegex = [[\v]] .. expressionRegex  -- Very magic
+local wordRegex = [[%(]] .. numRegex .. [[|]] .. operRegex .. [[)]]         -- A word is a number or an operator.
+
+local expressionRegex = wordRegex .. [[%( +]] .. wordRegex .. [[)*]]        -- An expression is multiple space-delimited words.
+expressionRegex = expressionRegex .. [[$]]                                  -- Matching ends at the end of input string.
+expressionRegex = [[\v]] .. expressionRegex                                 -- The very magic flag simplifies the regex immensely.
+-- vim.print(expressionRegex)
 
 local function changeBase(num)
     if type(num) == 'string' then return num end
@@ -586,18 +591,20 @@ source.complete = function(_, request, callback)
     base = 10
     memory = nil
     lastx = nil
+    -- vim.print(request)
     local input = request.context.cursor_before_line
     local s,e = vim.regex(expressionRegex):match_str(input)
-    -- vim.pretty_print(s,e,input)
+    -- vim.print(s,e,input)
     if not s or not e then
         return callback({})
     end
     input = string.sub(input, s+1)
+    -- vim.print(s,e,input)
 
     stack = {}
     for _,word in ipairs(vim.fn.split(input, ' \\+')) do
         local number = tonumber(word)
-        -- vim.pretty_print(word)
+        -- vim.print(word)
         if number then
             push(number)
             lastx = stack[#stack]
@@ -612,7 +619,7 @@ source.complete = function(_, request, callback)
                 return callback({})
             end
         end
-        -- vim.pretty_print(stack)
+        -- vim.print(stack)
     end
 
     local value = ''
