@@ -53,38 +53,38 @@ The **Domain** column in the following table indicates the types of numbers that
 * **ℝ**eal - real numbers (includes **ℕ**)
 * **ℂ**omplex - complex numbers (includes **ℝ** and **ℕ**)
 
-| Operator         | Function                                                                                 | Domain |
-| :-:              | ---                                                                                      | :-:    |
+| Operator         | Function                                                    | Domain |
+| :-:              | ---                                                         | :-:    |
 || <br>**Basic Arithmetic**||
-| <kbd>+</kbd>     | Addition                                                                                 | **ℂ**omplex |
-| <kbd>-</kbd>     | Subtraction                                                                              | **ℂ**omplex |
-| <kbd>\*</kbd>    | Multiplication                                                                           | **ℂ**omplex |
-| <kbd>/</kbd>     | Division                                                                                 | **ℂ**omplex |
-| <kbd>div</kbd>   | Integer division                                                                         | **ℂ**omplex |
-| <kbd>%</kbd>     | Modulus *(not well-defined for negatives)*                                               | **ℝ**eal |
-| <kbd>abs</kbd>   | Absolute value                                                                           | **ℂ**omplex |
-| <kbd>arg</kbd>   | Argument *(the angle between X and the positive real axis)*                              | **ℂ**omplex |
-| <kbd>chs</kbd>   | Change Sign *(negation)*                                                                 | **ℂ**omplex |
+| <kbd>+</kbd>     | Addition                                                    | **ℂ**omplex |
+| <kbd>-</kbd>     | Subtraction                                                 | **ℂ**omplex |
+| <kbd>\*</kbd>    | Multiplication                                              | **ℂ**omplex |
+| <kbd>/</kbd>     | Division                                                    | **ℂ**omplex |
+| <kbd>div</kbd>   | Integer division                                            | **ℂ**omplex |
+| <kbd>%</kbd>     | Modulus *(not well-defined for negatives)*                  | **ℝ**eal |
+| <kbd>abs</kbd>   | Absolute value                                              | **ℂ**omplex |
+| <kbd>arg</kbd>   | Argument *(the angle between X and the positive real axis)* | **ℂ**omplex |
+| <kbd>chs</kbd>   | Change Sign *(negation)*                                    | **ℂ**omplex |
 || <br>**Powers & Logs**||
-| <kbd>exp</kbd>   | Raise e to the X power                                                                   | **ℂ**omplex |
-| <kbd>ln</kbd>    | Natural Log of X                                                                         | **ℂ**omplex |
-| <kbd>log</kbd>   | Log (base 10) of X                                                                       | **ℂ**omplex |
-| <kbd>log2</kbd>  | Log (base 2) of X                                                                        | **ℂ**omplex |
-| <kbd>sqrt</kbd>  | Square Root                                                                              | **ℂ**omplex |
-| <kbd>\*\*</kbd>  | Raise Y to the X power                                                                   | **ℂ**omplex |
-| <kbd>\\</kbd>    | Reciprocal                                                                               | **ℂ**omplex |
+| <kbd>exp</kbd>   | Raise e to the X power | **ℂ**omplex |
+| <kbd>ln</kbd>    | Natural Log of X       | **ℂ**omplex |
+| <kbd>log</kbd>   | Log (base 10) of X     | **ℂ**omplex |
+| <kbd>log2</kbd>  | Log (base 2) of X      | **ℂ**omplex |
+| <kbd>sqrt</kbd>  | Square Root            | **ℂ**omplex |
+| <kbd>\*\*</kbd>  | Raise Y to the X power | **ℂ**omplex |
+| <kbd>\\</kbd>    | Reciprocal             | **ℂ**omplex |
 || <br>**Trigonometry** *Variations are: <kbd>a...</kbd> for inverse and <kbd>...h</kbd> for hyperbolic* ||
-| <kbd>sin</kbd>   | Sine, <kbd>asin</kbd>, <kbd>sinh</kbd>, <kbd>asinh</kbd>                                 | **ℂ**omplex |
-| <kbd>cos</kbd>   | Cosine, <kbd>acos</kbd>, <kbd>cosh</kbd>, <kbd>acosh</kbd>                               | **ℂ**omplex |
-| <kbd>tan</kbd>   | Tangent, <kbd>atan</kbd>, <kbd>tanh</kbd>, <kbd>atanh</kbd>                              | **ℂ**omplex |
-| <kbd>csc</kbd>   | Cosecant, <kbd>acsc</kbd>, <kbd>csch</kbd>, <kbd>acsch</kbd>                             | **ℂ**omplex |
-| <kbd>sec</kbd>   | Secant, <kbd>asec</kbd>, <kbd>sech</kbd>, <kbd>asech</kbd>                               | **ℂ**omplex |
-| <kbd>cot</kbd>   | Cotangent, <kbd>acot</kbd>, <kbd>coth</kbd>, <kbd>acoth</kbd>                            | **ℂ**omplex |
+| <kbd>sin</kbd>   | Sine, <kbd>asin</kbd>, <kbd>sinh</kbd>, <kbd>asinh</kbd>      | **ℂ**omplex |
+| <kbd>cos</kbd>   | Cosine, <kbd>acos</kbd>, <kbd>cosh</kbd>, <kbd>acosh</kbd>    | **ℂ**omplex |
+| <kbd>tan</kbd>   | Tangent, <kbd>atan</kbd>, <kbd>tanh</kbd>, <kbd>atanh</kbd>   | **ℂ**omplex |
+| <kbd>csc</kbd>   | Cosecant, <kbd>acsc</kbd>, <kbd>csch</kbd>, <kbd>acsch</kbd>  | **ℂ**omplex |
+| <kbd>sec</kbd>   | Secant, <kbd>asec</kbd>, <kbd>sech</kbd>, <kbd>asech</kbd>    | **ℂ**omplex |
+| <kbd>cot</kbd>   | Cotangent, <kbd>acot</kbd>, <kbd>coth</kbd>, <kbd>acoth</kbd> | **ℂ**omplex |
 || <br>**Rounding**||
-| <kbd>floor</kbd> | Round down to nearest integer                                                            | **ℂ**omplex |
-| <kbd>ceil</kbd>  | Round up to nearest integer                                                              | **ℂ**omplex |
-| <kbd>round</kbd> | Round up or down to nearest integer                                                      | **ℂ**omplex |
-| <kbd>trunc</kbd> | Round toward zero to nearest integer                                                     | **ℂ**omplex |
+| <kbd>floor</kbd> | Round down to nearest integer        | **ℂ**omplex |
+| <kbd>ceil</kbd>  | Round up to nearest integer          | **ℂ**omplex |
+| <kbd>round</kbd> | Round up or down to nearest integer  | **ℂ**omplex |
+| <kbd>trunc</kbd> | Round toward zero to nearest integer | **ℂ**omplex |
 || <br>**Bitwise** *Non-integer operands will be truncated.*||
 | <kbd>&</kbd>     | AND &nbsp; &nbsp; &nbsp; $\small0b\normalsize1100\text{ AND }\small0b\normalsize1010=\small0b\normalsize1000$ &nbsp; &nbsp; &nbsp; $12\text{ AND }10=8$                                    | **ℕ**atural |
 | <kbd>\|</kbd>    | OR &nbsp; &nbsp; &nbsp; $\small0b\normalsize1100\text{ OR }\small0b\normalsize1010=\small0b\normalsize1110$ &nbsp; &nbsp; &nbsp; $12\text{ OR }10=14$                                      | **ℕ**atural |
@@ -93,33 +93,33 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd><<</kbd>    | Left Shift *(Y shifted X bits)* &nbsp; &nbsp; &nbsp; ${\small0b\normalsize1\overleftarrow{11}}^{\text{ }2}=\small0b\normalsize11100$ &nbsp; &nbsp; &nbsp; ${\overleftarrow{7}}^{\text{ }2}=28$    | **ℕ**atural |
 | <kbd>>></kbd>    | Right Shift *(Y shifted X bits)* &nbsp; &nbsp; &nbsp; ${\small0b\normalsize110\overrightarrow{100}}^{\text{ }3}=\small0b\normalsize110$ &nbsp; &nbsp; &nbsp; ${\overrightarrow{52}}^{\text{ }3}=6$ | **ℕ**atural |
 || <br>**Statistics**||
-| <kbd>!</kbd>     | Factorial of X &nbsp; &nbsp; &nbsp; $X!={\prod^{X}_{i=1}{i}}$                                                                       | **ℕ**atural |
-| <kbd>perm</kbd>  | Permutation of Y things taken X at a time &nbsp; &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                          | **ℕ**atural |
-| <kbd>comb</kbd>  | Combination of Y things taken X at a time &nbsp; &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                        | **ℕ**atural |
-| <kbd>n</kbd>     | Sample size *(size of the stack)*                                                                                                   | **ℂ**omplex |
-| <kbd>mean</kbd>  | Average of all numbers on the stack. &nbsp; &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum^{n}_{i=1}{x_i}}$                              | **ℂ**omplex |
-| <kbd>sum</kbd>   | Sum of all numbers on the stack &nbsp; &nbsp; &nbsp; ${\sum^{n}_{i=1}{x_i}}$                                                        | **ℂ**omplex |
-| <kbd>ssq</kbd>   | Sum of squares of all numbers on the stack &nbsp; &nbsp; &nbsp; ${\sum^{n}_{i=1}{x_i}^2}$                                           | **ℂ**omplex |
-| <kbd>std</kbd>   | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; &nbsp; $s={\sqrt{\frac{{\sum^{n}_{i=1}(x_i-\bar{x})^2}}{n-1}}}$ | **ℝ**eal |
+| <kbd>!</kbd>     | Factorial of X &nbsp; &nbsp; &nbsp; $X!={\prod\limits^{X}_{i=1}{i}}$                                                                       | **ℕ**atural |
+| <kbd>perm</kbd>  | Permutation of Y things taken X at a time &nbsp; &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                                 | **ℕ**atural |
+| <kbd>comb</kbd>  | Combination of Y things taken X at a time &nbsp; &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                               | **ℕ**atural |
+| <kbd>n</kbd>     | Sample size *(size of the stack)*                                                                                                          | **ℂ**omplex |
+| <kbd>mean</kbd>  | Average of all numbers on the stack. &nbsp; &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum\limits^{n}_{i=1}{x_i}}$                              | **ℂ**omplex |
+| <kbd>sum</kbd>   | Sum of all numbers on the stack &nbsp; &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}}$                                                        | **ℂ**omplex |
+| <kbd>ssq</kbd>   | Sum of squares of all numbers on the stack &nbsp; &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}^2}$                                           | **ℂ**omplex |
+| <kbd>std</kbd>   | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; &nbsp; $s={\sqrt{\frac{{\sum\limits^{n}_{i=1}(x_i-\bar{x})^2}}{n-1}}}$ | **ℝ**eal |
 || <br>**Miscellaneous**||
-| <kbd>hrs</kbd>   | Convert (Z hours:Y minutes:X seconds) to X hours                                                | **ℝ**eal |
-| <kbd>hms</kbd>   | Convert X hours to (Z hours:Y minutes:X seconds)                                                | **ℝ**eal |
-| <kbd>bin</kbd>   | Print results in binary (base 2).                                                               | **ℝ**eal |
-| <kbd>hex</kbd>   | Print results in hexadecimal (base 16).                                                         | **ℝ**eal |
-| <kbd>dec</kbd>   | Print results in decimal (base 10).                                                             | **ℝ**eal |
+| <kbd>hrs</kbd>   | Convert (Z hours:Y minutes:X seconds) to X hours | **ℝ**eal |
+| <kbd>hms</kbd>   | Convert X hours to (Z hours:Y minutes:X seconds) | **ℝ**eal |
+| <kbd>bin</kbd>   | Print results in binary (base 2).                | **ℝ**eal |
+| <kbd>hex</kbd>   | Print results in hexadecimal (base 16).          | **ℝ**eal |
+| <kbd>dec</kbd>   | Print results in decimal (base 10).              | **ℝ**eal |
 || <br>**Constants**||
-| <kbd>pi</kbd>    | Ratio of circumference to diameter &nbsp; &nbsp; &nbsp; $\pi={3.1415926535898...}$              | **ℝ**eal |
-| <kbd>e</kbd>     | Euler's number &nbsp; &nbsp; &nbsp; $e={\sum^{\infty}_{i=0}{\frac{1}{i!}}=2.7182818284590...}$  | **ℝ**eal |
-| <kbd>phi</kbd>   | The golden ratio &nbsp; &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$          | **ℝ**eal |
-| <kbd>i</kbd>     | The imaginary unit number &nbsp; &nbsp; &nbsp; $i={\sqrt{-1}}$                                  | **ℂ**omplex |
+| <kbd>pi</kbd>    | Ratio of circumference to diameter &nbsp; &nbsp; &nbsp; $\pi={3.1415926535898...}$                     | **ℝ**eal |
+| <kbd>e</kbd>     | Euler's number &nbsp; &nbsp; &nbsp; $e={\sum\limits^{\infty}_{i=0}{\frac{1}{i!}}=2.7182818284590...}$  | **ℝ**eal |
+| <kbd>phi</kbd>   | The golden ratio &nbsp; &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$                 | **ℝ**eal |
+| <kbd>i</kbd>     | The imaginary unit number &nbsp; &nbsp; &nbsp; $i={\sqrt{-1}}$                                         | **ℂ**omplex |
 || <br>**Memory and Stack Manipulation**||
-| <kbd>sto</kbd>   | Store the value of X to memory                                                                  | **ℂ**omplex |
-| <kbd>rcl</kbd>   | Recall the value in memory to the stack                                                         | **ℂ**omplex |
-| <kbd>m+</kbd>    | Add X to the value in memory                                                                    | **ℂ**omplex |
-| <kbd>m-</kbd>    | Subtract X from the value in memory                                                             | **ℂ**omplex |
-| <kbd>xy</kbd>    | Swap X and Y on the stack                                                                       | **ℂ**omplex |
-| <kbd>x</kbd>     | Place the value of X from the last operation back on the stack                                  | **ℂ**omplex |
-| <kbd>drop</kbd>  | Remove X from the stack                                                                         | **ℂ**omplex |
+| <kbd>sto</kbd>   | Store the value of X to memory                                 | **ℂ**omplex |
+| <kbd>rcl</kbd>   | Recall the value in memory to the stack                        | **ℂ**omplex |
+| <kbd>m+</kbd>    | Add X to the value in memory                                   | **ℂ**omplex |
+| <kbd>m-</kbd>    | Subtract X from the value in memory                            | **ℂ**omplex |
+| <kbd>xy</kbd>    | Swap X and Y on the stack                                      | **ℂ**omplex |
+| <kbd>x</kbd>     | Place the value of X from the last operation back on the stack | **ℂ**omplex |
+| <kbd>drop</kbd>  | Remove X from the stack                                        | **ℂ**omplex |
 
 ## Disclaimer ⚠
 The author of this plugin makes no warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
