@@ -1,8 +1,9 @@
 *cmp-rpncalc.txt*        An nvim-cmp completion source for RPN math calculations
 
-┌─┐┌┬┐┌─┐     ┬─┐┌─┐┌┐┌┌─┐┌─┐┬  ┌─┐                            *cmp-rpncalc* *rpn*
-│  │││├─┘ ─── ├┬┘├─┘││││  ├─┤│  │
-└─┘┴ ┴┴       ┴└─┴  ┘└┘└─┘┴ ┴┴─┘└─┘
+                                                               *cmp-rpncalc* *rpn*
+  __        __      __   __        __             __ ~
+ /  ` |\/| |__) __ |__) |__) |\ | /  `  /\  |    /  `~
+ \__, |  | |       |  \ |    | \| \__, /~~\ |___ \__,~
 
 Reverse Polish Notation, RPN for short, is a mathematical notation in which
 operators follow their operands, in contrast to Polish notation (PN), in which
@@ -91,15 +92,15 @@ Most operators work on complex numbers. Exceptions are noted below.
 
 *Bitwise*                                                  *rpn-bitwise-operators*
 
-  These functions work best with natural numbers, and don't work at all with
+  These operators work best with natural numbers, and don't work at all with
   complex numbers.
 
   `&`  AND         `10 7 &`  is `2`  In binary, 1010 AND 111 = 10
   `|`  OR          `10 6 |`  is `14`             1010 OR 110 = 1110
   `^`  XOR         `10 3 ^`  is `9`              1010 XOR 11 = 1001
   `~`  NOT         `42 ~`    is `-43`               101010 ~ = 1...111111110101
-  `<<` Left Shift  `5 3 <<`  is `40`                  101 << = 101000
-  `>>` Right Shift `58 2 >>` is `14`               111010 >> = 1110
+  `<<` Left Shift  `5 3 <<`  is `40`                101 << 3 = 101000
+  `>>` Right Shift `58 2 >>` is `14`             111010 >> 2 = 1110
 
 *Rounding*                                                *rpn-rounding-operators*
 
