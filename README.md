@@ -86,12 +86,12 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>round</kbd> | Round up or down to nearest integer                                                      | **ℂ**omplex |
 | <kbd>trunc</kbd> | Round toward zero to nearest integer                                                     | **ℂ**omplex |
 || <br>**Bitwise** *Non-integer operands will be truncated.*||
-| <kbd>&</kbd>     | AND &nbsp; &nbsp; &nbsp; $\footnotesize0b\normalsize1100\text{ AND }\footnotesize0b\normalsize1010=\footnotesize0b\normalsize1000$ &nbsp; &nbsp; &nbsp; $12\text{ AND }10=8$                                    | **ℕ**atural |
-| <kbd>\|</kbd>    | OR &nbsp; &nbsp; &nbsp; $\footnotesize0b\normalsize1100\text{ OR }\footnotesize0b\normalsize1010=\footnotesize0b\normalsize1110$ &nbsp; &nbsp; &nbsp; $12\text{ OR }10=14$                                      | **ℕ**atural |
-| <kbd>^</kbd>     | XOR &nbsp; &nbsp; &nbsp; $\footnotesize0b\normalsize1100\text{ XOR }\footnotesize0b\normalsize1010=\footnotesize0b\normalsize0110$ &nbsp; &nbsp; &nbsp; $12\text{ XOR }10=6$                                    | **ℕ**atural |
-| <kbd>~</kbd>     | NOT &nbsp; &nbsp; &nbsp; $\text{NOT }\footnotesize0b\normalsize1010=\footnotesize0b\normalsize101$ &nbsp; &nbsp; &nbsp; $\text{NOT }10=5$                                                                       | **ℕ**atural |
-| <kbd><<</kbd>    | Left Shift *(Y shifted X bits)* &nbsp; &nbsp; &nbsp; ${\footnotesize0b\normalsize1\overleftarrow{11}}^{\text{ }2}=\footnotesize0b\normalsize11100$ &nbsp; &nbsp; &nbsp; ${\overleftarrow{7}}^{\text{ }2}=28$    | **ℕ**atural |
-| <kbd>>></kbd>    | Right Shift *(Y shifted X bits)* &nbsp; &nbsp; &nbsp; ${\footnotesize0b\normalsize110\overrightarrow{10}}^{\text{ }2}=\footnotesize0b\normalsize110$ &nbsp; &nbsp; &nbsp; ${\overrightarrow{26}}^{\text{ }2}=6$ | **ℕ**atural |
+| <kbd>&</kbd>     | AND &nbsp; &nbsp; &nbsp; $\small0b\normalsize1100\text{ AND }\small0b\normalsize1010=\small0b\normalsize1000$ &nbsp; &nbsp; &nbsp; $12\text{ AND }10=8$                                    | **ℕ**atural |
+| <kbd>\|</kbd>    | OR &nbsp; &nbsp; &nbsp; $\small0b\normalsize1100\text{ OR }\small0b\normalsize1010=\small0b\normalsize1110$ &nbsp; &nbsp; &nbsp; $12\text{ OR }10=14$                                      | **ℕ**atural |
+| <kbd>^</kbd>     | XOR &nbsp; &nbsp; &nbsp; $\small0b\normalsize1100\text{ XOR }\small0b\normalsize1010=\small0b\normalsize0110$ &nbsp; &nbsp; &nbsp; $12\text{ XOR }10=6$                                    | **ℕ**atural |
+| <kbd>~</kbd>     | NOT &nbsp; &nbsp; &nbsp; $\text{NOT }\small0b\normalsize1010=\small0b\normalsize101$ &nbsp; &nbsp; &nbsp; $\text{NOT }10=5$                                                                       | **ℕ**atural |
+| <kbd><<</kbd>    | Left Shift *(Y shifted X bits)* &nbsp; &nbsp; &nbsp; ${\small0b\normalsize1\overleftarrow{11}}^{\text{ }2}=\small0b\normalsize11100$ &nbsp; &nbsp; &nbsp; ${\overleftarrow{7}}^{\text{ }2}=28$    | **ℕ**atural |
+| <kbd>>></kbd>    | Right Shift *(Y shifted X bits)* &nbsp; &nbsp; &nbsp; ${\small0b\normalsize110\overrightarrow{100}}^{\text{ }3}=\small0b\normalsize110$ &nbsp; &nbsp; &nbsp; ${\overrightarrow{52}}^{\text{ }3}=6$ | **ℕ**atural |
 || <br>**Statistics**||
 | <kbd>!</kbd>     | Factorial of X &nbsp; &nbsp; &nbsp; $X!={\prod^{X}_{i=1}{i}}$                                                                       | **ℕ**atural |
 | <kbd>perm</kbd>  | Permutation of Y things taken X at a time &nbsp; &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                          | **ℕ**atural |
