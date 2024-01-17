@@ -24,7 +24,7 @@ RPN is a mathematical notation in which an operator follows its operand(s). This
 | $462\div11=42$ | `462 11 /` |
 | $\lvert((1+2)\times(3-4))^5\rvert=243$ | `1 2 + 3 4 - * 5 ** abs` |
 | $\tan^{-1}(\frac{1}{\sqrt{3}})=30^\circ$| `1 3 sqrt / atan deg` <br> or <br> `3 sqrt \ atan deg` |
-| $48a^2-\frac{98}{a^4}=-491$, when ${a=\frac{\sqrt{7}}{4}}$ | `7 sqrt 4 / sto 2 ** 48 * 98 rcl 4 ** / -` |
+| If ${a=\frac{\sqrt{7}}{4}}$, $48a^2-\frac{98}{a^4}=-491$ | `7 sqrt 4 / sto 2 ** 48 * 98 rcl 4 ** / -` |
 | Euler's Identity: $e^{i\pi}+1=0$ | `e i pi * ** 1 +`<br>Round-off error gives the answer $\scriptsize{0+1.2246467991474\times{10}^{-16}i}$. |
 
 Reading an RPN expression from left to right, numbers are placed on a stack. The top four numbers are labeled **X**, **Y**, **Z**, and **T** from the top down. These labels are not shown when using the plugin, but they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back onto the stack.
@@ -43,7 +43,7 @@ Most of the operators will work on complex numbers. The following Wikipedia page
 Operands can take on any of these forms:
 * Decimal (base 10): integer `42`, float `-3.14`, or scientific notation `6.02e23`
 * Binary (base 2): `0b` prefix, followed by digits `0` and `1`.
-* Hexadecimal (base 16): `0x` prefix, followed by digits `0`-`9` or letters `a`-`f`.
+* Hexadecimal (base 16): `0x` prefix, followed by digits `0`-`9` or letters `a`-`f` or `A`-`F`.
 * Complex: an ordered pair of numbers in any of the prior formats. For example,<br>`1.2e-4,0x43` equates to `0.00012+67i` in decimal notation.
 
 ## Operators
@@ -53,73 +53,74 @@ The **Domain** column in the following table indicates the types of numbers that
 * ℝeal - real numbers (includes ℕatural)
 * ℂomplex - complex numbers (includes ℝeal and ℕatural)
 
-| Operator         | Function                                                                                                                                                                  | Domain  |
-| :-:              | ---                                                                                                                                                                       | :-:     |
-|                  | <br>**Basic Arithmetic**                                                                                                                                                  |         |
-| <kbd>+</kbd>     | Addition                                                                                                                                                                  | ℂomplex |
-| <kbd>-</kbd>     | Subtraction                                                                                                                                                               | ℂomplex |
-| <kbd>\*</kbd>    | Multiplication                                                                                                                                                            | ℂomplex |
-| <kbd>/</kbd>     | Division                                                                                                                                                                  | ℂomplex |
-| <kbd>div</kbd>   | Integer division                                                                                                                                                          | ℂomplex |
-| <kbd>%</kbd>     | Modulus *(not well-defined for negatives)*                                                                                                                                | ℝeal    |
-| <kbd>abs</kbd>   | Absolute value                                                                                                                                                            | ℂomplex |
-| <kbd>arg</kbd>   | Argument *(the angle between* **X** *and the positive real axis)*                                                                                                         | ℂomplex |
-| <kbd>chs</kbd>   | Change Sign *(negation)*                                                                                                                                                  | ℂomplex |
-|                  | <br>**Powers & Logs**                                                                                                                                                     |         |
-| <kbd>\*\*</kbd>  | Raise **Y** to the **X** power                                                                                                                                            | ℂomplex |
-| <kbd>\\</kbd>    | Reciprocal                                                                                                                                                                | ℂomplex |
-| <kbd>exp</kbd>   | Raise e to the **X** power                                                                                                                                                | ℂomplex |
-| <kbd>ln</kbd>    | Natural Log of **X**                                                                                                                                                      | ℂomplex |
-| <kbd>log</kbd>   | Log (base 10) of **X**                                                                                                                                                    | ℂomplex |
-| <kbd>log2</kbd>  | Log (base 2) of **X**                                                                                                                                                     | ℂomplex |
-| <kbd>sqrt</kbd>  | Square Root                                                                                                                                                               | ℂomplex |
-|                  | <br>**Trigonometry** *Variations are: <kbd>a...</kbd> for inverse and <kbd>...h</kbd> for hyperbolic*                                                                     |         |
-| <kbd>sin</kbd>   | Sine, <kbd>asin</kbd>, <kbd>sinh</kbd>, <kbd>asinh</kbd>                                                                                                                  | ℂomplex |
-| <kbd>cos</kbd>   | Cosine, <kbd>acos</kbd>, <kbd>cosh</kbd>, <kbd>acosh</kbd>                                                                                                                | ℂomplex |
-| <kbd>tan</kbd>   | Tangent, <kbd>atan</kbd>, <kbd>tanh</kbd>, <kbd>atanh</kbd>                                                                                                               | ℂomplex |
-| <kbd>csc</kbd>   | Cosecant, <kbd>acsc</kbd>, <kbd>csch</kbd>, <kbd>acsch</kbd>                                                                                                              | ℂomplex |
-| <kbd>sec</kbd>   | Secant, <kbd>asec</kbd>, <kbd>sech</kbd>, <kbd>asech</kbd>                                                                                                                | ℂomplex |
-| <kbd>cot</kbd>   | Cotangent, <kbd>acot</kbd>, <kbd>coth</kbd>, <kbd>acoth</kbd>                                                                                                             | ℂomplex |
-|                  | <br>**Rounding**                                                                                                                                                          |         |
-| <kbd>floor</kbd> | Round down to nearest integer                                                                                                                                             | ℂomplex |
-| <kbd>ceil</kbd>  | Round up to nearest integer                                                                                                                                               | ℂomplex |
-| <kbd>round</kbd> | Round up or down to nearest integer                                                                                                                                       | ℂomplex |
-| <kbd>trunc</kbd> | Round toward zero to nearest integer                                                                                                                                      | ℂomplex |
-|                  | <br>**Bitwise** *Non-integer operands will be truncated.*                                                                                                                 |         |
-| <kbd>&</kbd>     | AND &nbsp; &nbsp; &nbsp; $\scriptsize0b\normalsize1100\text{ AND }\scriptsize0b\normalsize1010=\scriptsize0b\normalsize1000$ &nbsp; &nbsp; &nbsp; $12\text{ AND }10=8$    | ℕatural |
-| <kbd>\|</kbd>    | OR &nbsp; &nbsp; &nbsp; $\scriptsize0b\normalsize1100\text{ OR }\scriptsize0b\normalsize1010=\scriptsize0b\normalsize1110$ &nbsp; &nbsp; &nbsp; $12\text{ OR }10=14$      | ℕatural |
-| <kbd>^</kbd>     | XOR &nbsp; &nbsp; &nbsp; $\scriptsize0b\normalsize1100\text{ XOR }\scriptsize0b\normalsize1010=\scriptsize0b\normalsize0110$ &nbsp; &nbsp; &nbsp; $12\text{ XOR }10=6$    | ℕatural |
-| <kbd>~</kbd>     | NOT &nbsp; &nbsp; &nbsp; $\text{NOT }\scriptsize{0b}\normalsize{1010}=-\scriptsize{0b}\normalsize{1011}$ &nbsp; &nbsp; &nbsp; $\text{NOT }10=-11$<br>All bits are flipped; a [two's complement conversion](https://www.wikiwand.com/en/Two's_complement#Converting_from_two's_complement_representation) of the result is displayed.<br>$6=\scriptsize{0b}\normalsize{00000110}\scriptsize{\text{ (NOT}\rightarrow\text{) }}\scriptsize{0b}\normalsize{11111001}\scriptsize{\text{ (2s compl.}\rightarrow\text{) }}\normalsize{=-7}$ | ℕatural |
-| <kbd><<</kbd>    | Left Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; &nbsp; ${\scriptsize0b\normalsize1\overleftarrow{11}}^{\text{ }2}=\scriptsize0b\normalsize11100$ &nbsp; &nbsp; &nbsp; ${\overleftarrow{7}}^{\text{ }2}=28$     | ℕatural |
-| <kbd>>></kbd>    | Right Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; &nbsp; ${\scriptsize0b\normalsize110\overrightarrow{100}}^{\text{ }3}=\scriptsize0b\normalsize110$ &nbsp; &nbsp; &nbsp; ${\overrightarrow{52}}^{\text{ }3}=6$ | ℕatural |
-|                  | <br>**Statistics**                                                                                                                                                        |         |
-| <kbd>!</kbd>     | Factorial of **X** &nbsp; &nbsp; &nbsp; $X!={\prod\limits^{X}_{i=1}{i}}$                                                                                                  | ℕatural |
-| <kbd>perm</kbd>  | Permutation of **Y** things taken **X** at a time &nbsp; &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                                                        | ℕatural |
-| <kbd>comb</kbd>  | Combination of **Y** things taken **X** at a time &nbsp; &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                                                      | ℕatural |
-| <kbd>n</kbd>     | Sample size *(size of the stack)*                                                                                                                                         | ℂomplex |
-| <kbd>mean</kbd>  | Average of all numbers on the stack. &nbsp; &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum\limits^{n}_{i=1}{x_i}}$                                                             | ℂomplex |
-| <kbd>sum</kbd>   | Sum of all numbers on the stack &nbsp; &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}}$                                                                                       | ℂomplex |
-| <kbd>ssq</kbd>   | Sum of squares of all numbers on the stack &nbsp; &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}^2}$                                                                          | ℂomplex |
-| <kbd>std</kbd>   | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; &nbsp; $s={\sqrt{\frac{{\sum\limits^{n}_{i=1}(x_i-\bar{x})^2}}{n-1}}}$                                | ℝeal    |
-|                  | <br>**Miscellaneous**                                                                                                                                                     |         |
-| <kbd>hrs</kbd>   | Convert (**Z** hours:**Y** minutes:**X** seconds) to **X** hours                                                                                                          | ℝeal    |
-| <kbd>hms</kbd>   | Convert **X** hours to (**Z** hours:**Y** minutes:**X** seconds)                                                                                                          | ℝeal    |
-| <kbd>bin</kbd>   | Print results in binary (base 2).                                                                                                                                         | ℝeal    |
-| <kbd>hex</kbd>   | Print results in hexadecimal (base 16).                                                                                                                                   | ℝeal    |
-| <kbd>dec</kbd>   | Print results in decimal (base 10).                                                                                                                                       | ℝeal    |
-|                  | <br>**Constants**                                                                                                                                                         |         |
-| <kbd>pi</kbd>    | Ratio of circumference to diameter &nbsp; &nbsp; &nbsp; $\pi={3.1415926535898...}$                                                                                        | ℝeal    |
-| <kbd>e</kbd>     | Euler's number &nbsp; &nbsp; &nbsp; $e={\sum\limits^{\infty}_{i=0}{\frac{1}{i!}}=2.7182818284590...}$                                                                     | ℝeal    |
-| <kbd>phi</kbd>   | The golden ratio &nbsp; &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$                                                                                    | ℝeal    |
-| <kbd>i</kbd>     | The imaginary unit number &nbsp; &nbsp; &nbsp; $i={\sqrt{-1}}$                                                                                                            | ℂomplex |
-|                  | <br>**Memory and Stack Manipulation**                                                                                                                                     |         |
-| <kbd>sto</kbd>   | Store the value of **X** to memory                                                                                                                                        | ℂomplex |
-| <kbd>rcl</kbd>   | Recall the value in memory to the stack                                                                                                                                   | ℂomplex |
-| <kbd>m+</kbd>    | Add **X** to the value in memory                                                                                                                                          | ℂomplex |
-| <kbd>m-</kbd>    | Subtract **X** from the value in memory                                                                                                                                   | ℂomplex |
-| <kbd>xy</kbd>    | Swap **X** and **Y** on the stack                                                                                                                                         | ℂomplex |
-| <kbd>x</kbd>     | Place the value of **X** from the last operation back on the stack                                                                                                        | ℂomplex |
-| <kbd>drop</kbd>  | Remove **X** from the stack                                                                                                                                               | ℂomplex |
+| Operator | Function | Domain |
+| :-:      | ---      | :-:    |
+|                | <br>**Basic Arithmetic**                                          |         |
+| <kbd>+</kbd>   | Addition                                                          | ℂomplex |
+| <kbd>-</kbd>   | Subtraction                                                       | ℂomplex |
+| <kbd>\*</kbd>  | Multiplication                                                    | ℂomplex |
+| <kbd>/</kbd>   | Division                                                          | ℂomplex |
+| <kbd>div</kbd> | Integer division                                                  | ℂomplex |
+| <kbd>%</kbd>   | Modulus *(not well-defined for negatives)*                        | ℝeal    |
+| <kbd>abs</kbd> | Absolute value                                                    | ℂomplex |
+| <kbd>arg</kbd> | Argument *(the angle between* **X** *and the positive real axis)* | ℂomplex |
+| <kbd>chs</kbd> | Change Sign *(negation)*                                          | ℂomplex |
+|                 | <br>**Powers & Logs**          |         |
+| <kbd>\*\*</kbd> | Raise **Y** to the **X** power | ℂomplex |
+| <kbd>\\</kbd>   | Reciprocal                     | ℂomplex |
+| <kbd>exp</kbd>  | Raise e to the **X** power     | ℂomplex |
+| <kbd>ln</kbd>   | Natural Log of **X**           | ℂomplex |
+| <kbd>log</kbd>  | Log (base 10) of **X**         | ℂomplex |
+| <kbd>log2</kbd> | Log (base 2) of **X**          | ℂomplex |
+| <kbd>sqrt</kbd> | Square Root                    | ℂomplex |
+|                | <br>**Trigonometry** *Variations are: <kbd>a...</kbd> for inverse and <kbd>...h</kbd> for hyperbolic* |         |
+| <kbd>sin</kbd> | Sine, <kbd>asin</kbd>, <kbd>sinh</kbd>, <kbd>asinh</kbd>                                              | ℂomplex |
+| <kbd>cos</kbd> | Cosine, <kbd>acos</kbd>, <kbd>cosh</kbd>, <kbd>acosh</kbd>                                            | ℂomplex |
+| <kbd>tan</kbd> | Tangent, <kbd>atan</kbd>, <kbd>tanh</kbd>, <kbd>atanh</kbd>                                           | ℂomplex |
+| <kbd>csc</kbd> | Cosecant, <kbd>acsc</kbd>, <kbd>csch</kbd>, <kbd>acsch</kbd>                                          | ℂomplex |
+| <kbd>sec</kbd> | Secant, <kbd>asec</kbd>, <kbd>sech</kbd>, <kbd>asech</kbd>                                            | ℂomplex |
+| <kbd>cot</kbd> | Cotangent, <kbd>acot</kbd>, <kbd>coth</kbd>, <kbd>acoth</kbd>                                         | ℂomplex |
+|                  | <br>**Rounding**                     |         |
+| <kbd>floor</kbd> | Round down to nearest integer        | ℂomplex |
+| <kbd>ceil</kbd>  | Round up to nearest integer          | ℂomplex |
+| <kbd>round</kbd> | Round up or down to nearest integer  | ℂomplex |
+| <kbd>trunc</kbd> | Round toward zero to nearest integer | ℂomplex |
+|                  | <br>**Bitwise** *Non-integer operands will be truncated.* |         |
+| <kbd>&</kbd>     | AND &nbsp; &nbsp; $\scriptsize0b\normalsize{1100}\text{ AND }\scriptsize0b\normalsize{1010}=\scriptsize0b\normalsize{1000}$ &nbsp; &nbsp; $12\text{ AND }10=8$                                                 | ℕatural |
+| <kbd>\|</kbd>    | OR &nbsp; &nbsp; $\scriptsize0b\normalsize{1100}\text{ OR }\scriptsize0b\normalsize{1010}=\scriptsize0b\normalsize{1110}$ &nbsp; &nbsp; $12\text{ OR }10=14$                                                   | ℕatural |
+| <kbd>^</kbd>     | XOR &nbsp; &nbsp; $\scriptsize0b\normalsize{1100}\text{ XOR }\scriptsize0b\normalsize{1010}=\scriptsize0b\normalsize{0110}$ &nbsp; &nbsp; $12\text{ XOR }10=6$                                                 | ℕatural |
+| <kbd>~</kbd>     | NOT &nbsp; &nbsp; $\text{NOT }\scriptsize{0b}\normalsize{1010}=-\scriptsize{0b}\normalsize{1011}$ &nbsp; &nbsp; $\text{NOT }10=-11$<br>All bits are flipped, and a [two's complement conversion](https://en.wikipedia.org/wiki/Two's_complement#Converting_from_two's_complement_representation) of the result is displayed.<br>$\begin{aligned}58 &= \scriptsize{0b}\normalsize{00111010} \\\scriptsize{\text{[NOT}\rightarrow\text{] }} &= \scriptsize{0b}\normalsize{11000101} \\\scriptsize{\text{[2's complement}\rightarrow\text{] }} &= -2^7+2^6+2^2+2^0=-128+64+4+1=-59\end{aligned}$ | ℕatural |
+| <kbd><<</kbd>    | Left Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${\scriptsize0b\normalsize{1}\overleftarrow{11}}^{\text{ }2}=\scriptsize0b\normalsize{11100}$ &nbsp; &nbsp; ${\overleftarrow{7}}^{\text{ }2}=28$     | ℕatural |
+| <kbd>>></kbd>    | Right Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${\scriptsize0b\normalsize{110}\overrightarrow{100}}^{\text{ }3}=\scriptsize0b\normalsize{110}$ &nbsp; &nbsp; ${\overrightarrow{52}}^{\text{ }3}=6$ | ℕatural |
+|                 | <br>**Statistics**                                                                                                                         |         |
+| <kbd>!</kbd>    | Factorial of **X** &nbsp; &nbsp; $X!={\prod\limits^{X}_{i=1}{i}}$                                                                   | ℕatural |
+| <kbd>perm</kbd> | Permutation of **Y** things taken **X** at a time &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                         | ℕatural |
+| <kbd>comb</kbd> | Combination of **Y** things taken **X** at a time &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                       | ℕatural |
+| <kbd>n</kbd>    | Sample size *(size of the stack)*                                                                                                          | ℂomplex |
+| <kbd>mean</kbd> | Average of all numbers on the stack. &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum\limits^{n}_{i=1}{x_i}}$                              | ℂomplex |
+| <kbd>sum</kbd>  | Sum of all numbers on the stack &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}}$                                                        | ℂomplex |
+| <kbd>ssq</kbd>  | Sum of squares of all numbers on the stack &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}^2}$                                           | ℂomplex |
+| <kbd>std</kbd>  | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; $s={\sqrt{\frac{{\sum\limits^{n}_{i=1}(x_i-\bar{x})^2}}{n-1}}}$ | ℝeal    |
+|                | <br>**Miscellaneous**                                            |      |
+| <kbd>hrs</kbd> | Convert (**Z** hours:**Y** minutes:**X** seconds) to **X** hours | ℝeal |
+| <kbd>hms</kbd> | Convert **X** hours to (**Z** hours:**Y** minutes:**X** seconds) | ℝeal |
+| <kbd>dec</kbd> | Print result in decimal (base 10)                                | ℝeal |
+| <kbd>hex</kbd> | Print result in hexadecimal (base 16) $^*$                       | ℝeal |
+| <kbd>bin</kbd> | Print result in binary (base 2) $^*$                             | ℝeal |
+|                  | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-\scriptsize{0b}\normalsize{10111}=-\scriptsize{0x}\normalsize{17}$<br>as opposed to<br>$\scriptsize{0b}\normalsize{1...1111111111111111111111111101001}$ or $\scriptsize{0x}\normalsize{\text{F...FFFFFE9}}$            | ℝeal    |
+|                | <br>**Constants**                                                                                     |         |
+| <kbd>pi</kbd>  | Ratio of a circle's circumference to its diameter &nbsp; &nbsp; $\pi={3.1415926535898...}$         | ℝeal    |
+| <kbd>e</kbd>   | Euler's number &nbsp; &nbsp; $e={\sum\limits^{\infty}_{i=0}{\frac{1}{i!}}=2.7182818284590...}$ | ℝeal    |
+| <kbd>phi</kbd> | The golden ratio &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$                | ℝeal    |
+| <kbd>i</kbd>   | The imaginary unit number &nbsp; &nbsp; $i={\sqrt{-1}}$                                        | ℂomplex |
+|                 | <br>**Memory and Stack Manipulation**                              |         |
+| <kbd>sto</kbd>  | Store the value of **X** to memory                                 | ℂomplex |
+| <kbd>rcl</kbd>  | Recall the value in memory to the stack                            | ℂomplex |
+| <kbd>m+</kbd>   | Add **X** to the value in memory                                   | ℂomplex |
+| <kbd>m-</kbd>   | Subtract **X** from the value in memory                            | ℂomplex |
+| <kbd>xy</kbd>   | Swap **X** and **Y** on the stack                                  | ℂomplex |
+| <kbd>x</kbd>    | Place the value of **X** from the last operation back on the stack | ℂomplex |
+| <kbd>drop</kbd> | Remove **X** from the stack                                        | ℂomplex |
 
 ## Disclaimer ⚠
 The author of this plugin makes no warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
