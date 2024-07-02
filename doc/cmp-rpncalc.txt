@@ -1,10 +1,12 @@
-*cmp-rpncalc.txt*        An nvim-cmp completion source for RPN math calculations
+*cmp-rpncalc.txt*  An nvim-cmp completion source for RPN math calculations
 
-                                                               *cmp-rpncalc* *rpn*
-  __        __      __   __        __             __ ~
- /  ` |\/| |__) __ |__) |__) |\ | /  `  /\  |    /  `~
- \__, |  | |       |  \ |    | \| \__, /~~\ |___ \__,~
-
+                                                              *cmp-rpncalc* *rpn* >
+                                                          |
+      ,---. ,-.-. ,---.     ,---. ,---. ,---. ,---. ,---. |  ,---.
+      |     | | | |   | --- |     |   | |   | |     ,---| |  |
+      `---' ` ' ' |---'     `     |---' `   ' `---' `---^ `' `---'
+                  |               |
+<
 Reverse Polish Notation, RPN for short, is a mathematical notation in which
 operators follow their operands, in contrast to Polish notation (PN), in which
 operators precede their operands. The description "Polish" refers to the
@@ -16,8 +18,8 @@ nationality of logician Jan Łukasiewicz, who invented Polish notation in 1924.
 
 Numbers, formally called operands, are pushed onto a stack in the order they
 are read by the processor. The top number on the stack is called X, with Y, Z,
-W, and other unnamed positions underneath. When an operator is encountered, X
-and maybe other numbers are popped off the stack, and the result of the
+T, and other unnamed positions underneath. When an operator is encountered,
+the required operators are popped off the stack, and the result of the
 operation is pushed back onto the stack.
 
 Operands can take on any of these forms:
@@ -42,8 +44,8 @@ Most operators work on complex numbers. Exceptions are noted below.
 |Rounding|          `floor  ceil  round  trunc`
 |Constants|         `pi     e     phi    i`
 |Statistics|        `!      perm  comb   mean    std    sum   ssq   n`
-|Memory_&_Stack|    `sto    rcl   m+     m-      xy     x     drop`
 |Miscellaneous|     `hrs    hms`
+|Memory_&_Stack|    `sto    rcl   m+     m-      xy     x     drop`
 
 ==============================================================================
 *Basic_Arithmetic*                                           *rpn-basic-operators*
@@ -55,7 +57,7 @@ Most operators work on complex numbers. Exceptions are noted below.
   `div`  Integer division
   `%`    Remainder of Y / X (real numbers only)
   `abs`  Absolute value
-  `arg`  Argument - the angle between the positive x-axis and X
+  `arg`  Argument - the angle between X and the positive real axis
   `chs`  Change sign of X
 
 *Powers_&_Logs*                            *rpn-power-operators* *rpn-log-operators*
@@ -95,12 +97,12 @@ Most operators work on complex numbers. Exceptions are noted below.
   These operators work best with natural numbers, and don't work at all with
   complex numbers.
 
-  `&`  AND         `10 7 &`  is `2`  In binary, 1010 AND 111 = 10
-  `|`  OR          `10 6 |`  is `14`             1010 OR 110 = 1110
-  `^`  XOR         `10 3 ^`  is `9`              1010 XOR 11 = 1001
-  `~`  NOT         `42 ~`    is `-43`               101010 ~ = 1...111111110101
-  `<<` Left Shift  `5 3 <<`  is `40`                101 << 3 = 101000
-  `>>` Right Shift `58 2 >>` is `14`             111010 >> 2 = 1110
+  `&`  AND         `10 7 &`  is `2`  In binary, 1010 AND 111 is 10
+  `|`  OR          `10 6 |`  is `14`            1010 OR 110  is 1110
+  `^`  XOR         `10 3 ^`  is `9`             1010 XOR 11  is 1001
+  `~`  NOT         `42 ~`    is `-43`         101010 ~       is 1...111111110101
+  `<<` Left Shift  `5 3 <<`  is `40`             101 << 3    is 101000
+  `>>` Right Shift `58 2 >>` is `14`          111010 >> 2    is 1110
 
 *Rounding*                                                *rpn-rounding-operators*
 
@@ -127,6 +129,16 @@ Most operators work on complex numbers. Exceptions are noted below.
   `ssq`  - Sum of squares of all numbers on the stack (real and complex numbers)
   `n`    - Sample size (real and complex numbers)
 
+*Miscellaneous*                                      *rpn-miscellaneous-operators*
+
+  These functions work only with real numbers.
+
+  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` is `3.625`
+  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
+  `bin` - Print results in binary.
+  `hex` - Print results in hexadecimal.
+  `dec` - Print results in decimal.
+
 *Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
 
   `sto`  - Store the value of X to memory
@@ -137,12 +149,4 @@ Most operators work on complex numbers. Exceptions are noted below.
   `x`    - Place the value of X from the last operation back on the stack
   `drop` - Remove X from the stack
 
-*Miscellaneous*                                      *rpn-miscellaneous-operators*
-
-  These functions work only with real numbers.
-
-  `hrs` - Convert hours, minutes, seconds to hours. `3 37 30 hrs` is `3.625`
-  `hms` - Convert hours to hours, minutes, seconds. `3.625 hms` is `3 37 30`
-  `bin` - Print results in binary.
-  `hex` - Print results in hexadecimal.
-  `dec` - Print results in decimal.
+ vim:tw=78:isk=!-~,^*,^\|,^\":ts=8:noet:ft=help:norl:
