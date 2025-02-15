@@ -86,21 +86,21 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>round</kbd> | Round up or down to nearest integer  | ℂomplex |
 | <kbd>trunc</kbd> | Round toward zero to nearest integer | ℂomplex |
 |                  | <br>**Bitwise** *Non-integer operands will be truncated.* |         |
-| <kbd>&</kbd>     | AND &nbsp; &nbsp; $\scriptsize0b\normalsize{1100}\text{ AND }\scriptsize0b\normalsize{1010}=\scriptsize0b\normalsize{1000}$ &nbsp; &nbsp; $12\text{ AND }10=8$                                                 | ℕatural |
-| <kbd>\|</kbd>    | OR &nbsp; &nbsp; $\scriptsize0b\normalsize{1100}\text{ OR }\scriptsize0b\normalsize{1010}=\scriptsize0b\normalsize{1110}$ &nbsp; &nbsp; $12\text{ OR }10=14$                                                   | ℕatural |
-| <kbd>^</kbd>     | XOR &nbsp; &nbsp; $\scriptsize0b\normalsize{1100}\text{ XOR }\scriptsize0b\normalsize{1010}=\scriptsize0b\normalsize{0110}$ &nbsp; &nbsp; $12\text{ XOR }10=6$                                                 | ℕatural |
-| <kbd>~</kbd>     | NOT &nbsp; &nbsp; $\text{NOT }\scriptsize{0b}\normalsize{1010}=-\scriptsize{0b}\normalsize{1011}$ &nbsp; &nbsp; $\text{NOT }10=-11$<br>All bits are flipped, and a [two's complement conversion](https://en.wikipedia.org/wiki/Two's_complement#Converting_from_two's_complement_representation) of the result is displayed.<br>$58 = \scriptsize{0b}\normalsize{00111010}$<br>$\scriptsize{\text{[NOT}\rightarrow\text{] }} = \scriptsize{0b}\normalsize{11000101}$<br>$\scriptsize{\text{[2's complement}\rightarrow\text{] }}\normalsize{ = -2^7+2^6+2^2+2^0=-128+64+4+1=-59}$ | ℕatural |
-| <kbd><<</kbd>    | Left Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${\scriptsize0b\normalsize{1}\overleftarrow{11}}^{\text{ }2}=\scriptsize0b\normalsize{11100}$ &nbsp; &nbsp; ${\overleftarrow{7}}^{\text{ }2}=28$     | ℕatural |
-| <kbd>>></kbd>    | Right Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${\scriptsize0b\normalsize{110}\overrightarrow{100}}^{\text{ }3}=\scriptsize0b\normalsize{110}$ &nbsp; &nbsp; ${\overrightarrow{52}}^{\text{ }3}=6$ | ℕatural |
+| <kbd>&</kbd>     | AND &nbsp; &nbsp; $0b1100\text{ AND }0b{1010}=0b1000$ &nbsp; &nbsp; $12\text{ AND }10=8$                                                 | ℕatural |
+| <kbd>\|</kbd>    | OR &nbsp; &nbsp; $0b1100\text{ OR }0b1010=0b1110$ &nbsp; &nbsp; $12\text{ OR }10=14$                                                   | ℕatural |
+| <kbd>^</kbd>     | XOR &nbsp; &nbsp; $0b1100\text{ XOR }0b1010=0b0110$ &nbsp; &nbsp; $12\text{ XOR }10=6$                                                 | ℕatural |
+| <kbd>~</kbd>     | NOT &nbsp; &nbsp; $\text{NOT }0b1010=-0b1011$ &nbsp; &nbsp; $\text{NOT }10=-11$<br>All bits are flipped, and a [two's complement conversion](https://en.wikipedia.org/wiki/Two's_complement#Converting_from_two's_complement_representation) of the result is displayed.<br>$58 = 0b00111010$<br>$\text{[NOT}\rightarrow\text{] } = 0b11000101$<br>$\text{[2's complement}\rightarrow\text{] } = -2^7+2^6+2^2+2^0=-128+64+4+1=-59$ | ℕatural |
+| <kbd><<</kbd>    | Left Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${0b1\overleftarrow{11}}^{\text{ }2}=0b11100$ &nbsp; &nbsp; $\overleftarrow{7}^2=28$     | ℕatural |
+| <kbd>>></kbd>    | Right Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${0b110\overrightarrow{100}}^{\text{ }3}=0b110$ &nbsp; &nbsp; $\overrightarrow{52}^3=6$ | ℕatural |
 |                 | <br>**Statistics**                                                                                                                         |         |
-| <kbd>!</kbd>    | Factorial of **X** &nbsp; &nbsp; $X!={\prod\limits^{X}_{i=1}{i}}$                                                                   | ℕatural |
+| <kbd>!</kbd>    | Factorial of **X** &nbsp; &nbsp; $X!=\prod_{i=1}^{X}{i}$                                                                   | ℕatural |
 | <kbd>perm</kbd> | Permutation of **Y** things taken **X** at a time &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                         | ℕatural |
 | <kbd>comb</kbd> | Combination of **Y** things taken **X** at a time &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                       | ℕatural |
 | <kbd>n</kbd>    | Sample size *(size of the stack)*                                                                                                          | ℂomplex |
-| <kbd>mean</kbd> | Average of all numbers on the stack. &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum\limits^{n}_{i=1}{x_i}}$                              | ℂomplex |
-| <kbd>sum</kbd>  | Sum of all numbers on the stack &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}}$                                                        | ℂomplex |
-| <kbd>ssq</kbd>  | Sum of squares of all numbers on the stack &nbsp; &nbsp; ${\sum\limits^{n}_{i=1}{x_i}^2}$                                           | ℂomplex |
-| <kbd>std</kbd>  | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; $s={\sqrt{\frac{{\sum\limits^{n}_{i=1}(x_i-\bar{x})^2}}{n-1}}}$ | ℝeal    |
+| <kbd>mean</kbd> | Average of all numbers on the stack. &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum_{i=1}^n{x_i}}$                              | ℂomplex |
+| <kbd>sum</kbd>  | Sum of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}$                                                        | ℂomplex |
+| <kbd>ssq</kbd>  | Sum of squares of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}^2$                                           | ℂomplex |
+| <kbd>std</kbd>  | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; $s=\sqrt{\frac{{\sum_{i=1}^{n}(x_i-\bar{x})^2}}{n-1}}$ | ℝeal    |
 |                | <br>**Miscellaneous**                                            |      |
 | <kbd>hrs</kbd> | Convert (**Z** hours:**Y** minutes:**X** seconds) to **X** hours | ℝeal |
 | <kbd>hms</kbd> | Convert **X** hours to (**Z** hours:**Y** minutes:**X** seconds) | ℝeal |
@@ -109,10 +109,10 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>dec</kbd> | Print result in decimal (base 10)                                | ℂomplex |
 | <kbd>hex</kbd> | Print result in hexadecimal (base 16) $^*$                       | ℂomplex |
 | <kbd>bin</kbd> | Print result in binary (base 2) $^*$                             | ℂomplex |
-|                  | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-\scriptsize{0b}\normalsize{10111}=-\scriptsize{0x}\normalsize{17}$<br>as opposed to<br>$\scriptsize{0b}\normalsize{1...1111111111111111111111111101001}$ or $\scriptsize{0x}\normalsize{\text{F...FFFFFE9}}$            | |
+|                  | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-0b10111=-0x17$<br>as opposed to<br>$0b1...1111111111111111111111111101001$ or $0x\text{F...FFFFFE9}$            | |
 |                | <br>**Constants**                                                                                     |         |
 | <kbd>pi</kbd>  | Ratio of a circle's circumference to its diameter &nbsp; &nbsp; $\pi={3.1415926535898...}$         | ℝeal    |
-| <kbd>e</kbd>   | Euler's number &nbsp; &nbsp; $e={\sum\limits^{\infty}_{i=0}{\frac{1}{i!}}=2.7182818284590...}$ | ℝeal    |
+| <kbd>e</kbd>   | Euler's number &nbsp; &nbsp; $e=\sum_{i=0}^\infty{\frac{1}{i!}}=2.7182818284590...$ | ℝeal    |
 | <kbd>phi</kbd> | The golden ratio &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$                | ℝeal    |
 | <kbd>i</kbd>   | The imaginary unit number &nbsp; &nbsp; $i={\sqrt{-1}}$                                        | ℂomplex |
 |                 | <br>**Memory and Stack Manipulation**                              |         |
