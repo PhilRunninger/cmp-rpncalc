@@ -104,10 +104,12 @@ The **Domain** column in the following table indicates the types of numbers that
 |                | <br>**Miscellaneous**                                            |      |
 | <kbd>hrs</kbd> | Convert (**Z** hours:**Y** minutes:**X** seconds) to **X** hours | ℝeal |
 | <kbd>hms</kbd> | Convert **X** hours to (**Z** hours:**Y** minutes:**X** seconds) | ℝeal |
-| <kbd>dec</kbd> | Print result in decimal (base 10)                                | ℝeal |
-| <kbd>hex</kbd> | Print result in hexadecimal (base 16) $^*$                       | ℝeal |
-| <kbd>bin</kbd> | Print result in binary (base 2) $^*$                             | ℝeal |
-|                  | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-\scriptsize{0b}\normalsize{10111}=-\scriptsize{0x}\normalsize{17}$<br>as opposed to<br>$\scriptsize{0b}\normalsize{1...1111111111111111111111111101001}$ or $\scriptsize{0x}\normalsize{\text{F...FFFFFE9}}$            | ℝeal    |
+| <kbd>gcd</kbd> | Greatest Common Divisor of **X** and **Y** | ℕatural |
+| <kbd>lcm</kbd> | Least Common Multiple of **X** and **Y** | ℕatural |
+| <kbd>dec</kbd> | Print result in decimal (base 10)                                | ℂomplex |
+| <kbd>hex</kbd> | Print result in hexadecimal (base 16) $^*$                       | ℂomplex |
+| <kbd>bin</kbd> | Print result in binary (base 2) $^*$                             | ℂomplex |
+|                  | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-\scriptsize{0b}\normalsize{10111}=-\scriptsize{0x}\normalsize{17}$<br>as opposed to<br>$\scriptsize{0b}\normalsize{1...1111111111111111111111111101001}$ or $\scriptsize{0x}\normalsize{\text{F...FFFFFE9}}$            | |
 |                | <br>**Constants**                                                                                     |         |
 | <kbd>pi</kbd>  | Ratio of a circle's circumference to its diameter &nbsp; &nbsp; $\pi={3.1415926535898...}$         | ℝeal    |
 | <kbd>e</kbd>   | Euler's number &nbsp; &nbsp; $e={\sum\limits^{\infty}_{i=0}{\frac{1}{i!}}=2.7182818284590...}$ | ℝeal    |
@@ -128,4 +130,4 @@ The author of this plugin makes no warranties about the completeness, reliabilit
 ## Feedback 📣
 This was mainly an exercise to learn lua, and to write a Neovim plugin by porting my prior [Ruby and Erlang rpn calculators](https://github.com/PhilRunninger/rpn). It's quite possible that computational errors made their way in, despite all efforts to ensure the plugin's accuracy. If you spot any errors, or have suggestions for improvements, new operators, etc., create an issue or a pull request.
 
-Finally, I don't know how useful some of the complex number functions are. It was a fun exercise implementing them, but was it just that, an exercise? Leave a comment if you know of any real-world use (pun intended) for perhaps, the inverse hyperbolic cotangent of a complex number.
+Finally, I don't know how useful some of the complex number functions are. It was a fun exercise implementing them, but was it just that - an exercise? Leave a comment if you know of any real-world use (pun intended) for perhaps, the inverse hyperbolic cotangent of a complex number.
