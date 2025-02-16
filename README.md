@@ -18,25 +18,19 @@ require'cmp'.setup {
 ## How Does RPN Work?
 
 RPN is a mathematical notation in which an operator follows its operand(s). This means there is no need for parentheses. Here are some examples, comparing algebraic notation to RPN.
-| Algebraic | RPN (this plugin's flavor)
+| Algebraic | This plugin's version of RPN |
 |:--|:--|
 | $73 + 37=110$ | `73 37 +` |
 | $462\div11=42$ | `462 11 /` |
 | $\lvert((1+2)\times(3-4))^5\rvert=243$ | `1 2 + 3 4 - * 5 ** abs` |
 | $\tan^{-1}(\frac{1}{\sqrt{3}})=30^\circ$| `1 3 sqrt / atan deg` <br> or <br> `3 sqrt \ atan deg` |
-| If ${a=\frac{\sqrt{7}}{4}}$, $48a^2-\frac{98}{a^4}=-491$ | `7 sqrt 4 / sto 2 ** 48 * 98 rcl 4 ** / -` |
-| Euler's Identity: $e^{i\pi}+1=0$ | `e i pi * ** 1 +`<br>Round-off error gives the answer $\scriptsize{0+1.2246467991474\times{10}^{-16}i}$. |
+| For $a=\frac{\sqrt{7}}{4}$, $48a^2-\frac{98}{a^4}=-491$ | `7 sqrt 4 / sto 2 ** 48 * 98 rcl 4 ** / -` |
+| Euler's Identity: $e^{i\pi}+1=0$ | `e i pi * ** 1 +`<br>Round-off error gives an answer that's almost exact: $0+1.2246467991474*10^{-16}i$ |
 
 Reading an RPN expression from left to right, numbers are placed on a stack. The top four numbers are labeled **X**, **Y**, **Z**, and **T** from the top down. These labels are not shown when using the plugin, but they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back onto the stack.
 
 ## Complex Numbers
-Most of the operators will work on complex numbers. The following Wikipedia pages were used as reference for some of the more arcane complex numbers calculations. Where the complete answer is an infinte number of values, only the principal value is given.
-* [logarithms](https://en.wikipedia.org/wiki/Complex_logarithm)
-* [exponentiation](https://en.wikipedia.org/wiki/exponential_function#computation_of_ab_where_both_a_and_b_are_complex)
-* [ordinary trig functions](https://en.wikipedia.org/wiki/sine_and_cosine#complex_exponential_function_definitions)
-* [inverse trig functions](https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Extension_to_complex_plane)
-* [hyperbolic trig functions](https://en.wikipedia.org/wiki/Hyperbolic_sin#Hyperbolic_functions_for_complex_numbers)
-* [inverse hyperbolic trig functions](https://en.wikipedia.org/wiki/Inverse_hyperbolic_functions)
+Most of the operators will work on complex numbers. The following Wikipedia pages were used as reference for some of the more arcane complex number calculations: [logarithms](https://en.wikipedia.org/wiki/Complex_logarithm), [exponentiation](https://en.wikipedia.org/wiki/exponential_function#computation_of_ab_where_both_a_and_b_are_complex), [ordinary trig functions](https://en.wikipedia.org/wiki/sine_and_cosine#complex_exponential_function_definitions), [inverse trig functions](https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Extension_to_complex_plane), [hyperbolic trig functions](https://en.wikipedia.org/wiki/Hyperbolic_sin#Hyperbolic_functions_for_complex_numbers), [inverse hyperbolic trig functions](https://en.wikipedia.org/wiki/Inverse_hyperbolic_functions). Where the complete answer is an infinte number of values, only the principal value is given.
 
 ## Operands
 
@@ -86,7 +80,7 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>round</kbd> | Round up or down to nearest integer  | ℂomplex |
 | <kbd>trunc</kbd> | Round toward zero to nearest integer | ℂomplex |
 |                  | <br>**Bitwise** *Non-integer operands will be truncated.* |         |
-| <kbd>&</kbd>     | AND &nbsp; &nbsp; $0b1100\text{ AND }0b{1010}=0b1000$ &nbsp; &nbsp; $12\text{ AND }10=8$                                                 | ℕatural |
+| <kbd>&</kbd>     | AND &nbsp; &nbsp; $0b1100\text{ AND }0b1010=0b1000$ &nbsp; &nbsp; $12\text{ AND }10=8$                                                 | ℕatural |
 | <kbd>\|</kbd>    | OR &nbsp; &nbsp; $0b1100\text{ OR }0b1010=0b1110$ &nbsp; &nbsp; $12\text{ OR }10=14$                                                   | ℕatural |
 | <kbd>^</kbd>     | XOR &nbsp; &nbsp; $0b1100\text{ XOR }0b1010=0b0110$ &nbsp; &nbsp; $12\text{ XOR }10=6$                                                 | ℕatural |
 | <kbd>~</kbd>     | NOT &nbsp; &nbsp; $\text{NOT }0b1010=-0b1011$ &nbsp; &nbsp; $\text{NOT }10=-11$<br>All bits are flipped, and a [two's complement conversion](https://en.wikipedia.org/wiki/Two's_complement#Converting_from_two's_complement_representation) of the result is displayed.<br>$58 = 0b00111010$<br>$\text{[NOT}\rightarrow\text{] } = 0b11000101$<br>$\text{[2's complement}\rightarrow\text{] } = -2^7+2^6+2^2+2^0=-128+64+4+1=-59$ | ℕatural |
