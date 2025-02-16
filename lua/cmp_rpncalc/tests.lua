@@ -214,14 +214,30 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[i]],   {0,1} ))
 
     print('Other =======================================================================')
-    tally(assert( [[3 20 15 hrs]], 3.3375 ))  -- Convert Z:Y:X to hours
+    tally(assert( [[3 20 15 hrs]], 3.3375 ))      -- Convert Z:Y:X to hours
     tally(assert( [[3.3375 hms]], [[3 20 15]] ))  -- Convert X hours to Z:Y:X
+    tally(assert( [[12 15 gcd]], [[3]] ))         -- Greatest Common Divisor
+    tally(assert( [[12 30 48 gcd gcd]], [[6]] ))
+    tally(assert( [[-12 15 gcd]], [[3]] ))
+    tally(assert( [[2 -5 gcd]], [[1]] ))
+    tally(assert( [[1,2 30 gcd]], [[NaN]] ))
+    tally(assert( [[1.2 3.4 gcd]], [[NaN]] ))
+    tally(assert( [[0 0 gcd]], [[0]] ))
+    tally(assert( [[0 42 gcd]], [[42]] ))
+    tally(assert( [[12 15 lcm]], [[60]] ))        -- Least Common Multiple
+    tally(assert( [[2 3 4 5 7 lcm lcm lcm lcm]], [[420]] ))
+    tally(assert( [[-12 15 lcm]], [[60]] ))
+    tally(assert( [[2 -5 lcm]], [[10]] ))
+    tally(assert( [[2 0 lcm]], [[0]] ))
+    tally(assert( [[0 0 lcm]], [[0]] ))
+    tally(assert( [[1,2 30 lcm]], [[NaN]] ))
+    tally(assert( [[1.2 3.4 lcm]], [[NaN]] ))
 
-    print('Complex: No Operator (return the input) ======================================')
+    print('Complex: No Operator (return the input) =====================================')
     tally(assert( [[12,2]],       {12,2} ))
     tally(assert( [[1,-2 3,4]],  [[1-2i 3+4i]] ))
 
-    print('Complex: Basic Arithmetic ====================================================')
+    print('Complex: Basic Arithmetic ===================================================')
     tally(assert( [[3,1  2,6 +]],    {5,7} ))   -- Addtion
     tally(assert( [[3.5  2,6 +]],    {5.5,6} ))
     tally(assert( [[3,1  6 +]],      {9,1} ))
@@ -244,7 +260,7 @@ M.run = function(verbose) -- Unit Tests {{{1
 
     tally(assert( [[-8,2 chs]],    {8,-2} ))   -- Change Sign
 
-    print('Complex: Rounding ============================================================')
+    print('Complex: Rounding ===========================================================')
     tally(assert( [[12.3,4.2 floor]],   {12,4} ))  -- Floor - round down to nearest integer
     tally(assert( [[-12.3,-4.2 floor]], {-13,-5} ))
     tally(assert( [[12.3,4.2 ceil]],    {13,5} ))  -- Ceiling - round up to nearest integer
@@ -256,7 +272,7 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[12.7,4.3 trunc]],   {12,4} ))  -- Round toward zero
     tally(assert( [[-12.7,-4.3 trunc]], {-12,-4} ))
 
-    print('Complex: Powers & Logs =======================================================')
+    print('Complex: Powers & Logs ======================================================')
     tally(assert( [[2,1 exp]],      {3.992324048,6.217676312}, 1e-6 )) -- Raise e to the x power
     tally(assert( [[2,3 ln]],      {1.282474678,0.982793723}, 1e-6 ))  -- Natural log of x
     tally(assert( [[2,3 log]],    {0.556971676,0.426821891}, 1e-6 ))  -- Log (base 10) of x
@@ -276,7 +292,7 @@ M.run = function(verbose) -- Unit Tests {{{1
     tally(assert( [[0,0 \]],        'NaN' ))
     tally(assert( [[2,3 \]],        {2/13, -3/13}, 1e-6))
 
-    print('Complex: Trigonometry ========================================================')
+    print('Complex: Trigonometry =======================================================')
     tally(assert( [[1,1 sin]], {1.298457581,0.634963915}, 1e-6))
     tally(assert( [[1,1 cos]], {0.833730025,-0.988897706}, 1e-6))
     tally(assert( [[1,1 tan]], {0.271752585,1.083923327}, 1e-6))

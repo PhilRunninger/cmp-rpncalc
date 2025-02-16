@@ -17,8 +17,9 @@ math.nan = 0/0
 math.isNan = function(x) return tostring(x) == tostring(math.nan) end
 math.isPosInf = function(x) return tostring(x) == tostring(0^-1) end
 math.isNegInf = function(x) return tostring(x) == tostring(-0^-1) end
-math.isreal = function(x) return type(x) == 'number' end
-math.iscomplex = function(x) return type(x) == 'table' and #x == 2 and type(x[1]) == 'number' and type(x[2]) == 'number' end
+math.isInt = function(x) return math.isReal(x) and math.floor(x) == x end
+math.isReal = function(x) return type(x) == 'number' end
+math.isComplex = function(x) return type(x) == 'table' and #x == 2 and type(x[1]) == 'number' and type(x[2]) == 'number' end
 math.round = function(x) return x>=0 and math.floor(x+0.5) or math.ceil(x-0.5) end -- Round to nearest integer
 math.trunc = function(x) return x>=0 and math.floor(x) or math.ceil(x) end -- Round toward zero
 
@@ -29,34 +30,34 @@ local op= {}
 -- #############################################################################################
 op[ [[+]] ] = function()  -- Addtion
     local x,y = pop(), pop()
-    if math.isreal(x)        and math.isreal(y)    then push(x + y)
-    elseif math.iscomplex(x) and math.isreal(y)    then push({x[1] + y, x[2]})
-    elseif math.isreal(x)    and math.iscomplex(y) then push({x + y[1], y[2]})
-    elseif math.iscomplex(x) and math.iscomplex(y) then push({x[1] + y[1], x[2] + y[2]})
+    if math.isReal(x)        and math.isReal(y)    then push(x + y)
+    elseif math.isComplex(x) and math.isReal(y)    then push({x[1] + y, x[2]})
+    elseif math.isReal(x)    and math.isComplex(y) then push({x + y[1], y[2]})
+    elseif math.isComplex(x) and math.isComplex(y) then push({x[1] + y[1], x[2] + y[2]})
     end
 end
 op[ [[-]] ] = function() -- Subtraction
     local x,y = pop(), pop()
-    if math.isreal(x)        and math.isreal(y)    then push(y - x)
-    elseif math.iscomplex(x) and math.isreal(y)    then push({y - x[1], -x[2]})
-    elseif math.isreal(x)    and math.iscomplex(y) then push({y[1] - x, y[2]})
-    elseif math.iscomplex(x) and math.iscomplex(y) then push({y[1] - x[1], y[2] - x[2]})
+    if math.isReal(x)        and math.isReal(y)    then push(y - x)
+    elseif math.isComplex(x) and math.isReal(y)    then push({y - x[1], -x[2]})
+    elseif math.isReal(x)    and math.isComplex(y) then push({y[1] - x, y[2]})
+    elseif math.isComplex(x) and math.isComplex(y) then push({y[1] - x[1], y[2] - x[2]})
     end
 end
 op[ [[*]] ] = function() -- Multiplication
     local x,y = pop(), pop()
-    if math.isreal(x)        and math.isreal(y)    then push(x * y)
-    elseif math.iscomplex(x) and math.isreal(y)    then push({x[1] * y, x[2] * y})
-    elseif math.isreal(x)    and math.iscomplex(y) then push({x * y[1], x * y[2]})
-    elseif math.iscomplex(x) and math.iscomplex(y) then push({x[1]*y[1] - x[2]*y[2], x[1]*y[2] + x[2]*y[1]})
+    if math.isReal(x)        and math.isReal(y)    then push(x * y)
+    elseif math.isComplex(x) and math.isReal(y)    then push({x[1] * y, x[2] * y})
+    elseif math.isReal(x)    and math.isComplex(y) then push({x * y[1], x * y[2]})
+    elseif math.isComplex(x) and math.isComplex(y) then push({x[1]*y[1] - x[2]*y[2], x[1]*y[2] + x[2]*y[1]})
     end
 end
 op[ [[/]] ] = function() -- Division
     local x,y = pop(), pop()
-    if     math.isreal(x)    and math.isreal(y)    then push(y / x)
-    elseif math.iscomplex(x) and math.isreal(y)    then push({y*x[1]/(x[1]*x[1] + x[2]*x[2]), -y*x[2]/(x[1]*x[1] + x[2]*x[2])})
-    elseif math.isreal(x)    and math.iscomplex(y) then push({y[1] / x, y[2] / x})
-    elseif math.iscomplex(x) and math.iscomplex(y) then push({(y[1]*x[1]+y[2]*x[2]) / (x[1]*x[1]+x[2]*x[2]), (y[2]*x[1]-y[1]*x[2]) / (x[1]*x[1]+x[2]*x[2])})
+    if     math.isReal(x)    and math.isReal(y)    then push(y / x)
+    elseif math.isComplex(x) and math.isReal(y)    then push({y*x[1]/(x[1]*x[1] + x[2]*x[2]), -y*x[2]/(x[1]*x[1] + x[2]*x[2])})
+    elseif math.isReal(x)    and math.isComplex(y) then push({y[1] / x, y[2] / x})
+    elseif math.isComplex(x) and math.isComplex(y) then push({(y[1]*x[1]+y[2]*x[2]) / (x[1]*x[1]+x[2]*x[2]), (y[2]*x[1]-y[1]*x[2]) / (x[1]*x[1]+x[2]*x[2])})
     end
 end
 op[ [[div]] ]   = function()  -- Integer part of division
@@ -70,20 +71,20 @@ end
 
 op[ [[abs]] ]   = function() -- Absolute Value
     local x=pop()
-    if math.isreal(x)        then push(math.abs(x))
-    elseif math.iscomplex(x) then push(math.sqrt(x[1]*x[1] + x[2]*x[2]))
+    if math.isReal(x)        then push(math.abs(x))
+    elseif math.isComplex(x) then push(math.sqrt(x[1]*x[1] + x[2]*x[2]))
     end
 end
 op[ [[arg]] ]   = function() -- Arg
     local x=pop()
-    if math.isreal(x)        then push(x < 0 and math.pi or 0)
-    elseif math.iscomplex(x) then push(math.atan2(x[2], x[1]));
+    if math.isReal(x)        then push(x < 0 and math.pi or 0)
+    elseif math.isComplex(x) then push(math.atan2(x[2], x[1]));
     end
 end
 op[ [[chs]] ]   = function() -- Change Sign
     local x=pop()
-    if math.isreal(x)        then push(-x)
-    elseif math.iscomplex(x) then push({-x[1], -x[2]})
+    if math.isReal(x)        then push(-x)
+    elseif math.isComplex(x) then push({-x[1], -x[2]})
     end
 end
 
@@ -93,26 +94,26 @@ end
 -- #############################################################################################
 op[ [[floor]] ] = function() -- Floor - round down to nearest integer
     local x=pop()
-    if math.isreal(x)        then push(math.floor(x))
-    elseif math.iscomplex(x) then push({math.floor(x[1]), math.floor(x[2])})
+    if math.isReal(x)        then push(math.floor(x))
+    elseif math.isComplex(x) then push({math.floor(x[1]), math.floor(x[2])})
     end
 end
 op[ [[ceil]] ]  = function() -- Ceiling - round up to nearest integer
     local x=pop()
-    if math.isreal(x)        then push(math.ceil(x))
-    elseif math.iscomplex(x) then push({math.ceil(x[1]), math.ceil(x[2])})
+    if math.isReal(x)        then push(math.ceil(x))
+    elseif math.isComplex(x) then push({math.ceil(x[1]), math.ceil(x[2])})
     end
 end
 op[ [[round]] ] = function() -- Round to nearest integer
     local x=pop()
-    if math.isreal(x)        then push(math.round(x))
-    elseif math.iscomplex(x) then push({math.round(x[1]), math.round(x[2])})
+    if math.isReal(x)        then push(math.round(x))
+    elseif math.isComplex(x) then push({math.round(x[1]), math.round(x[2])})
     end
 end
 op[ [[trunc]] ] = function() -- Round toward zero
     local x=pop()
-    if math.isreal(x)        then push(math.trunc(x))
-    elseif math.iscomplex(x) then push({math.trunc(x[1]), math.trunc(x[2])})
+    if math.isReal(x)        then push(math.trunc(x))
+    elseif math.isComplex(x) then push({math.trunc(x[1]), math.trunc(x[2])})
     end
 end
 
@@ -122,11 +123,11 @@ end
 -- #############################################################################################
 op[ [[ln]] ]   = function() -- Natural log of x
         local x=pop()
-    if math.iscomplex(x) then
+    if math.isComplex(x) then
             local r = math.sqrt(x[1]*x[1] + x[2]*x[2])
             local theta = math.atan2(x[2],x[1])
             push({math.log(r), theta})
-        elseif math.isreal(x) then
+        elseif math.isReal(x) then
             push(math.log(x))
         end
     end
@@ -135,18 +136,18 @@ op[ [[log2]] ] = function() pcall(op[ [[ln]] ]); push(2); pcall(op[ [[ln]] ]); p
 op[ [[logx]] ]  = function() local x=pop(); pcall(op[ [[ln]] ]); push(x); pcall(op[ [[ln]] ]); pcall(op[ [[/]] ]) end -- Log y of x
 op[ [[**]] ] = function() -- Exponentiation - y to the x power
     local x,y = pop(), pop()
-    if ((math.iscomplex(y) and y[1]==0 and y[2]==0) or y == 0) and
-        ((math.iscomplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(math.nan)
-    elseif math.iscomplex(x) and math.iscomplex(y) then
+    if ((math.isComplex(y) and y[1]==0 and y[2]==0) or y == 0) and
+        ((math.isComplex(x) and x[1]==0 and x[2]==0) or x == 0) then push(math.nan)
+    elseif math.isComplex(x) and math.isComplex(y) then
         local r = math.sqrt(y[1]*y[1] + y[2]*y[2])
         local theta = math.atan2(y[2],y[1])
         local m = math.exp(x[1]*math.log(r) - x[2]*theta)
         push({m*math.cos(x[2]*math.log(r) + x[1]*theta), m*math.sin(x[2]*math.log(r) + x[1]*theta)})
-    elseif math.isreal(x) and math.iscomplex(y) then
+    elseif math.isReal(x) and math.isComplex(y) then
         local r = math.sqrt(y[1]*y[1]+y[2]*y[2])
         local theta = math.atan2(y[2],y[1])
         push({math.pow(r,x)*math.cos(theta*x), math.pow(r,x)*math.sin(theta*x)})
-    elseif math.iscomplex(x) then
+    elseif math.isComplex(x) then
         push({math.pow(y,x[1])*math.cos(x[2]*math.log(y)), math.pow(y,x[1])*math.sin(x[2]*math.log(y))})
     elseif y < 0 and x ~= math.round(x) then
         push({y,0})
@@ -171,26 +172,26 @@ op[ [[sqrt]] ]  = function() push(0.5); pcall(op[ [[**]] ]) end -- Square root o
 -- #############################################################################################
 op[ [[sin]] ]   = function() -- Sine
     local x=pop()
-    if math.iscomplex(x) then
+    if math.isComplex(x) then
         push({math.sin(x[1])*math.cosh(x[2]), math.cos(x[1])*math.sinh(x[2])})
-    elseif math.isreal(x) then push(math.sin(x))
+    elseif math.isReal(x) then push(math.sin(x))
     end
 end
 op[ [[cos]] ]   = function() -- Cosine
     local x=pop()
-    if math.iscomplex(x) then push({math.cos(x[1])*math.cosh(x[2]), -math.sin(x[1])*math.sinh(x[2])})
-    elseif math.isreal(x) then push(math.cos(x))
+    if math.isComplex(x) then push({math.cos(x[1])*math.cosh(x[2]), -math.sin(x[1])*math.sinh(x[2])})
+    elseif math.isReal(x) then push(math.cos(x))
     end
 end
 op[ [[tan]] ]   = function() -- Tangent
     local x=pop()
-    if math.iscomplex(x) then
+    if math.isComplex(x) then
         push(x)
         pcall(op[ [[sin]] ])
         push(x)
         pcall(op[ [[cos]] ])
         pcall(op[ [[/]] ])
-    elseif math.isreal(x) then push(math.tan(x))
+    elseif math.isReal(x) then push(math.tan(x))
     end
 end
 op[ [[csc]] ]   = function() pcall(op[ [[sin]] ]); pcall(op[ [[\]] ]); end -- Cosecant
@@ -199,7 +200,7 @@ op[ [[cot]] ]   = function() pcall(op[ [[tan]] ]); pcall(op[ [[\]] ]); end -- Co
 -- Inverse Trigonometry ------------------------------------------------------------------------
 op[ [[asin]] ]  = function() -- Inverse sine
     local x=pop()
-    if math.iscomplex(x) then -- i*ln(sqrt(1-x^2)-ix)
+    if math.isComplex(x) then -- i*ln(sqrt(1-x^2)-ix)
         push({0,1})
         push(1)
         push(x)
@@ -228,7 +229,7 @@ op[ [[acos]] ]  = function() -- Inverse cosine = pi/2 - asin(x)
 end
 op[ [[atan]] ]  = function() -- Inverse Tangent
     local x=pop()
-    if math.iscomplex(x) then -- -i/2*ln((1+ix)/(1-ix))
+    if math.isComplex(x) then -- -i/2*ln((1+ix)/(1-ix))
         push({0,-0.5})
         push(1)
         push({0,1})
@@ -262,17 +263,17 @@ end
 -- Hyperbolic Trigonometry ---------------------------------------------------------------------
 op[ [[sinh]] ]  = function() -- Hyperbolic sine
     local x=pop()
-    if math.iscomplex(x) then
+    if math.isComplex(x) then
         push({math.cos(x[2])*math.sinh(x[1]), math.sin(x[2])*math.cosh(x[1])})
-    elseif math.isreal(x) then
+    elseif math.isReal(x) then
         push(math.sinh(x))
     end
 end
 op[ [[cosh]] ]  = function() -- Hyperbolic cosine
     local x=pop()
-    if math.iscomplex(x) then
+    if math.isComplex(x) then
         push({math.cos(x[2])*math.cosh(x[1]), math.sin(x[2])*math.sinh(x[1])})
-    elseif math.isreal(x) then
+    elseif math.isReal(x) then
         push(math.cosh(x))
     end
 end
@@ -379,7 +380,6 @@ end
 op[ [[deg]] ]   = function() push(math.deg(pop())) end -- convert x to degrees
 op[ [[rad]] ]   = function() push(math.rad(pop())) end -- convert x to radians
 
-
 -- #############################################################################################
 -- ##################################################################################### Bitwise
 -- #############################################################################################
@@ -413,6 +413,37 @@ op[ [[hms]] ]   = function()  -- Convert X hours to Z:Y:X
     end
     push(x)
 end
+op[ [[gcd]] ] = function()
+    local x,y = pop(),pop()
+    if not math.isInt(x) or not math.isInt(y) then
+        push(math.nan)
+        return
+    end
+    x,y = math.abs(x),math.abs(y)
+    local t
+    while y ~= 0 do
+        t = y
+        y = math.fmod(x, y)
+        x = t
+    end
+    push(x)
+end
+op[ [[lcm]] ] = function()
+    local x,y = pop(),pop()
+    if not math.isInt(x) or not math.isInt(y) then
+        push(math.nan)
+        return
+    end
+    if x == 0 and y == 0 then
+        push(0)
+        return
+    end
+    push(y)
+    push(x)
+    pcall(op[ [[gcd]] ])
+    local gcd = pop()
+    push(math.abs(x) / gcd * math.abs(y))
+end
 
 -- #############################################################################################
 -- ################################################################### Bases (Reading & Writing)
@@ -437,7 +468,7 @@ op[ [[drop]] ] = function() pop(); end; -- drop X off the stack
 -- #############################################################################################
 op[ [[!]] ] = function()  -- Factorial
     local x = pop();
-    if math.iscomplex(x) or math.floor(x) ~= x or x < 0 then
+    if not math.isInt(x) or x < 0 then
         push(math.nan)
         return
     end
@@ -503,7 +534,7 @@ op[ [[std]] ] = function()  -- Standard deviation of all numbers on stack
 
     pcall(op[ [[mean]] ])
     local mean = stack[#stack]
-    if math.iscomplex(mean) then
+    if math.isComplex(mean) then
         stack = {math.nan}
     else
         local sum = 0
@@ -630,7 +661,7 @@ source.complete = function(_, request, callback)
             value = value .. ' Infinity'
         elseif math.isNegInf(n) then
             value = value .. ' -Infinity'
-        elseif math.iscomplex(n) then
+        elseif math.isComplex(n) then
             if math.isNan(n[1]) or math.isNan(n[2]) then
                 value = value .. ' NaN'
             elseif math.isPosInf(n[1]) or math.isPosInf(n[2]) then
@@ -640,7 +671,7 @@ source.complete = function(_, request, callback)
             else
                 value = value .. ' ' .. changeBase(n[1]) .. (n[2] >= 0 and '+' or '') .. changeBase(n[2]) .. 'i'
             end
-        elseif math.isreal(n) then
+        elseif math.isReal(n) then
             value = value .. ' ' .. changeBase(n)
         else
             value = value .. ' ' .. 'Error'
