@@ -680,17 +680,30 @@ source.complete = function(_, request, callback)
     value = string.gsub(value, "^%s*(.-)%s*$", "%1")
     input = string.gsub(input, "^%s*(.-)%s*$", "%1")
 
-    callback({
-        items = {{
-            label = input .. ' ▶ ' .. value,
+    local items = {
+        {
+            label = input .. ' == ' .. value,
+            filterText = input,
             textEdit = {
                 range = {
                     start = { line = request.context.cursor.row-1, character = s, },
                     ['end'] = { line = request.context.cursor.row-1, character = request.context.cursor.col-1, }, },
-                newText = value },
-        }},
-        isIncomplete = true,
-    })
+                newText = input .. ' == ' .. value
+            },
+        },
+        {
+            label = value,
+            filterText = input,
+            textEdit = {
+                range = {
+                    start = { line = request.context.cursor.row-1, character = s, },
+                    ['end'] = { line = request.context.cursor.row-1, character = request.context.cursor.col-1, }, },
+                newText = value
+            },
+        },
+    }
+
+    callback({ items = items, isIncomplete = true })
 end
 
 return source
