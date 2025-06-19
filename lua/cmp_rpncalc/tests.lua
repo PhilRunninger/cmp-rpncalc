@@ -24,22 +24,21 @@ local assert = function(expression, expected, tolerance)  -- {{{2
         or  '')
     local pass = false
     local checkResult = function(response)
-        -- vim.pretty_print('response', response)
+        -- vim.print('response', response)
         local result = ''
         if next(response) == nil then
             result = ''
             pass = false
         else
-            result = response.items[1].textEdit.newText
+            result = response.items[2].textEdit.newText
             if type(expected) == 'string' then
-                local s,e = vim.regex([[^]]..expected..[[$]]):match_str(result)
-                pass = s and e
+                pass = vim.regex([[^]]..expected..[[$]]):match_str(result) and true or false
             else
                 tolerance = tolerance or 0
                 if type(expected) == 'table' then
                     -- Split complex result into real and imaginary: "1.23+4.5i" -> {"1.23", "+4.5"}
                     local parts = vim.fn.split(result, '\\(\\ze[+-]\\|i\\)')
-                    -- vim.pretty_print(parts)
+                    -- vim.print(parts)
                     -- Side effect: it also splits mantissas from exponents: "1.2e-6+9.9e-8i" -> {"1.2e", "-6", "+9.9e", "-8"}
                     -- If that happens, smash them back together again: -> {"1.2e-6", "+9.9e-8"}
                     local i = 1
@@ -50,7 +49,7 @@ local assert = function(expression, expected, tolerance)  -- {{{2
                         end
                         i = i + 1
                     end
-                    -- vim.pretty_print(parts, expected)
+                    -- vim.print(parts, expected)
 
                     pass = #parts == #expected and
                         math.abs(tonumber(parts[1])-expected[1]) <= tolerance and
