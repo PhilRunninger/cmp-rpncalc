@@ -388,7 +388,7 @@ function M.run(verbose) -- Unit Tests {{{1
     tally(assertCMP( [[pi]],  3.1415926535, 1e-6 ))  -- 3.141592653....
     tally(assertCMP( [[e]],   2.7182818284, 1e-6 ))  -- 2.718281828...
     tally(assertCMP( [[phi]], 1.6180339887, 1e-6 ))  -- golden ratio
-    tally(assertCMP( [[i]],   {0,1} ))
+    tally(assertCMP( [[i]],   '0+1i' ))
 
     print('Bases (Reading & Writing) ===================================================')
     tally(assertCMP( [[0x22]], 34))
@@ -408,7 +408,7 @@ function M.run(verbose) -- Unit Tests {{{1
     tally(assertCMP( [[-0x37 dec]], -55))
 
     print('Memory and Stack Manipulation ===============================================')
-    -- sto cannot be tested by itself, as it doesn't change the stack.
+    -- sto cannot be tested by itself, as it doesn't change the output.
     tally(assertCMP( [[1 sto rcl]], '1 1'))
     tally(assertCMP( [[1 sto m+ rcl]], '1 2'))
     tally(assertCMP( [[1 sto 3 m- rcl]], '1 3 -2'))
