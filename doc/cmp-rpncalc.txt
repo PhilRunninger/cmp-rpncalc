@@ -1,11 +1,14 @@
-*cmp-rpncalc.txt*  An nvim-cmp completion source for RPN math calculations
+*cmp-rpncalc.txt*  An RPN mathematical expression processor
 
                                                               *cmp-rpncalc* *rpn* >
-                                                          |
-      ,---. ,-.-. ,---.     ,---. ,---. ,---. ,---. ,---. |  ,---.
-      |     | | | |   | --- |     |   | |   | |     ,---| |  |
-      `---' ` ' ' |---'     `     |---' `   ' `---' `---^ `' `---'
-                  |               |
+                                                             ▗▄▖
+                                                             ▝▜▌
+       ▟██▖▐█▙█▖▐▙█▙       ██▄████ ██▄███▄  ██▄████▄ ▟██▖ ▟██▖▐▌  ▟██▖
+      ▐▛  ▘▐▌█▐▌▐▛ ▜▌      ██▀     ██▀  ▀██ ██▀   ██▐▛  ▘ ▘▄▟▌▐▌ ▐▛  ▘
+      ▐▌   ▐▌█▐▌▐▌ ▐▌      ██      ██    ██ ██    ██▐▌   ▗█▀▜▌▐▌ ▐▌
+      ▝█▄▄▌▐▌█▐▌▐█▄█▘      ██      ███▄▄██▀ ██    ██▝█▄▄▌▐▙▄█▌▐▙▄▝█▄▄▌
+       ▝▀▀ ▝▘▀▝▘▐▌▀▘ ▀▀▀▀▀ ▀▀      ██ ▀▀▀   ▀▀    ▀▀ ▝▀▀  ▀▀▝▘ ▀▀ ▝▀▀
+                ▐▌                 ██
 <
 Reverse Polish Notation, RPN for short, is a mathematical notation in which
 operators follow their operands, in contrast to Polish notation (PN), in which
@@ -14,12 +17,41 @@ nationality of logician Jan Łukasiewicz, who invented Polish notation in 1924.
                        - https://en.wikipedia.org/wiki/Reverse_Polish_notation
 
 ==============================================================================
-                                                                  *rpn-operands*
+*Overview*                                                          *rpn-overview*
+
+This plugin is a processor that takes an RPN expression as input and inserts
+the results in the current buffer. It operates in two different ways.
+
+1. As a completion source for the nvim-cmp plugin, which can be found here:
+https://github.com/hrsh7th/nvim-cmp. While an RPN expression is entered,
+nvim-cmp will present two options for selection. For example, when typing:
+`1 2 3 ** +`  nvim-cmp will present these two strings:
+    `9`
+    `1 2 3 ** + == 9`
+
+2. As a standalone processor, using the `:RPN` command. Its different
+variations are as follows:
+
+    `:RPN` - replace the current line's RPN expression with its result.
+
+    `:<range>RPN` - replace the selected lines with the result of processing
+                  the concatenated RPN expression. The selection will always
+                  be treated as a linewise selection.
+
+    `:RPN <expression>` - treat all arguments as an RPN expression and insert
+                        the result in a new line above the current line.
+
+    Adding the bang operator, ie. `:RPN!`, to any of the syntaxes above will
+    cause the expression to be inserted along with the result, like so:
+        `30 rad sin == 0.5`
+
+==============================================================================
+*Operands*                                                          *rpn-operands*
 
 Numbers, formally called operands, are pushed onto a stack in the order they
 are read by the processor. The top number on the stack is called X, with Y, Z,
 T, and other unnamed positions underneath. When an operator is encountered,
-the required operators are popped off the stack, and the result of the
+the required operands are popped off the stack, and the result of the
 operation is pushed back onto the stack.
 
 Operands can take on any of these forms:
@@ -30,22 +62,22 @@ Operands can take on any of these forms:
             example `1.2,-0x43` represents `1.2-67i`.
 
 ==============================================================================
-                                                                 *rpn-operators*
+*Operators*                                                        *rpn-operators*
 
 Most operators work on complex numbers. Exceptions are noted below.
 
 |Basic_Arithmetic|  `+      -      *      /      div    %     abs  arg  chs`
-|Powers_&_Logs|     `exp    ln     log    log2   logx   sqrt  **   \`
+|Powers_and_Logs|   `exp    ln     log    log2   logx   sqrt  **   \`
 |Trigonometry|      `sin    cos    tan    csc    sec    cot`
                   `asin   acos   atan   acsc   asec   acot`
                   `sinh   cosh   tanh   csch   sech   coth`
                   `asinh  acosh  atanh  acsch  asech  acoth`
 |Bitwise|           `&      |      ^      <<     >>     ~`
-|Rounding|          `floor  ceil  round  trunc`
-|Constants|         `pi     e     phi    i`
-|Statistics|        `!      perm  comb   mean    std    sum   ssq   n`
+|Rounding|          `round  trunc  floor  ceil`
+|Constants|         `pi     e      phi    i`
+|Statistics|        `!      perm   comb   mean   std    sum   ssq  n`
 |Miscellaneous|     `hrs    hms`
-|Memory_&_Stack|    `sto    rcl   m+     m-      xy     x     drop`
+|Memory_and_Stack|  `sto    rcl    m+     m-     xy     x     drop`
 
 ==============================================================================
 *Basic_Arithmetic*                                           *rpn-basic-operators*
@@ -60,10 +92,10 @@ Most operators work on complex numbers. Exceptions are noted below.
   `arg`  Argument - the angle between X and the positive real axis
   `chs`  Change sign of X
 
-*Powers_&_Logs*                            *rpn-power-operators* *rpn-log-operators*
+*Powers_and_Logs*                          *rpn-power-operators* *rpn-log-operators*
 
   `exp`   Exponential function: e to the X power
-  `ln`    Natural log: ln(X)
+  `ln`    Natural log (base e) of X
   `log`   Common log (base 10) of X
   `log2`  Log (base 2) of X
   `logx`  Log (base X) of Y
@@ -97,19 +129,20 @@ Most operators work on complex numbers. Exceptions are noted below.
   These operators work best with natural numbers, and don't work at all with
   complex numbers.
 
-  `&`  AND         `10 7 &`  is `2`  In binary, 1010 AND 111 is 10
-  `|`  OR          `10 6 |`  is `14`            1010 OR 110  is 1110
-  `^`  XOR         `10 3 ^`  is `9`             1010 XOR 11  is 1001
-  `~`  NOT         `42 ~`    is `-43`         101010 ~       is 1...111111110101
-  `<<` Left Shift  `5 3 <<`  is `40`             101 << 3    is 101000
-  `>>` Right Shift `58 2 >>` is `14`          111010 >> 2    is 1110
+                     Decimal Example    Binary Representation
+  `&`  AND             `10 7 &`  is `2`         1010 AND 111 is 10
+  `|`  OR              `10 6 |`  is `14`        1010 OR 110  is 1110
+  `^`  XOR             `10 3 ^`  is `9`         1010 XOR 11  is 1001
+  `~`  NOT             `42 ~`    is `-43`     101010 ~       is 1...111111110101
+  `<<` Left Shift      `5 3 <<`  is `40`         101 << 3    is 101000
+  `>>` Right Shift     `58 2 >>` is `14`      111010 >> 2    is 1110
 
 *Rounding*                                                *rpn-rounding-operators*
 
-  `floor` Round down towards -infinity
-  `ceil`  Round up towards +infinity
   `round` Round up or down to nearest integer
   `trunc` Round toward zero
+  `floor` Round down towards negative infinity
+  `ceil`  Round up towards positive infinity
 
 *Constants*                                                        *rpn-constants*
 
@@ -141,7 +174,7 @@ Most operators work on complex numbers. Exceptions are noted below.
   `hex` - Print results in hexadecimal.
   `dec` - Print results in decimal.
 
-*Memory_&_Stack*                        *rpn-memory-operators* *rpn_stack-operators*
+*Memory_and_Stack*                      *rpn-memory-operators* *rpn_stack-operators*
 
   `sto`  - Store the value of X to memory
   `rcl`  - Recall the value in memory and put it on the stack
