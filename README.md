@@ -1,12 +1,59 @@
 # cmp-rpncalc
-An [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) source for math calculations using Reverse Polish Notation
+## Overview
+
+This plugin is a processor that takes a [Reverse Polish Notation expression](https://en.wikipedia.org/wiki/Reverse_Polish_notation) as input and inserts the results in the current buffer. It operates in two different ways.
+
+### 1. As a completion source for the [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) completion plugin
+If **nvim-cmp** is installed, then while an RPN expression is being typed, two completion options will be presented. For example, when typing:
+
+```
+1 2 3 ** +
+```
+**nvim-cmp** will present these two strings that can be insert in the expression's place:
+```
+9
+1 2 3 ** + == 9
+```
+
+### 2. As a standalone processor, using the `:RPN` command
+
+This is the only method that works when **nvim-cmp** is not installed. The `:RPN` command's various syntaxes are as follows:
+
+* `:RPN` - replace the current line's RPN expression with its result. The entire line will be treated as the RPN expression. Any text that is not a valid number or operator will cause an error.
+
+* `:<range>RPN` - replace the selected lines with the result of their concatenated RPN expression. The selection will always be treated as a linewise selection. The entire concatenation will be treated as the RPN expression. Any text that is not a valid number or operator will cause an error.
+
+* `:RPN <expression>` - treat all arguments as an RPN expression and insert the result in a new line above the current line.
+
+Adding the bang operator, ie. `:RPN!`, to any of the syntaxes above will cause the expression to be inserted along with the result, like so:
+```
+30 rad sin == 0.5
+```
+
+Use mappings like the following examples to call `:RPN` in Normal or Visual mode.
+```vim
+" Vimscript example
+nnoremap <F7>   :RPN<CR>
+nnoremap <S-F7> :RPN!<CR>
+xnoremap <F7>   :<C-U>'<,'>RPN<CR>
+xnoremap <S-F7> :<C-U>'<,'>RPN!<CR>
+```
+
+```lua
+-- Lua example
+vim.api.nvim_set_keymap("n", "<F7>",   ":RPN<CR>",            {noremap=true})
+vim.api.nvim_set_keymap("n", "<S-F7>", ":RPN!<CR>",           {noremap=true})
+vim.api.nvim_set_keymap("x", "<F7>",   ":<C-U>'<,'>RPN<CR>",  {noremap=true})
+vim.api.nvim_set_keymap("x", "<S-F7>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
+```
+
 
 ## Installation
 
 Use your favorite plugin manager. If you don't have one, try one of these: [vim-pathogen](https://github.com/tpope/vim-pathogen), [vim-plug](https://github.com/junegunn/vim-plug), [Packer.nvim](https://github.com/wbthomason/packer.nvim) or [lazy.nvim](https://github.com/folke/lazy.nvim). Alternatively, you can use packages and submodules, as Greg Hurrell ([@wincent](https://github.com/wincent)) describes in his excellent Youtube video: [Vim screencast #75: Plugin managers](https://www.youtube.com/watch?v=X2_R3uxDN6g)
 
 ## Setup
-There is no setup required specifically for this plugin; however, you need to add **rpncalc** to the list of sources in your **nvim-cmp** setup. The following snippet shows how to do that.
+There is no setup required specifically for this plugin; however, when using it as a source for **nvim-cmp**, you need to add **rpncalc** to its list of sources in your **nvim-cmp** setup function call. The following snippet shows how to do that.
 ```lua
 require'cmp'.setup {
   sources = {
@@ -22,15 +69,23 @@ RPN is a mathematical notation in which an operator follows its operand(s). This
 |:--|:--|
 | $73 + 37=110$ | `73 37 +` |
 | $462\div11=42$ | `462 11 /` |
-| $\lvert((1+2)\times(3-4))^5\rvert=243$ | `1 2 + 3 4 - * 5 ** abs` |
+| $\lvert((1+2)-(3\times4))^5\rvert=59049$ | `1 2 + 3 4 * - 5 ** abs` |
 | $\tan^{-1}(\frac{1}{\sqrt{3}})=30^\circ$| `1 3 sqrt / atan deg` <br> or <br> `3 sqrt \ atan deg` |
-| For $a=\frac{\sqrt{7}}{4}$, $48a^2-\frac{98}{a^4}=-491$ | `7 sqrt 4 / sto 2 ** 48 * 98 rcl 4 ** / -` |
-| Euler's Identity: $e^{i\pi}+1=0$ | `e i pi * ** 1 +`<br>Round-off error gives an answer that's almost exact: $0+1.2246467991474*10^{-16}i$ |
+| For $t=\frac{\sqrt{7}}{4}$, $48t^2-\frac{98}{t^4}=-491$ | `7 sqrt 4 / sto 2 ** 48 * 98 rcl 4 ** / -` |
+| Euler's Identity: $e^{i\pi}+1=0$ | `e i pi * ** 1 +`<br/>Round-off error gives an answer that's almost exact:<br/>$0+1.2246467991474*10^{-16}i$ |
 
-Reading an RPN expression from left to right, numbers are placed on a stack. The top four numbers are labeled **X**, **Y**, **Z**, and **T** from the top down. These labels are not shown when using the plugin, but they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back onto the stack.
+An RPN expression is a space-delimited list of tokens. Reading the tokens from left to right, numbers are placed on a stack. The top four numbers are labeled $X$, $Y$, $Z$, and $T$ from the top down. These labels are not shown when using the plugin, but they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back onto the stack.
+3.6739403974421e-16+6i
+### Example
+Expression: `12 2 -3 ** +` <br/> Tokens: `12` `2` `-3` `**` `+`
 
-## Complex Numbers
-Most of the operators will work on complex numbers. The following Wikipedia pages were used as reference for some of the more arcane complex number calculations: [logarithms](https://en.wikipedia.org/wiki/Complex_logarithm), [exponentiation](https://en.wikipedia.org/wiki/exponential_function#computation_of_ab_where_both_a_and_b_are_complex), [ordinary trig functions](https://en.wikipedia.org/wiki/sine_and_cosine#complex_exponential_function_definitions), [inverse trig functions](https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Extension_to_complex_plane), [hyperbolic trig functions](https://en.wikipedia.org/wiki/Hyperbolic_sin#Hyperbolic_functions_for_complex_numbers), [inverse hyperbolic trig functions](https://en.wikipedia.org/wiki/Inverse_hyperbolic_functions). Where the complete answer is an infinte number of values, only the principal value is given.
+| Token | Stack Before    | Stack After Pop | Calculation        | Stack After Push |
+| ---   | ---             | ---             | ---                | ---              |
+| `12`    | *empty*         | *n/a*           | *n/a*              | $X:12$               |
+| `2`     | $X:12$              | *n/a*           | *n/a*              | $X:2$<br/>$Y:12$         |
+| `-3`    | $X:2$<br/>$Y:12$        | *n/a*           | *n/a*              | $X:-3$<br/>$Y:2$<br/>$Z:12$  |
+| `**`    | $X:-3$<br/>$Y:2$<br/>$Z:12$ | $X:12$              | $y^x=2^{-3}=0.125$     | $X:0.125$<br/>$Y:12$     |
+| `+`     | $X:0.125$<br/>$Y:12$    | *empty*         | $x+y=0.125+12=12.125$  | $X:12$.125           |
 
 ## Operands
 
@@ -39,6 +94,10 @@ Operands can take on any of these forms:
 * Binary (base 2): `0b` prefix, followed by digits `0` and `1`.
 * Hexadecimal (base 16): `0x` prefix, followed by digits `0`-`9` or letters `a`-`f` or `A`-`F`.
 * Complex: an ordered pair of numbers in any of the prior formats. For example,<br>`1.2e-4,0x43` equates to `0.00012+67i` in decimal notation.
+
+
+### Complex Numbers
+Most of the operators will work on complex numbers. The following Wikipedia pages were used as reference for some of the more arcane complex number calculations: [logarithms](https://en.wikipedia.org/wiki/Complex_logarithm), [exponentiation](https://en.wikipedia.org/wiki/exponential_function#computation_of_ab_where_both_a_and_b_are_complex), [ordinary trig functions](https://en.wikipedia.org/wiki/sine_and_cosine#complex_exponential_function_definitions), [inverse trig functions](https://en.wikipedia.org/wiki/Inverse_trigonometric_functions#Extension_to_complex_plane), [hyperbolic trig functions](https://en.wikipedia.org/wiki/Hyperbolic_sin#Hyperbolic_functions_for_complex_numbers), [inverse hyperbolic trig functions](https://en.wikipedia.org/wiki/Inverse_hyperbolic_functions). Where the complete answer is an infinte number of values, only the principal value is given.
 
 ## Operators
 
@@ -49,24 +108,24 @@ The **Domain** column in the following table indicates the types of numbers that
 
 | Operator | Function | Domain |
 | :-:      | ---      | :-:    |
-|                | <br>**Basic Arithmetic**                                          |         |
-| <kbd>+</kbd>   | Addition                                                          | ℂomplex |
-| <kbd>-</kbd>   | Subtraction                                                       | ℂomplex |
-| <kbd>\*</kbd>  | Multiplication                                                    | ℂomplex |
-| <kbd>/</kbd>   | Division                                                          | ℂomplex |
-| <kbd>div</kbd> | Integer division                                                  | ℂomplex |
-| <kbd>%</kbd>   | Modulus *(not well-defined for negatives)*                        | ℝeal    |
-| <kbd>abs</kbd> | Absolute value                                                    | ℂomplex |
-| <kbd>arg</kbd> | Argument *(the angle between* **X** *and the positive real axis)* | ℂomplex |
-| <kbd>chs</kbd> | Change Sign *(negation)*                                          | ℂomplex |
-|                 | <br>**Powers & Logs**          |         |
-| <kbd>\*\*</kbd> | Raise **Y** to the **X** power | ℂomplex |
-| <kbd>\\</kbd>   | Reciprocal                     | ℂomplex |
-| <kbd>exp</kbd>  | Raise e to the **X** power     | ℂomplex |
-| <kbd>ln</kbd>   | Natural Log of **X**           | ℂomplex |
-| <kbd>log</kbd>  | Log (base 10) of **X**         | ℂomplex |
-| <kbd>log2</kbd> | Log (base 2) of **X**          | ℂomplex |
-| <kbd>sqrt</kbd> | Square Root                    | ℂomplex |
+|                | <br>**Basic Arithmetic**                                      |         |
+| <kbd>+</kbd>   | Addition                                                      | ℂomplex |
+| <kbd>-</kbd>   | Subtraction                                                   | ℂomplex |
+| <kbd>\*</kbd>  | Multiplication                                                | ℂomplex |
+| <kbd>/</kbd>   | Division                                                      | ℂomplex |
+| <kbd>div</kbd> | Integer division                                              | ℂomplex |
+| <kbd>%</kbd>   | Modulus *(not well-defined for negatives)*                    | ℝeal    |
+| <kbd>abs</kbd> | Absolute value                                                | ℂomplex |
+| <kbd>arg</kbd> | Argument *(the angle between $X$ and the positive real axis)* | ℂomplex |
+| <kbd>chs</kbd> | Change Sign *(negation)*                                      | ℂomplex |
+|                 | <br>**Powers & Logs**        |         |
+| <kbd>\*\*</kbd> | Raise $Y$ to the $X$ power   | ℂomplex |
+| <kbd>\\</kbd>   | Reciprocal                   | ℂomplex |
+| <kbd>exp</kbd>  | Raise e to the $X$ power     | ℂomplex |
+| <kbd>ln</kbd>   | Natural Log of $X$           | ℂomplex |
+| <kbd>log</kbd>  | Log (base 10) of $X$         | ℂomplex |
+| <kbd>log2</kbd> | Log (base 2) of $X$          | ℂomplex |
+| <kbd>sqrt</kbd> | Square Root                  | ℂomplex |
 |                | <br>**Trigonometry** *Variations are: <kbd>a...</kbd> for inverse and <kbd>...h</kbd> for hyperbolic* |         |
 | <kbd>sin</kbd> | Sine, <kbd>asin</kbd>, <kbd>sinh</kbd>, <kbd>asinh</kbd>                                              | ℂomplex |
 | <kbd>cos</kbd> | Cosine, <kbd>acos</kbd>, <kbd>cosh</kbd>, <kbd>acosh</kbd>                                            | ℂomplex |
@@ -79,44 +138,44 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>ceil</kbd>  | Round up to nearest integer          | ℂomplex |
 | <kbd>round</kbd> | Round up or down to nearest integer  | ℂomplex |
 | <kbd>trunc</kbd> | Round toward zero to nearest integer | ℂomplex |
-|                  | <br>**Bitwise** *Non-integer operands will be truncated.* |         |
-| <kbd>&</kbd>     | AND &nbsp; &nbsp; $0b1100\text{ AND }0b1010=0b1000$ &nbsp; &nbsp; $12\text{ AND }10=8$                                                 | ℕatural |
-| <kbd>\|</kbd>    | OR &nbsp; &nbsp; $0b1100\text{ OR }0b1010=0b1110$ &nbsp; &nbsp; $12\text{ OR }10=14$                                                   | ℕatural |
-| <kbd>^</kbd>     | XOR &nbsp; &nbsp; $0b1100\text{ XOR }0b1010=0b0110$ &nbsp; &nbsp; $12\text{ XOR }10=6$                                                 | ℕatural |
+|                  | <br>**Bitwise** *Non-integer operands will be truncated.*                                 |         |
+| <kbd>&</kbd>     | AND &nbsp; &nbsp; $0b1100\text{ AND }0b1010=0b1000$ &nbsp; &nbsp; $12\text{ AND }10=8$    | ℕatural |
+| <kbd>\|</kbd>    | OR &nbsp; &nbsp; $0b1100\text{ OR }0b1010=0b1110$ &nbsp; &nbsp; $12\text{ OR }10=14$      | ℕatural |
+| <kbd>^</kbd>     | XOR &nbsp; &nbsp; $0b1100\text{ XOR }0b1010=0b0110$ &nbsp; &nbsp; $12\text{ XOR }10=6$    | ℕatural |
 | <kbd>~</kbd>     | NOT &nbsp; &nbsp; $\text{NOT }0b1010=-0b1011$ &nbsp; &nbsp; $\text{NOT }10=-11$<br>All bits are flipped, and a [two's complement conversion](https://en.wikipedia.org/wiki/Two's_complement#Converting_from_two's_complement_representation) of the result is displayed.<br>$58 = 0b00111010$<br>$\text{[NOT}\rightarrow\text{] } = 0b11000101$<br>$\text{[2's complement}\rightarrow\text{] } = -2^7+2^6+2^2+2^0=-128+64+4+1=-59$ | ℕatural |
-| <kbd><<</kbd>    | Left Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${0b1\overleftarrow{11}}^{\text{ }2}=0b11100$ &nbsp; &nbsp; $\overleftarrow{7}^2=28$     | ℕatural |
-| <kbd>>></kbd>    | Right Shift _(_**Y** *shifted* **X** *bits)* &nbsp; &nbsp; ${0b110\overrightarrow{100}}^{\text{ }3}=0b110$ &nbsp; &nbsp; $\overrightarrow{52}^3=6$ | ℕatural |
+| <kbd><<</kbd>    | Left Shift _(_$Y$ *shifted* $X$ *bits)* &nbsp; &nbsp; ${0b100\overleftarrow{01}}^{\text{ }2}=0b1000100$ &nbsp; &nbsp; $\overleftarrow{17}^2=68$     | ℕatural |
+| <kbd>>></kbd>    | Right Shift _(_$Y$ *shifted* $X$ *bits)* &nbsp; &nbsp; ${0b110\overrightarrow{100}}^{\text{ }3}=0b110$ &nbsp; &nbsp; $\overrightarrow{52}^3=6$ | ℕatural |
 |                 | <br>**Statistics**                                                                                                                         |         |
-| <kbd>!</kbd>    | Factorial of **X** &nbsp; &nbsp; $X!=\prod_{i=1}^{X}{i}$                                                                   | ℕatural |
-| <kbd>perm</kbd> | Permutation of **Y** things taken **X** at a time &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                         | ℕatural |
-| <kbd>comb</kbd> | Combination of **Y** things taken **X** at a time &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                       | ℕatural |
-| <kbd>n</kbd>    | Sample size *(size of the stack)*                                                                                                          | ℂomplex |
+| <kbd>!</kbd>    | Factorial of $X$ &nbsp; &nbsp; $X!=\prod_{i=1}^{X}{i}$                                                                     | ℕatural |
+| <kbd>perm</kbd> | Permutation of $Y$ things taken $X$ at a time &nbsp; &nbsp; $_YP_X={\frac{Y!}{(Y-X)!}}$                                    | ℕatural |
+| <kbd>comb</kbd> | Combination of $Y$ things taken $X$ at a time &nbsp; &nbsp; $_YC_X={\frac{Y!}{X!(Y-X)!}}$                                  | ℕatural |
+| <kbd>n</kbd>    | Sample size *(size of the stack)*                                                                                          | ℂomplex |
 | <kbd>mean</kbd> | Average of all numbers on the stack. &nbsp; &nbsp; $\bar{x}={\frac{1}{n}}{\sum_{i=1}^n{x_i}}$                              | ℂomplex |
-| <kbd>sum</kbd>  | Sum of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}$                                                        | ℂomplex |
-| <kbd>ssq</kbd>  | Sum of squares of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}^2$                                           | ℂomplex |
+| <kbd>sum</kbd>  | Sum of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}$                                                          | ℂomplex |
+| <kbd>ssq</kbd>  | Sum of squares of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}^2$                                             | ℂomplex |
 | <kbd>std</kbd>  | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; $s=\sqrt{\frac{{\sum_{i=1}^{n}(x_i-\bar{x})^2}}{n-1}}$ | ℝeal    |
-|                | <br>**Miscellaneous**                                            |      |
-| <kbd>hrs</kbd> | Convert (**Z** hours:**Y** minutes:**X** seconds) to **X** hours | ℝeal |
-| <kbd>hms</kbd> | Convert **X** hours to (**Z** hours:**Y** minutes:**X** seconds) | ℝeal |
-| <kbd>gcd</kbd> | Greatest Common Divisor of **X** and **Y** | ℕatural |
-| <kbd>lcm</kbd> | Least Common Multiple of **X** and **Y** | ℕatural |
-| <kbd>dec</kbd> | Print result in decimal (base 10)                                | ℂomplex |
-| <kbd>hex</kbd> | Print result in hexadecimal (base 16) $^*$                       | ℂomplex |
-| <kbd>bin</kbd> | Print result in binary (base 2) $^*$                             | ℂomplex |
-|                  | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-0b10111=-0x17$<br>as opposed to<br>$0b1...1111111111111111111111111101001$ or $0x\text{F...FFFFFE9}$            | |
-|                | <br>**Constants**                                                                                     |         |
-| <kbd>pi</kbd>  | Ratio of a circle's circumference to its diameter &nbsp; &nbsp; $\pi={3.1415926535898...}$         | ℝeal    |
-| <kbd>e</kbd>   | Euler's number &nbsp; &nbsp; $e=\sum_{i=0}^\infty{\frac{1}{i!}}=2.7182818284590...$ | ℝeal    |
-| <kbd>phi</kbd> | The golden ratio &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$                | ℝeal    |
-| <kbd>i</kbd>   | The imaginary unit number &nbsp; &nbsp; $i={\sqrt{-1}}$                                        | ℂomplex |
-|                 | <br>**Memory and Stack Manipulation**                              |         |
-| <kbd>sto</kbd>  | Store the value of **X** to memory                                 | ℂomplex |
-| <kbd>rcl</kbd>  | Recall the value in memory to the stack                            | ℂomplex |
-| <kbd>m+</kbd>   | Add **X** to the value in memory                                   | ℂomplex |
-| <kbd>m-</kbd>   | Subtract **X** from the value in memory                            | ℂomplex |
-| <kbd>xy</kbd>   | Swap **X** and **Y** on the stack                                  | ℂomplex |
-| <kbd>x</kbd>    | Place the value of **X** from the last operation back on the stack | ℂomplex |
-| <kbd>drop</kbd> | Remove **X** from the stack                                        | ℂomplex |
+|                | <br>**Miscellaneous**                                    |      |
+| <kbd>hrs</kbd> | Convert ($Z$ hours:$Y$ minutes:$X$ seconds) to $X$ hours | ℝeal |
+| <kbd>hms</kbd> | Convert $X$ hours to ($Z$ hours:$Y$ minutes:$X$ seconds) | ℝeal |
+| <kbd>gcd</kbd> | Greatest Common Divisor of $X$ and $Y$                   | ℕatural |
+| <kbd>lcm</kbd> | Least Common Multiple of $X$ and $Y$                     | ℕatural |
+| <kbd>dec</kbd> | Print result in decimal (base 10)                        | ℂomplex |
+| <kbd>hex</kbd> | Print result in hexadecimal (base 16) $^*$               | ℂomplex |
+| <kbd>bin</kbd> | Print result in binary (base 2) $^*$                     | ℂomplex |
+|                | $^*$ Non-integer values are truncated. Negatives are formatted as human readable:<br> $-23=-0b10111=-0x17$<br>as opposed to<br>$0b1...1111111111111111111111111101001$ or $0x\text{F...FFFFFE9}$            | |
+|                | <br>**Constants**                                                                          |         |
+| <kbd>pi</kbd>  | Ratio of a circle's circumference to its diameter &nbsp; &nbsp; $\pi={3.1415926535898...}$ | ℝeal    |
+| <kbd>e</kbd>   | Euler's number &nbsp; &nbsp; $e=\sum_{i=0}^\infty{\frac{1}{i!}}=2.7182818284590...$        | ℝeal    |
+| <kbd>phi</kbd> | The golden ratio &nbsp; &nbsp; $\phi={\frac{\sqrt{5}+1}{2}}=1.6180339887499...$            | ℝeal    |
+| <kbd>i</kbd>   | The imaginary unit number &nbsp; &nbsp; $i={\sqrt{-1}}$                                    | ℂomplex |
+|                 | <br>**Memory and Stack Manipulation**                            |         |
+| <kbd>sto</kbd>  | Store the value of $X$ to memory                                 | ℂomplex |
+| <kbd>rcl</kbd>  | Recall the value in memory to the stack                          | ℂomplex |
+| <kbd>m+</kbd>   | Add $X$ to the value in memory                                   | ℂomplex |
+| <kbd>m-</kbd>   | Subtract $X$ from the value in memory                            | ℂomplex |
+| <kbd>xy</kbd>   | Swap $X$ and $Y$ on the stack                                    | ℂomplex |
+| <kbd>x</kbd>    | Place the value of $X$ from the last operation back on the stack | ℂomplex |
+| <kbd>drop</kbd> | Remove $X$ from the stack                                        | ℂomplex |
 
 ## Disclaimer ⚠
 The author of this plugin makes no warranties about the completeness, reliability or accuracy of this calculator. Any action you take upon the results you get from it is strictly at your own risk. The author will not be liable for any losses and/or damages in connection with the use of this calculator.
