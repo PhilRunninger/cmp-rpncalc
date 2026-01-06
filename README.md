@@ -116,7 +116,7 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>div</kbd> | Integer division                                              | ℂomplex |
 | <kbd>%</kbd>   | Modulus *(not well-defined for negatives)*                    | ℝeal    |
 | <kbd>abs</kbd> | Absolute value                                                | ℂomplex |
-| <kbd>arg</kbd> | Argument *(the angle between $X$ and the positive real axis)* | ℂomplex |
+| <kbd>arg</kbd> | Argument *(the angle between* $X$ *and the positive real axis)* | ℂomplex |
 | <kbd>chs</kbd> | Change Sign *(negation)*                                      | ℂomplex |
 |                 | <br>**Powers & Logs**        |         |
 | <kbd>\*\*</kbd> | Raise $Y$ to the $X$ power   | ℂomplex |
@@ -155,8 +155,8 @@ The **Domain** column in the following table indicates the types of numbers that
 | <kbd>ssq</kbd>  | Sum of squares of all numbers on the stack &nbsp; &nbsp; $\sum_{i=1}^n{x_i}^2$                                             | ℂomplex |
 | <kbd>std</kbd>  | Sample standard deviation of all numbers on the stack &nbsp; &nbsp; $s=\sqrt{\frac{{\sum_{i=1}^{n}(x_i-\bar{x})^2}}{n-1}}$ | ℝeal    |
 |                | <br>**Miscellaneous**                                    |      |
-| <kbd>hrs</kbd> | Convert ($Z$ hours:$Y$ minutes:$X$ seconds) to $X$ hours | ℝeal |
-| <kbd>hms</kbd> | Convert $X$ hours to ($Z$ hours:$Y$ minutes:$X$ seconds) | ℝeal |
+| <kbd>hrs</kbd> | Convert ($Z$ hours : $Y$ minutes : $X$ seconds) to $X$ hours | ℝeal |
+| <kbd>hms</kbd> | Convert $X$ hours to ($Z$ hours : $Y$ minutes : $X$ seconds) | ℝeal |
 | <kbd>gcd</kbd> | Greatest Common Divisor of $X$ and $Y$                   | ℕatural |
 | <kbd>lcm</kbd> | Least Common Multiple of $X$ and $Y$                     | ℕatural |
 | <kbd>dec</kbd> | Print result in decimal (base 10)                        | ℂomplex |
