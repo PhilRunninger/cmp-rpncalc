@@ -53,7 +53,7 @@ vim.api.nvim_set_keymap("x", "<S-F7>", ":<C-U>'<,'>RPN!<CR>", {noremap=true})
 Use your favorite plugin manager. If you don't have one, try one of these: [vim-pathogen](https://github.com/tpope/vim-pathogen), [vim-plug](https://github.com/junegunn/vim-plug), [Packer.nvim](https://github.com/wbthomason/packer.nvim) or [lazy.nvim](https://github.com/folke/lazy.nvim). Alternatively, you can use packages and submodules, as Greg Hurrell ([@wincent](https://github.com/wincent)) describes in his excellent Youtube video: [Vim screencast #75: Plugin managers](https://www.youtube.com/watch?v=X2_R3uxDN6g)
 
 ## Setup
-There is no setup required specifically for this plugin; however, when using it as a source for **nvim-cmp**, you need to add **rpncalc** to its list of sources in your **nvim-cmp** setup function call. The following snippet shows how to do that.
+There is no setup required specifically for this plugin; however, when using it as a source for **nvim-cmp**, you need to add **rpncalc** to its list of sources in your **nvim-cmp** setup. The following snippet shows how to do that.
 ```lua
 require'cmp'.setup {
   sources = {
@@ -75,7 +75,7 @@ RPN is a mathematical notation in which an operator follows its operand(s). This
 | Euler's Identity: $e^{i\pi}+1=0$ | `e i pi * ** 1 +`<br/>Round-off error gives an answer that's almost exact:<br/>$0+1.2246467991474*10^{-16}i$ |
 
 An RPN expression is a space-delimited list of tokens. Reading the tokens from left to right, numbers are placed on a stack. The top four numbers are labeled $X$, $Y$, $Z$, and $T$ from the top down. These labels are not shown when using the plugin, but they are referenced in the README and the documentation. When an operator is encountered, one or more numbers (as needed by the operator) are popped from the stack, and the result of the operation is pushed back onto the stack.
-3.6739403974421e-16+6i
+
 ### Example
 Expression: `12 2 -3 ** +` <br/> Tokens: `12` `2` `-3` `**` `+`
 
